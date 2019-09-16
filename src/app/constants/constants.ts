@@ -205,8 +205,7 @@ export class Constants {
   // DEV
   // static readonly APIORDENDECOMPRA = 'https://apim-dev-proxy.sodhc.co/logistica-ordenescompra';
   // QA
-  static readonly APIORDENDECOMPRA =
-    'https://apim-qa-proxy.sodhc.co/logistica-ordenescompra';
+  static readonly APIORDENDECOMPRA = 'https://apim-qa-proxy.sodhc.co/logistica-ordenescompra';
   // PROD
   // static readonly APIORDENDECOMPRA = 'https://apim-prod-proxy.sodhc.co/logistica-ordenescompra';
 
@@ -219,12 +218,10 @@ export class Constants {
   // static readonly USR = 'EAE6VELE';
   // static readonly PASSWD = 'EAE6VELE';
 
-  // DEV 
-  static readonly AUTH =
-    'https://apim-dev-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
+  // DEV
+  // static readonly AUTH = 'https://apim-dev-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
   // QA
-  // static readonly AUTH =
-    // 'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
+  static readonly AUTH = 'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
   // PROD
   // static readonly AUTH =
   //   'https://apim-prod-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
@@ -234,22 +231,27 @@ export class Constants {
   // PROD
   // static readonly GUIA = 'http://200.69.100.66/ServicioLiquidacionREST/Service1.svc/Generacion';
 
-  static readonly APIPROVEEDOR = 'https://apim-prod-proxy.sodhc.co/inventario/api';
+  // DEV
+  // static readonly APIPROVEEDOR = 'https://apim-dev-proxy.sodhc.co/inventario/api';
+  // QA
+  static readonly APIPROVEEDOR = 'https://apim-qa-proxy.sodhc.co/inventario/api';
+  // PROD
+  // static readonly APIPROVEEDOR = 'https://apim-prod-proxy.sodhc.co/inventario/api';
 
   // DEV
-  static readonly APIGUIA = 'https://apim-dev-proxy.sodhc.co/logistica-transportadora';
+  // static readonly APIGUIA = 'https://apim-dev-proxy.sodhc.co/logistica-transportadora';
   // QA
-  // static readonly APIGUIA =
-  //   'https://apim-qa-proxy.sodhc.co/logistica-transportadora';
+  static readonly APIGUIA =
+    'https://apim-qa-proxy.sodhc.co/logistica-transportadora';
   // PROD
   // static readonly APIGUIA = 'https://apim-prod-proxy.sodhc.co/logistica-transportadora';
 
   // Local
   // static readonly APIGUIA = 'http://localhost/Abastecimiento/Servicios/Transportadoras/api';
   // DEV
-  static readonly SUBSCRIPTIONKEY = 'dfeb9e69860f45258647cc7ba45fb040';
+  // static readonly SUBSCRIPTIONKEY = 'dfeb9e69860f45258647cc7ba45fb040';
   // QA
-  // static readonly SUBSCRIPTIONKEY = '442c55ae313642028c9eb69dc4220dad';
+  static readonly SUBSCRIPTIONKEY = '442c55ae313642028c9eb69dc4220dad';
   // PROD
   // static readonly SUBSCRIPTIONKEY = "209fa70e5b0c4b5c8bddaf0aa54b8e19";
 

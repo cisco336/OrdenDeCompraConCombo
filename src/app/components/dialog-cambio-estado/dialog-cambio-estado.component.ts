@@ -142,8 +142,9 @@ export class DialogCambioEstadoComponent implements OnInit {
 
   cambiarEstados() {
     this.isLoading = true;
-    let query = {
+    const query = {
       p_transaccion: 'UO',
+      p_prd_lvl_child: -1,
       p_pmg_po_number: null,
       p_vpc_tech_key: '-1',
       p_fecha_inicio: '-1',

@@ -4,7 +4,7 @@
 <div class="the-wrapper" [@entering]="render">
   <mat-card
     class="no-privileges mat-elevation-z4"
-    *ngIf="!render && errorMessage"
+    *ngIf="!render && errorMessage && !isLoading"
     [@entering]="errorMessage"
   >
     <h2>{{ errorMessage }}</h2>
@@ -20,7 +20,7 @@
   </div>
   <mat-card class="mat-elevation-z4 first" *ngIf="render">
     <div [formGroup]="mainFilterForm">
-      <!-- <mat-form-field class="example-full-width">
+      <mat-form-field class="example-full-width">
         <input
           type="text"
           placeholder="{{ strings.provider }}"
@@ -42,7 +42,7 @@
           </mat-option>
         </mat-autocomplete>
         <mat-error>{{ strings.requiredField }}</mat-error>
-      </mat-form-field> -->
+      </mat-form-field>
       <mat-form-field>
         <input
           type="text"
@@ -145,6 +145,7 @@
     <mat-form-field class="filter" *ngIf="tableMessage === ''">
       <input
         matInput
+        [formControl]="filter"
         (keyup)="applyFilter($event.target.value)"
         placeholder="{{ strings.filter }}"
         matTooltip="{{ tooltips.tableFilterInfo }}"
@@ -294,8 +295,10 @@
                 <span mat-line>{{ strings.value }}:</span>
                 <span mat-line>
                   {{
-                    element.PMG_TOT_PO_COST | currency: 'COP':'symbol-narrow' || errorMessagesText.noData
-                      
+                    element.PMG_TOT_PO_COST
+                      | currency
+                        : 'COP'
+                        : 'symbol-narrow' || errorMessagesText.noData
                   }}
                 </span>
               </mat-list-item>

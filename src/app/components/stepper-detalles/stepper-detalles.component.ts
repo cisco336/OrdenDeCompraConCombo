@@ -161,12 +161,12 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   }
 
   noDetails() {
-    this.stepOne = true;
     const detalleOC = this._componentService.getDetalleOC().value;
     this.oc = detalleOC[0]['PMG_PO_NUMBER'];
     this.skus = detalleOC.map(
       number =>
         (number = {
+          guia: number['GUIA'],
           sku: number['PRD_LVL_NUMBER'],
           description: number['PRD_NAME_FULL']
         })
@@ -344,7 +344,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
           UrlRotulo: `${Constants.PATHROTULO}Guia=${data['guia']}&Usuario=${Constants.USR}`,
           OrdenServicio: data['num_ordens'],
           IdBulto: y.getIdBulto().value,
-          Usuario: y.getUser().value
+          Usuario: y.getUser().value || 'ACEL03'
         };
         this._dataService
           .SetDatosGuia(this.queryRotulo)

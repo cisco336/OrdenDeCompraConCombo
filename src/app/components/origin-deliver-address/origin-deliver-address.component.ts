@@ -101,7 +101,7 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
           this.addresses.get('originCity').setValue(origen[0]);
         }
       },
-      () => console.log('error')
+      () => {}
     );
   }
 

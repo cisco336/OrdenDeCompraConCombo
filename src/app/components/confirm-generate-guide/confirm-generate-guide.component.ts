@@ -16,9 +16,7 @@ export class ConfirmGenerateGuideComponent implements OnInit {
   }
 
   getGuia(data) {
-    console.log(data);
     this._dataservice.GetGuia('envia').subscribe(getGuiaResponse => {
-        console.log(getGuiaResponse);
       });
   }
 

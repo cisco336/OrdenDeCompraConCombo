@@ -69,8 +69,6 @@ export class GenerateOrderGuideComponent implements OnInit, OnDestroy {
           description: number['PRD_NAME_FULL']
         })
     );
-    // this.skus = this.skus.filter(s => s['GUIA'] === '--');
-    // console.log(this.skus);
     if (this.skus) {
       this._componentService.aux.next(true);
     }

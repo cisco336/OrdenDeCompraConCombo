@@ -128,6 +128,7 @@ import { DialogService } from 'src/app/services/dialog.service';
 export class OrdenesCompraComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   mainFilterForm: FormGroup;
+  filter: FormControl;
   proveedores: Proveedores[] = [];
   estados: Estado[] = [];
   expandedElement: OrdenDeCompra;
@@ -156,7 +157,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   dataSource;
   selection = new SelectionModel<OrdenDeCompra>(true, []);
 
-  proveedor: string;
+  proveedor;
   tableMessage = '';
   date: any;
   filteredProveedores: Observable<Proveedores[]>;
@@ -211,6 +212,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       ],
       fechaFinControl: [moment(), [Validators.required]]
     });
+    this.filter = new FormControl('');
     this.onResize();
   }
 
@@ -239,7 +241,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
           this.usr = y.split(';')[0];
           this.key = y.split(';')[1];
           this.TOKEN = y.split(';')[2];
-
+          
           if (this.TOKEN) {
             try {
               this._dataService.setToken(this.TOKEN);
@@ -285,10 +287,9 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this._dataService
       .getProveedores()
-      .toPromise().then(
+      .toPromise()
+      .then(
         getProveedoresData => {
-          const proveedor = getProveedoresData['Value'].filter(s => s.ID === parseInt(this.key, 10));
-          this.proveedor = proveedor.length > 0 ? proveedor[0].DESCRIPCION : 'Proveedor no encontrado.';
           if (
             !getProveedoresData['Estado'] ||
             getProveedoresData['Value'][0]['Código']
@@ -399,10 +400,6 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         },
         error => {
           this.errorHandling(error);
-          this.mainFilterForm
-            .get('proveedorControl')
-            .setErrors({ incorrect: true });
-          this.mainFilterForm.get('proveedorControl').disable();
         }
       );
   }
@@ -695,6 +692,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
+    this.filter.reset();
     this.consultar();
     this.applyFilter('');
   }
