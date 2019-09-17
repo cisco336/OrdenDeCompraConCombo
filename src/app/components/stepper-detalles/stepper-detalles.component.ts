@@ -56,6 +56,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   selectedSku;
+  cambioEstadoSkus;
   estadosSubscription: Subscription;
   getSelectedSkuSubscription: Subscription;
   estados: Estado[] = [];
@@ -141,6 +142,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
     this.selectedSkuSubscription = this._componentService
       .getSelectedSku()
       .subscribe(skusSub => {
+        this.cambioEstadoSkus = skusSub;
         if (skusSub.length) {
           this.selectedSku = skusSub.filter(
             s => s.GUIA === 'NA' || s.GUIA === '--'
@@ -187,7 +189,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
             this.cambioEstado(response);
           }
         },
-        error => {
+        () => {
           this.showQueryResponse = true;
           this.queryResponse = strings.errorMessagesText.errorUnknown;
           setTimeout(() => (this.showQueryResponse = false), 2000);
@@ -208,7 +210,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
       p_origen: '-1',
       p_usuario: this._componentService.getUser().value
     };
-    this.selectedSku.forEach(data => {
+    this.cambioEstadoSkus.forEach(data => {
       query.p_pmg_po_number = data.PMG_PO_NUMBER;
       query.p_prd_lvl_child = data.PRD_LVL_CHILD;
       const postTablaPrincipalOC = this._dataService

@@ -25,13 +25,13 @@
           *ngIf="details"
           mat-raised-button
           color="accent"
-          [disabled]="!selectedSku?.length"
+          [disabled]="!cambioEstadoSkus?.length"
           (click)="openBottomSheet()"
         >
           <mat-icon>category</mat-icon>{{ strings.strings.changeState }}
         </button>
         <button mat-raised-button color="primary" matStepperNext>
-          <mat-icon>navigate_next</mat-icon>{{ strings.strings.next }}
+          <mat-icon>navigate_next</mat-icon>{{ strings.strings.generateGuide }}
         </button>
       </div>
     </form>
