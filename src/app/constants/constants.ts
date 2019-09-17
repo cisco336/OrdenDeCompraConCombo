@@ -1,6 +1,7 @@
 export const tooltips = {
   optionsInfo:
-    'Cambiar estado: debe seleccionar (con el checkbox) las ordenes a las que desea cambiar el estado. Generar reporte: genera un archivo .xlsx (Excel) que contiene toda la información presentada en la tabla.',
+    'Cambiar estado: debe seleccionar (con el checkbox) las ordenes a las que desea \
+    cambiar el estado. Generar reporte: genera un archivo .xlsx (Excel) que contiene toda la información presentada en la tabla.',
 
   mainFilterInfo:
     'La fecha final no puede ser anterior a la inicial. Todos los campos son obligatorios.',
@@ -9,7 +10,8 @@ export const tooltips = {
     'El valor indicado se utilizará como filtro en toda la información de la tabla.',
 
   checkBoxInfo:
-    "Seleccione para habilitar la opción 'Cambio de Estado', puede seleccionar/deseleccionar todos con este check principal o sleccionar/deseleccionar cada orden de compra por separado",
+    "Seleccione para habilitar la opción 'Cambio de Estado', \
+    puede seleccionar/deseleccionar todos con este check principal o sleccionar/deseleccionar cada orden de compra por separado",
 
   tableFooterClick:
     'Haga clic sobre el número de orden para mostrar los detalles. ',
@@ -197,67 +199,73 @@ export const longMessages = {
 
 export class Constants {
   // DEV & QA
-  static readonly PATHROTULO =
-    'http://200.69.100.66/2IMPRESIONGUIASpruebas/ISticker_ZEA.aspx?';
+  // static readonly PATHROTULO =
+  //   'http://200.69.100.66/2IMPRESIONGUIASpruebas/ISticker_ZEA.aspx?';
   // PROD
-  // static readonly PATHROTULO = 'http://200.69.100.66/2IMPRESIONGUIAS/ISticker_ZEA2.aspx';
+  static readonly PATHROTULO =
+    'http://200.69.100.66/2IMPRESIONGUIAS/ISticker_ZEA2.aspx';
 
   // DEV
   // static readonly APIORDENDECOMPRA = 'https://apim-dev-proxy.sodhc.co/logistica-ordenescompra';
   // QA
-  static readonly APIORDENDECOMPRA = 'https://apim-qa-proxy.sodhc.co/logistica-ordenescompra';
+  // static readonly APIORDENDECOMPRA =
+  //   'https://apim-qa-proxy.sodhc.co/logistica-ordenescompra';
   // PROD
-  // static readonly APIORDENDECOMPRA = 'https://apim-prod-proxy.sodhc.co/logistica-ordenescompra';
+  static readonly APIORDENDECOMPRA = 'https://apim-prod-proxy.sodhc.co/logistica-ordenescompra';
 
   // DEV & QA
-  static readonly USRPASSWD = 'EMPCAR01:EMPCAR1';
-  static readonly USR = 'EMPCAR01';
-  static readonly PASSWD = 'EMPCAR1';
+  // static readonly USRPASSWD = 'EMPCAR01:EMPCAR1';
+  // static readonly USR = 'EMPCAR01';
+  // static readonly PASSWD = 'EMPCAR1';
   // PROD
-  // static readonly USRPASSWD = 'EAE6VELE:EAE6VELE';
-  // static readonly USR = 'EAE6VELE';
-  // static readonly PASSWD = 'EAE6VELE';
+  static readonly USRPASSWD = 'EAE6VELE:EAE6VELE';
+  static readonly USR = 'EAE6VELE';
+  static readonly PASSWD = 'EAE6VELE';
 
   // DEV
   // static readonly AUTH = 'https://apim-dev-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
   // QA
-  static readonly AUTH = 'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
-  // PROD
   // static readonly AUTH =
-  //   'https://apim-prod-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
-  // DEV & QA
-  static readonly GUIA =
-    'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion';
+  //   'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
   // PROD
-  // static readonly GUIA = 'http://200.69.100.66/ServicioLiquidacionREST/Service1.svc/Generacion';
+  static readonly AUTH = 'https://apim-prod-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
+
+  // DEV & QA
+  // static readonly GUIA =
+  // 'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion';
+  // PROD
+  static readonly GUIA = 'http://200.69.100.66/ServicioLiquidacionREST/Service1.svc/Generacion';
 
   // DEV
   // static readonly APIPROVEEDOR = 'https://apim-dev-proxy.sodhc.co/inventario/api';
   // QA
-  static readonly APIPROVEEDOR = 'https://apim-qa-proxy.sodhc.co/inventario/api';
+  // static readonly APIPROVEEDOR =
+  //   'https://apim-qa-proxy.sodhc.co/inventario/api';
   // PROD
-  // static readonly APIPROVEEDOR = 'https://apim-prod-proxy.sodhc.co/inventario/api';
+  static readonly APIPROVEEDOR = 'https://apim-prod-proxy.sodhc.co/inventario/api';
 
   // DEV
   // static readonly APIGUIA = 'https://apim-dev-proxy.sodhc.co/logistica-transportadora';
   // QA
-  static readonly APIGUIA =
-    'https://apim-qa-proxy.sodhc.co/logistica-transportadora';
+  // static readonly APIGUIA =
+  //   'https://apim-qa-proxy.sodhc.co/logistica-transportadora';
   // PROD
-  // static readonly APIGUIA = 'https://apim-prod-proxy.sodhc.co/logistica-transportadora';
+  static readonly APIGUIA = 'https://apim-prod-proxy.sodhc.co/logistica-transportadora';
 
   // Local
   // static readonly APIGUIA = 'http://localhost/Abastecimiento/Servicios/Transportadoras/api';
   // DEV
   // static readonly SUBSCRIPTIONKEY = 'dfeb9e69860f45258647cc7ba45fb040';
   // QA
-  static readonly SUBSCRIPTIONKEY = '442c55ae313642028c9eb69dc4220dad';
+  // static readonly SUBSCRIPTIONKEY = '442c55ae313642028c9eb69dc4220dad';
   // PROD
-  // static readonly SUBSCRIPTIONKEY = "209fa70e5b0c4b5c8bddaf0aa54b8e19";
+  static readonly SUBSCRIPTIONKEY = '209fa70e5b0c4b5c8bddaf0aa54b8e19';
 
   // DEV
   // static readonly SUBSCRIPTIONKEYCONFIGURACION = '9b33c33d833340e0839653420edf6a89';
   // QA
-  static readonly SUBSCRIPTIONKEYCONFIGURACION = '442c55ae313642028c9eb69dc4220dad';
+  // static readonly SUBSCRIPTIONKEYCONFIGURACION =
+  //   '442c55ae313642028c9eb69dc4220dad';
   // PROD
+  static readonly SUBSCRIPTIONKEYCONFIGURACION = '209fa70e5b0c4b5c8bddaf0aa54b8e19';
 }
