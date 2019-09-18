@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, throwError } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, skip } from 'rxjs/operators';
 import {
   MatDialogRef,
   MatDialog,
@@ -226,7 +226,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading = true;
     this.routeSubscription = this._route.queryParams;
-    this.routeSubscription.subscribe(
+    this.routeSubscription.pipe(skip(1)).subscribe(
       params => {
         if (!params['token']) {
           this.usr = '';
@@ -272,13 +272,6 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
             );
           }
         }
-      },
-      error => {
-        this.isLoading = false;
-        this.noData = true;
-        this.errorMessage = `${
-          this.errorMessagesText.noPrivileges
-        }. ${error.statusText || error.status}`;
       }
     );
   }

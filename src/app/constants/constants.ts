@@ -199,8 +199,8 @@ export const longMessages = {
 
 export class Constants {
   // DEV & QA
-  // static readonly PATHROTULO =
-  //   'https://portal.envia.co/2IMPRESIONGUIAS/ISticker_ZEA2.aspx';
+  static readonly PATHROTULO =
+    'https://portal.envia.co/2IMPRESIONGUIAS/ISticker_ZEA2.aspx';
 
   // DEV
   // static readonly APIORDENDECOMPRA = 'https://apim-dev-proxy.sodhc.co/logistica-ordenescompra';
