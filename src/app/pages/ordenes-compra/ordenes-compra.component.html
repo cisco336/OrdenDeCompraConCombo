@@ -14,7 +14,7 @@
       <span>{{ strings.provider }}:</span
       ><span [@child]="proveedor !== undefined">{{ proveedor }}</span>
     </h1>
-    <button mat-mini-fab color="accent">
+    <button mat-mini-fab color="accent" disabled>
       <mat-icon mat-list-icon>help_outline</mat-icon>
     </button>
   </div>
@@ -102,7 +102,7 @@
       <mat-icon
         matTooltip="{{ tooltips.mainFilterInfo }}"
         [matTooltipPosition]="'right'"
-        matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+        matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
         >info_outline</mat-icon
       >
     </div>
@@ -118,7 +118,7 @@
         <mat-icon
           matTooltip="{{ tooltips.optionsInfo }}"
           [matTooltipPosition]="'right'"
-          matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+          matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
           >info_outline</mat-icon
         >
       </h2>
@@ -150,7 +150,7 @@
         placeholder="{{ strings.filter }}"
         matTooltip="{{ tooltips.tableFilterInfo }}"
         [matTooltipPosition]="'above'"
-        matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+        matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
       />
       <mat-icon matSuffix>filter_list</mat-icon>
     </mat-form-field>
@@ -174,7 +174,7 @@
             [aria-label]="checkboxLabel()"
             matTooltip="{{ tooltips.checkBoxInfo }}"
             [matTooltipPosition]="'above'"
-            matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+            matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
           >
           </mat-checkbox>
         </th>
@@ -202,6 +202,7 @@
           (click)="
             expandedElement = expandedElement === element ? null : element
           "
+          (dblclick)="getOrdenDetalle(element.PMG_PO_NUMBER)"
           matRipple
           [matRippleColor]="primary"
         >
