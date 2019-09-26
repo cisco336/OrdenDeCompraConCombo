@@ -63,13 +63,14 @@
     </mat-form-field>
     <mat-form-field>
       <input
-        type="time"
+        type="text"
         matInput
         required
         placeholder="{{ strings.strings.changeTime }}"
         [formControl]="horaCambioControl"
-        value="00:00"
+        value="{{ now }}"
       />
+      <mat-error>{{ strings.errorMessagesText.timeError }}</mat-error>
     </mat-form-field>
   </form>
   <button

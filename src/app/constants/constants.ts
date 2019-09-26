@@ -260,7 +260,7 @@ export class Constants {
   // static readonly APIPROVEEDOR = 'https://apim-dev-proxy.sodhc.co/inventario/api';
   // QA
   // static readonly APIPROVEEDOR =
-    // 'https://apim-qa-proxy.sodhc.co/inventario/api';
+  //   'https://apim-qa-proxy.sodhc.co/inventario/api';
   // PROD
   static readonly APIPROVEEDOR = 'https://apim-prod-proxy.sodhc.co/inventario/api';
 

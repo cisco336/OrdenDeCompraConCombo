@@ -12,7 +12,8 @@ import * as strings from '../../constants/constants';
 })
 export class BottomSheetComponent implements OnInit {
   fechaCambioControl = new FormControl('', Validators.required);
-  horaCambioControl = new FormControl('00:00', [Validators.required]);
+  now = moment().format('hh:mm:ss A');
+  horaCambioControl = new FormControl(this.now, [Validators.required]);
   today = moment();
   strings = strings;
 
@@ -21,15 +22,23 @@ export class BottomSheetComponent implements OnInit {
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.horaCambioControl.valueChanges.subscribe(s => {
+      if (moment(s, 'hh:mm:ss A').isValid()) {
+        this.horaCambioControl.setErrors(null);
+      } else {
+        this.horaCambioControl.setErrors({ invalid: true });
+      }
+    });
+  }
   closeSheet(data?) {
     const response = {
       ID: data.ID || -1,
       fecha_real:
         data.ID > 0
-          ? `${this.fechaCambioControl.value.format('DD/MM/YYYY')} ${
-              this.horaCambioControl.value
-            }:00`
+          ? `${this.fechaCambioControl.value.format(
+              'DD/MM/YYYY'
+            )} ${moment(this.horaCambioControl.value, 'hh:mm:ss A').format('hh:mm:ss A')}`
           : null
     };
     this._bottomSheetRef.dismiss(response);
