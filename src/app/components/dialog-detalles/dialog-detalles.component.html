@@ -1,138 +1,147 @@
 <mat-toolbar class="toolbar mat-elevation-z10" color="primary" mat-dialog-title>
-  <span>{{ strings.longMessages.orderDetailTitle }} {{ numeroOrden }}</span>
-  <span>
-    <button mat-icon-button (click)="closeDialog()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </span>
-</mat-toolbar>
-
-<div class="the-wrapper" mat-dialog-content>
-  <div [@cardGroup]="ordenCompra !== null ? true : false" class="card-wrapper">
-    <div *ngIf="error === ''">
+    <span>{{ strings.longMessages.orderDetailTitle }} {{ numeroOrden }}</span>
+    <span>
+      <button mat-icon-button (click)="closeDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </span>
+  </mat-toolbar>
+  
+  <div class="the-wrapper" mat-dialog-content>
+    <div *ngIf="error !== ''">
       {{ error }}
     </div>
-    <mat-card *ngIf="cliente" class="card-first mat-elevation-z10">
-      <div class="card-title">
-        <mat-icon>person</mat-icon>
-        {{ strings.strings.clientData }}:
-      </div>
-      <div class="card-body">
-        <ul>
-          <li *ngIf="infoBaseOC.CEDULA && infoBaseOC.CEDULA !== ''">
-            <span>{{ strings.strings.clientID }}:</span
-            ><span>{{ infoBaseOC.CEDULA }}</span>
-          </li>
-          <li *ngIf="infoBaseOC.CLIENTE && infoBaseOC.CLIENTE !== ''">
-            <span>{{ strings.strings.client }}:</span
-            ><span>{{ infoBaseOC.CLIENTE | titlecase }}</span>
-          </li>
-          <li *ngIf="infoBaseOC.TELEFONOS && infoBaseOC.TELEFONOS !== ''">
-            <span>{{ strings.strings.phone }}:</span
-            ><span>{{ infoBaseOC.TELEFONOS }}</span>
-          </li>
-          <li
-            *ngIf="infoBaseOC.DIRECCION_CTE && infoBaseOC.DIRECCION_CTE !== ''"
-          >
-            <span>{{ strings.strings.address }}:</span
-            ><span>{{ infoBaseOC.DIRECCION_CTE | titlecase }}</span>
-          </li>
-          <li *ngIf="infoBaseOC.CIUDAD_CTE && infoBaseOC.CIUDAD_CTE !== ''">
-            <span>{{ strings.strings.city }}:</span
-            ><span>{{ infoBaseOC.CIUDAD_CTE | titlecase }}</span>
-          </li>
-        </ul>
-      </div>
-    </mat-card>
-
-    <mat-card *ngIf="entrega" class="card-second mat-elevation-z10">
-      <div class="card-title">
-        <mat-icon>local_shipping</mat-icon>
-        {{ strings.strings.deliveryData }}:
-      </div>
-      <div class="card-body">
-        <ul>
-          <li
-            *ngIf="
-              infoBaseOC.DIRECCION_ENTREGA &&
-              infoBaseOC.DIRECCION_ENTREGA !== ''
-            "
-          >
-            <span>{{ strings.strings.address }}:</span
-            ><span>{{ direccionDestino | titlecase }}</span>
-          </li>
-          <li *ngIf="ciudad">
-            <span>{{ strings.strings.city }}:</span
-            ><span>{{ ciudad | titlecase }}</span>
-          </li>
-          <li
-            *ngIf="
-              infoBaseOC.TRANSPORTADORA && infoBaseOC.TRANSPORTADORA !== ''
-            "
-          >
-            <span>{{ strings.strings.conveyor | titlecase }}: </span
-            ><span>
-              {{ infoBaseOC.TRANSPORTADORA | titlecase }}
-            </span>
-          </li>
-        </ul>
-      </div>
-    </mat-card>
-
-    <mat-card class="card-third mat-elevation-z10">
-      <div class="card-title">
-        <mat-icon>local_offer</mat-icon>
-        {{ strings.strings.orderData }}:
-      </div>
-      <div class="card-body">
-        <ul>
-          <li>
-            <span>{{ strings.strings.orderNumber }}:</span
-            ><span>{{ ordenCompra[0].PMG_PO_NUMBER }}</span>
-          </li>
-          <li *ngIf="infoBaseOC.TIPO_ENTREGA && infoBaseOC.TIPO_ENTREGA !== ''">
-            <span>{{ strings.strings.deliverType }}:</span
-            ><span>{{ infoBaseOC.TIPO_ENTREGA | titlecase }}</span>
-          </li>
-          <li *ngIf="infoBaseOC.PROVEEDOR && infoBaseOC.PROVEEDOR !== ''">
-            <span>{{ strings.strings.provider }}:</span
-            ><span>{{ infoBaseOC.PROVEEDOR | titlecase }}</span>
-          </li>
-          <li *ngIf="infoBaseOC.STICKER && infoBaseOC.STICKER !== ''">
-            <span>{{ strings.strings.sticker }}:</span
-            ><span>{{ infoBaseOC.STICKER }}</span>
-          </li>
-          <li *ngIf="infoBaseOC.NOTA_PEDIDO && infoBaseOC.NOTA_PEDIDO !== ''">
-            <span>{{ strings.strings.orderNote }}:</span
-            ><span>{{ infoBaseOC.NOTA_PEDIDO }}</span>
-          </li>
-        </ul>
-      </div>
-    </mat-card>
-
-    <!-- <mat-card
-      class="card-fourth mat-elevation-z10"
-      *ngIf="ordenCompra['observaciones']"
-    >
-      <div class="card-title">
-        <mat-icon>insert_comment</mat-icon>
-        {{ strings.strings.observations }}:
-      </div>
-      <div class="card-body">
-        {{
-          ordenCompra['observaciones'] ||
-            strings.errorMessagesText.noObservations
-        }}
-      </div>
-    </mat-card> -->
+    <div [@cardGroup]="ordenCompra !== null ? true : false" class="card-wrapper">
+      <mat-card *ngIf="cliente" class="card-first mat-elevation-z10">
+        <div class="card-title">
+          <mat-icon>person</mat-icon>
+          {{ strings.strings.clientData }}:
+        </div>
+        <div class="card-body">
+          <ul>
+            <li *ngIf="infoBaseOC.CEDULA && infoBaseOC.CEDULA !== ''">
+              <span>{{ strings.strings.clientID }}:</span
+              ><span>{{ infoBaseOC.CEDULA }}</span>
+            </li>
+            <li *ngIf="infoBaseOC.CLIENTE && infoBaseOC.CLIENTE !== ''">
+              <span>{{ strings.strings.client }}:</span
+              ><span>{{ infoBaseOC.CLIENTE | titlecase }}</span>
+            </li>
+            <li *ngIf="infoBaseOC.TELEFONOS && infoBaseOC.TELEFONOS !== ''">
+              <span>{{ strings.strings.phone }}:</span
+              ><span>{{ infoBaseOC.TELEFONOS }}</span>
+            </li>
+            <li
+              *ngIf="infoBaseOC.DIRECCION_CTE && infoBaseOC.DIRECCION_CTE !== ''"
+            >
+              <span>{{ strings.strings.address }}:</span
+              ><span>{{ infoBaseOC.DIRECCION_CTE | titlecase }}</span>
+            </li>
+            <li *ngIf="infoBaseOC.CIUDAD_CTE && infoBaseOC.CIUDAD_CTE !== ''">
+              <span>{{ strings.strings.city }}:</span
+              ><span>{{ infoBaseOC.CIUDAD_CTE | titlecase }}</span>
+            </li>
+          </ul>
+        </div>
+      </mat-card>
+  
+      <mat-card *ngIf="entrega" class="card-second mat-elevation-z10">
+        <div class="card-title">
+          <mat-icon>local_shipping</mat-icon>
+          {{ strings.strings.deliveryData }}:
+        </div>
+        <div class="card-body">
+          <ul>
+            <li
+              *ngIf="
+                infoBaseOC.DIRECCION_ENTREGA &&
+                infoBaseOC.DIRECCION_ENTREGA !== ''
+              "
+            >
+              <span>{{ strings.strings.address }}:</span
+              ><span>{{ direccionDestino | titlecase }}</span>
+            </li>
+            <li *ngIf="ciudad">
+              <span>{{ strings.strings.city }}:</span
+              ><span>{{ ciudad | titlecase }}</span>
+            </li>
+            <!-- <li
+              *ngIf="
+                infoBaseOC.TRANSPORTADORA && infoBaseOC.TRANSPORTADORA !== ''
+              "
+            >
+              <span>{{ strings.strings.conveyor | titlecase }}: </span
+              ><span>
+                {{ infoBaseOC.TRANSPORTADORA | titlecase }}
+              </span>
+            </li> -->
+          </ul>
+        </div>
+      </mat-card>
+  
+      <mat-card class="card-third mat-elevation-z10">
+        <div class="card-title">
+          <mat-icon>local_offer</mat-icon>
+          {{ strings.strings.orderData }}:
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <span>{{ strings.strings.orderNumber }}:</span
+              ><span>{{ ordenCompra[0].PMG_PO_NUMBER }}</span>
+            </li>
+            <li *ngIf="infoBaseOC.TIPO_ENTREGA && infoBaseOC.TIPO_ENTREGA !== ''">
+              <span>{{ strings.strings.deliverType }}:</span
+              ><span>{{ infoBaseOC.TIPO_ENTREGA | titlecase }}</span>
+            </li>
+            <li *ngIf="infoBaseOC.PROVEEDOR && infoBaseOC.PROVEEDOR !== ''">
+              <span>{{ strings.strings.provider }}:</span
+              ><span>{{ infoBaseOC.PROVEEDOR | titlecase }}</span>
+            </li>
+            <li *ngIf="infoBaseOC.STICKER && infoBaseOC.STICKER !== ''">
+              <span>{{ strings.strings.sticker }}:</span
+              ><span>{{ infoBaseOC.STICKER }}</span>
+            </li>
+            <li *ngIf="infoBaseOC.NOTA_PEDIDO && infoBaseOC.NOTA_PEDIDO !== ''">
+              <span>{{ strings.strings.orderNote }}:</span
+              ><span>{{ infoBaseOC.NOTA_PEDIDO }}</span>
+            </li>
+            <li *ngIf="fechasOC.FECHA_MINIMA_OC">
+              <span>{{ strings.strings.minDeliverDate }}:</span
+              ><span>{{ fechasOC.FECHA_MINIMA_OC }}</span>
+            </li>
+            <li *ngIf="fechasOC.FECHA_MAXIMA_OC">
+              <span>{{ strings.strings.maxDeliverDate }}:</span
+              ><span>{{ fechasOC.FECHA_MAXIMA_OC }}</span>
+            </li>
+          </ul>
+        </div>
+      </mat-card>
+  
+      <!-- <mat-card
+        class="card-fourth mat-elevation-z10"
+        *ngIf="ordenCompra['observaciones']"
+      >
+        <div class="card-title">
+          <mat-icon>insert_comment</mat-icon>
+          {{ strings.strings.observations }}:
+        </div>
+        <div class="card-body">
+          {{
+            ordenCompra['observaciones'] ||
+              strings.errorMessagesText.noObservations
+          }}
+        </div>
+      </mat-card> -->
+    </div>
+  
+    <mat-tab-group dynamicHeight mat-stretch-tabs>
+      <mat-tab label="SKU">
+        <app-stepper-detalles [details]="true"></app-stepper-detalles>
+      </mat-tab>
+      <mat-tab label="Tracking">
+        <app-tracking></app-tracking>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-
-  <mat-tab-group dynamicHeight mat-stretch-tabs>
-    <mat-tab label="SKU">
-      <app-stepper-detalles [details]="true"></app-stepper-detalles>
-    </mat-tab>
-    <mat-tab label="Tracking">
-      <app-tracking></app-tracking>
-    </mat-tab>
-  </mat-tab-group>
-</div>
+  

@@ -123,20 +123,8 @@ $sodimac-app-theme: mat-light-theme(
   src: url(./assets/fonts/google/icons.woff2) format('woff2');
 }
 
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -moz-font-feature-settings: 'liga';
-  -moz-osx-font-smoothing: grayscale;
+.break {
+  white-space: normal !important;
 }
 
 body {
@@ -191,12 +179,18 @@ body {
   background: $HC-success;
 }
 
-::ng-deep {
-  table th.mat-header-cell {
-    background: $HC-white !important;
-    z-index: 3000 !important;
+table {
+  & td {
+    font-size: 12px !important;
   }
-} 
+}
+
+::ng-deep table {
+  & thead {
+    background: white;
+    z-index: 1000;
+  }
+}
 
 table {
   & td {

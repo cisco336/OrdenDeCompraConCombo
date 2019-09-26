@@ -95,7 +95,8 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
   GetInfoBaseOcSubscription;
   ciudad;
   direccionDestino;
-  error: string;
+  error = '';
+  fechasOC;
 
   constructor(
     public dialogRef: MatDialogRef<DialogDetallesComponent>,
@@ -105,6 +106,7 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
     private _bottomSheet: MatBottomSheet
   ) {}
   ngOnInit() {
+    this.fechasOC = this._componentService.fechasOC.value;
     this._componentService.setCloseDialog(false);
     this._componentService.setSteps({
       two: false,
@@ -136,13 +138,19 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
           })
           .catch(() => {
             this.error = strings.errorMessagesText.citiesError;
-            setTimeout(
-              () => (this.error = ''),
-              3000
-            );
+            setTimeout(() => (this.error = ''), 3000);
           });
         this._componentService.setInfoBaseOC(data['Value'][0]);
         this.infoBaseOC = data['Value'][0];
+        const address = this._componentService.infoBaseOC.value;
+        this._componentService.setDireccionDestino({
+          direccion: address.DIRECCION_ENTREGA,
+          ciudad: address.CODIGO_DANE_DESTINO
+        });
+        this._componentService.setDireccionOrigen({
+          direccion: address.DIRECCION_ORIGEN,
+          ciudad: address.CODIGO_DANE_ORIGEN
+        });
         if (this.infoBaseOC['Código'] === '4') {
           this.cliente = false;
           this.entrega = false;

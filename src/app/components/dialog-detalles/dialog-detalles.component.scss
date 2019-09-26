@@ -1,4 +1,4 @@
-@import "../../../assets/css/vars";
+@import '../../../assets/css/vars';
 .toolbar {
   display: flex;
   flex-flow: row nowrap;
@@ -11,14 +11,18 @@
     }
   }
   & button span mat-icon {
-    margin-right: 0!important;
+    margin-right: 0 !important;
   }
 }
+
 .the-wrapper {
   width: 100%;
   padding: 0;
   margin: 0;
   max-height: 100% !important;
+  & > div:first-of-type {
+    padding: 1rem;
+  }
 }
 .card {
   &-first,
@@ -51,7 +55,7 @@
   &-title {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    padding: .5rem;
+    padding: 0.5rem;
     // font-size: 21px;
     display: flex;
     flex-flow: row-reverse nowrap;
@@ -72,7 +76,7 @@
   &-body {
     & ul {
       & li {
-        padding: .5rem;
+        padding: 0.5rem;
         list-style: none;
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -80,7 +84,7 @@
         align-items: center;
 
         &:not(:last-child) {
-          border-bottom: 1px solid rgba($HC-gray, .3);
+          border-bottom: 1px solid rgba($HC-gray, 0.3);
         }
         & span {
           font-size: 80%;
@@ -98,4 +102,3 @@
     }
   }
 }
-

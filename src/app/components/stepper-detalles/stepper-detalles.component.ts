@@ -98,6 +98,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   finalMessg: string;
   stepThreeMessg = '';
   isLoading = false;
+  genera_guia: boolean;
   queryRotulo;
   guideQuery: any;
 
@@ -110,7 +111,8 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this._componentService.aux.subscribe(val => this.stepOne = val);
+    this._componentService.generaGuia.subscribe(change => this.genera_guia = change);
+    this._componentService.aux.subscribe(val => (this.stepOne = val));
     this.finalMessg = strings.longMessages.generateOrderGuideAlertFinal;
     this.stepOne = false;
     this.magnitudes = this._componentService.getMagnitudes().value;
@@ -165,14 +167,16 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   noDetails() {
     const detalleOC = this._componentService.getDetalleOC().value;
     this.oc = detalleOC[0]['PMG_PO_NUMBER'];
-    this.skus = detalleOC.map(
-      number =>
-        (number = {
-          guia: number['GUIA'],
-          sku: number['PRD_LVL_NUMBER'],
-          description: number['PRD_NAME_FULL']
-        })
-    ).filter(s => s.guia === '--' || s.guia === 'NA');
+    this.skus = detalleOC
+      .map(
+        number =>
+          (number = {
+            guia: number['GUIA'],
+            sku: number['PRD_LVL_NUMBER'],
+            description: number['PRD_NAME_FULL']
+          })
+      )
+      .filter(s => s.guia === '--' || s.guia === 'NA');
     this.stepOne = this.skus.length > 0;
   }
   openBottomSheet(): void {
@@ -279,13 +283,13 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   buildBody(stepper: MatStepper) {
     const x = this._componentService;
     const query = {
-      Transportadora: x.getInfoBaseOC().value['TRANSPORTADORA'],
-      CodigoInterno: x.getInfoBaseOC().value['PMG_PO_NUMBER'],
-      IdBulto: x.getIdBulto().value,
-      Sku: x.getClearSkus().value,
-      Direccion: x.getDireccionOrigen().value.direccion || null,
-      CodDane: x.getDireccionOrigen().value.ciudad['ID'] || null,
-      info_cubicacion: x.getMagnitudes().value
+      Transportadora: x.infoBaseOC.value.TRANSPORTADORA,
+      CodigoInterno: x.infoBaseOC.value.PMG_PO_NUMBER,
+      IdBulto: x.idBulto.value,
+      Sku: x.clearSkus.value,
+      DireccionOrigen: x.direccionOrigen.value.direccion || null,
+      DireccionDestino: x.direccionDestino.value.direccion || null,
+      info_cubicacion: x.magnitudes.value
     };
     this._dataService
       .PostInfoGuia(query)
@@ -329,11 +333,11 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   }
 
   generarGuia(stepper: MatStepper) {
+    this.isLoading = true;
     this._dataService
       .PostSolicitarGuia(this.guideQuery)
       .toPromise()
       .then(data => {
-        this.isLoading = true;
         const y = this._componentService;
         this.queryRotulo = {
           Sticker: y.getInfoBaseOC().value.STICKER,
@@ -346,12 +350,12 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
           UrlRotulo: `${Constants.PATHROTULO}Guia=${data['guia']}&Usuario=${Constants.USR}`,
           OrdenServicio: data['num_ordens'],
           IdBulto: y.getIdBulto().value,
-          Usuario: y.getUser().value || 'ACEL03'
+          Usuario: y.getUser().value
         };
         this._dataService
           .SetDatosGuia(this.queryRotulo)
           .toPromise()
-          .then(guideQueryResponse => {
+          .then(() => {
             this.isLoading = false;
             this.finalMessg = strings.longMessages.generateGuideSuccess;
             this._componentService.setCloseDialog(true);
@@ -361,8 +365,8 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
             this.finalMessg = strings.errorMessagesText.errorGeneratingGuide;
           });
       })
-      .catch(error => {
-        this.stepThreeMessg = error['error']['respuesta'];
+      .catch(() => {
+        this.stepThreeMessg = this.strings.errorMessagesText.errorGeneratingGuide;
         setTimeout(() => {
           this.stepThreeMessg = '';
           this.isLoading = false;

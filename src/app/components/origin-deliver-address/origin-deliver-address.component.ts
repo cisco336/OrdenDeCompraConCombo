@@ -26,6 +26,7 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
   citiesSubscription: Subscription;
   TAG = 'DANESAPS';
   filteredOrigen: Observable<any>;
+  filteredDestino: Observable<any>;
   ciudades;
   destinos;
   transportadora;
@@ -39,22 +40,24 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
   ) {
     this.addresses = _formBuilder.group({
       originAddress: ['', Validators.required],
-      originCity: ['', Validators.required]
+      originCity: ['', Validators.required],
+      destinyAddress: ['', Validators.required],
+      destinyCity: ['', Validators.required]
     });
   }
 
   ngOnInit() {
-    this.addresses.get('originAddress').valueChanges.subscribe(change => {
-      this._componentService.setDireccionOrigen({ direccion: change, ciudad: this._componentService.getDireccionOrigen().value.ciudad });
-    });
     this.addresses.get('originCity').valueChanges.subscribe(change => {
-      this._componentService.setDireccionOrigen({ direccion: this._componentService.getDireccionOrigen().value.direccion, ciudad: change });
+      // this._componentService.setDireccionOrigen({
+      //   direccion: this._componentService.getDireccionOrigen().value.direccion,
+      //   ciudad: change
+      // });
     });
     this._dataService.GetCiudades(this.TAG).subscribe(
       ciudades => {
         if (!ciudades) {
           this.error = strings.errorMessagesText.citiesError;
-          setTimeout(() => this.error = '', 3000);
+          setTimeout(() => (this.error = ''), 3000);
         } else {
           this.ciudades = ciudades;
           this.destinos = ciudades;
@@ -71,34 +74,46 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
                   : this.ciudades.slice()
               )
             );
-          const data = this._componentService.getInfoBaseOC().value;
-          this.transportadora = data['TRANSPORTADORA'];
-          this.oc = data['PMG_PO_NUMBER'];
-          const query = {
-            Transportadora: this.transportadora,
-            CodigoInterno: this.oc,
-            IdBulto: this._componentService.getIdBultoPost().value,
-            Direccion: '',
-            CodDane: ''
-          };
-          const response = this._componentService.getInfoBaseOC().value;
-          this.direccionDestino.nativeElement.value =
-            response['DIRECCION_ENTREGA'];
-          const destino = this.ciudades.filter(
-            s => s.ID === response['CODIGO_DANE_DESTINO']
-          );
-          this.ciudadDestino.nativeElement.value =
-            destino && destino[0] && destino[0]['DESCRIPCION']
-              ? destino[0]['DESCRIPCION']
-              : null;
-          this.addresses
+          this.filteredDestino = this.addresses
+            .get('destinyCity')
+            .valueChanges.pipe(
+              startWith(''),
+              map(value =>
+                typeof value === 'string' ? value : value['DESCRIPCION']
+              ),
+              map(descripcion =>
+                descripcion
+                  ? this._filterOrigenes(descripcion)
+                  : this.ciudades.slice()
+              )
+            );
+          const form = this.addresses;
+          const component = this._componentService;
+          const origen = this._componentService.getDireccionOrigen().value
+            .ciudad;
+          const destino = this._componentService.direccionDestino.value.ciudad;
+          const ciudadOrigen = this.ciudades.filter(s => s.ID === origen);
+          const ciudadDestino = this.ciudades.filter(s => s.ID === destino);
+          form
             .get('originAddress')
-            .setValue(response['DIRECCION_ORIGEN']);
-          const origen =
-            this.ciudades.filter(
-              s => s.ID === response['CODIGO_DANE_ORIGEN']
-            ) || null;
-          this.addresses.get('originCity').setValue(origen[0]);
+            .setValue(component.direccionOrigen.value.direccion);
+          form
+            .get('destinyAddress')
+            .setValue(component.direccionDestino.value.direccion);
+          form.get('originCity').setValue(ciudadOrigen[0]);
+          form.get('destinyCity').setValue(ciudadDestino[0]);
+          form
+            .get('originAddress')
+            .valueChanges.subscribe(a => this._componentService.direccionOrigen.next({
+              direccion: a,
+              ciudad: form.get('originCity').value
+            }));
+          form
+            .get('destinyAddress')
+            .valueChanges.subscribe(b => this._componentService.direccionDestino.next({
+              direccion: b,
+              ciudad: form.get('destinyCity').value
+            }));
         }
       },
       () => {}

@@ -146,6 +146,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'Select',
     'PMG_PO_NUMBER',
+    'AUX',
     // 'ESTADO',
     // 'FECHA_CREACION',
     // 'PMG_EXP_RCT_DATE',
@@ -186,6 +187,8 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   longMessages = constants.longMessages;
   errorMessage = '';
 
+  filterInput = new FormControl('', []);
+
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
     this.screenHeight = window.innerHeight;
@@ -212,7 +215,6 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       ],
       fechaFinControl: [moment(), [Validators.required]]
     });
-    this.filter = new FormControl('');
     this.onResize();
   }
 
@@ -233,7 +235,10 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.errorMessage = this.errorMessagesText.noPrivileges;
         } else {
-          const y = atob(params['token']);
+          // const y = atob(params['token']);
+
+          const y = params['token'];
+
           if (!y.split(';')[0] || !y.split(';')[1] || !y.split(';')[2]) {
             this.errorMessage = 'Datos de inicio de sesión incorrectos.';
             this.usr = '';
@@ -241,36 +246,38 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
           this.usr = y.split(';')[0];
           this.key = y.split(';')[1];
           this.TOKEN = y.split(';')[2];
+
+          this.appStart(this.key);
           
-          if (this.TOKEN) {
-            try {
-              this._dataService.setToken(this.TOKEN);
-            } catch (error) {
-              this._toastr.error('Error al decodificar token');
-            }
-            this._dataService.getAutorizar().subscribe(
-              data => {
-                if (data) {
-                  this._componentService.setUser(this.usr);
-                  this.appStart(this.key);
-                }
-              },
-              error => {
-                switch (error.status) {
-                  case 401:
-                    this._toastr.warning('Usuario No autorizado.');
-                    break;
-                  case 500:
-                    this._toastr.error('Error en el servicio de autorización.');
-                    break;
-                  default:
-                    this._toastr.error('Error de comunicación.');
-                    break;
-                }
-                this.isLoading = false;
-              }
-            );
-          }
+          // if (this.TOKEN) {
+          //   try {
+          //     this._dataService.setToken(this.TOKEN);
+          //   } catch (error) {
+          //     this._toastr.error('Error al decodificar token');
+          //   }
+          //   this._dataService.getAutorizar().subscribe(
+          //     data => {
+          //       if (data) {
+          //         this._componentService.setUser(this.usr);
+          //         this.appStart(this.key);
+          //       }
+          //     },
+          //     error => {
+          //       switch (error.status) {
+          //         case 401:
+          //           this._toastr.warning('Usuario No autorizado.');
+          //           break;
+          //         case 500:
+          //           this._toastr.error('Error en el servicio de autorización.');
+          //           break;
+          //         default:
+          //           this._toastr.error('Error de comunicación.');
+          //           break;
+          //       }
+          //       this.isLoading = false;
+          //     }
+          //   );
+          // }
         }
       }
     );
@@ -549,9 +556,14 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
 
   getOrdenDetalle(element, guiaOrden?) {
     if (element) {
+      this._componentService.setGeneraGuia(element.GENERA_GUIA);
       if (!this.aux) {
         this.aux = true;
-        this.queryDetallesDialog.p_pmg_po_number = element;
+        this.queryDetallesDialog.p_pmg_po_number = element.PMG_PO_NUMBER;
+        this._componentService.fechasOC.next({
+          FECHA_MAXIMA_OC: element.FECHA_MAXIMA_OC,
+          FECHA_MINIMA_OC: element.FECHA_MINIMA_OC
+        });
         this._dataService
           .postTablaPrincipalOC(this.queryDetallesDialog)
           .toPromise()
@@ -575,7 +587,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         const form = this.mainFilterForm;
         const queryTracking = {
           p_transaccion: 'TR',
-          p_pmg_po_number: -1,
+          p_pmg_po_number: element.PMG_PO_NUMBER,
           p_prd_lvl_child: -1,
           p_vpc_tech_key: form.get('proveedorControl').value['ID'],
           p_fecha_inicio: form
@@ -594,7 +606,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
             this._componentService.setTracking(data);
           })
           .catch(() => {
-            // Controlar error TODO
+            this._toastr.error(this.errorMessagesText.trackingError);
           });
       }
     } else {
@@ -685,8 +697,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.filter.reset();
+    this.filterInput.reset();
     this.consultar();
-    this.applyFilter('');
   }
 }

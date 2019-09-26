@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TrackingObject } from '../../interfaces/interfaces';
 import { ComponentsService } from 'src/app/services/components.service';
 import * as strings from '../../constants/constants';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-tracking',
@@ -10,23 +11,24 @@ import * as strings from '../../constants/constants';
 })
 export class TrackingComponent implements OnInit {
   strings = strings;
-  items: TrackingObject = {
-    DESCRIPCION_ESTADO_HO: '',
-    DESCRIPCION_ESTADO_OC: '',
-    FECHA_CREACION: '',
-    FECHA_INTEGRACION: '',
-    ID_ESTADO_HOMOLOGADO: 0,
-    ID_ESTADO_OC: 0,
-    USUARIO_CREACION: ''
-  };
+  tracking: TrackingObject[];
   show = false;
+  dataSource;
+  displayedColumns: string[] = [
+    'TIPO_TRACKING',
+    'ID_ESTADO_OC',
+    'FECHA_INTEGRACION',
+    'FECHA_EVENTO',
+    'ID_ESTADO_HOMOLOGADO',
+    'USUARIO_CREACION',
+  ];
 
   constructor(private _componentService: ComponentsService) {}
 
   ngOnInit() {
-    this.show = this._componentService.getTracking().value ? true : false;
-    this.items = this._componentService.getTracking().value
-      ? this._componentService.getTracking().value['Value'][0]
-      : null;
+    this.dataSource = new MatTableDataSource<any>();
+    this.tracking = this._componentService.tracking.value['Value'];
+    this.show = this.tracking && this.tracking.length > 0;
+    this.dataSource.data = this.tracking;
   }
 }

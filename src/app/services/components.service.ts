@@ -36,10 +36,32 @@ export class ComponentsService {
   clearSkus = new BehaviorSubject<any>('');
   closeDialogBJ = new BehaviorSubject<boolean>(false);
   tracking = new BehaviorSubject<any>('');
+  direccionDestino = new BehaviorSubject<{
+    direccion: string;
+    ciudad: string;
+  }>({
+    direccion: '',
+    ciudad: ''
+  });
+  generaGuia = new BehaviorSubject<boolean>(false);
+  fechasOC = new BehaviorSubject<{
+    FECHA_MAXIMA_OC: string;
+    FECHA_MINIMA_OC: string;
+  }>({
+    FECHA_MINIMA_OC: '',
+    FECHA_MAXIMA_OC: ''
+  });
 
   aux = new BehaviorSubject<boolean>(false);
 
-  constructor() {}
+  constructor() { }
+
+  setGeneraGuia(data) {
+    this.generaGuia.next(data);
+  }
+  setDireccionDestino(data) {
+    this.direccionDestino.next(data);
+  }
 
   setSelectedSku(data) {
     this.selectedSku.next(data);

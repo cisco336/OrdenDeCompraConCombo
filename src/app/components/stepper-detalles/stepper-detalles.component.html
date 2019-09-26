@@ -1,118 +1,119 @@
 <mat-horizontal-stepper [linear]="true" #stepper>
-  <mat-step state="tab" [completed]="stepOne">
-    <form>
-      <mat-form-field class="no-show">
-        <input matInput [value]="selectedSku?.length || null" />
-      </mat-form-field>
-      <ng-template matStepLabel>{{ strings.strings.skuList }}</ng-template>
-      <div *ngIf="!details" class="chips">
-        {{ skus?.length ? strings.longMessages.generateOrderGuideAlert : 'La orden no tiene skus sin guía.' }}
-        <mat-chip-list>
-          <mat-chip
+    <mat-step state="tab" [completed]="stepOne">
+      <form>
+        <mat-form-field class="no-show">
+          <input matInput [value]="selectedSku?.length || null" />
+        </mat-form-field>
+        <ng-template matStepLabel>{{ strings.strings.skuList }}</ng-template>
+        <div *ngIf="!details" class="chips">
+          {{ skus?.length ? strings.longMessages.generateOrderGuideAlert : 'La orden no tiene skus sin guía.' }}
+          <mat-chip-list>
+            <mat-chip
+              color="accent"
+              *ngFor="let sku of skus"
+              matTooltip="{{ sku.description }}"
+              >{{ sku.sku }}</mat-chip
+            >
+          </mat-chip-list>
+        </div>
+        <app-tabla-detalles *ngIf="details"></app-tabla-detalles>
+        <div [@show]="showQueryResponse" class="query-response" [ngClass]="{'error': error < 0}">
+          {{ queryResponse | titlecase }}
+        </div>
+        <div class="stepper-buttons">
+          <button
+            *ngIf="details"
+            mat-raised-button
             color="accent"
-            *ngFor="let sku of skus"
-            matTooltip="{{ sku.description }}"
-            >{{ sku.sku }}</mat-chip
+            [disabled]="!cambioEstadoSkus?.length"
+            (click)="openBottomSheet()"
           >
-        </mat-chip-list>
-      </div>
-      <app-tabla-detalles *ngIf="details"></app-tabla-detalles>
-      <div [@show]="showQueryResponse" class="query-response" [ngClass]="{'error': error < 0}">
-        {{ queryResponse | titlecase }}
-      </div>
-      <div class="stepper-buttons">
-        <button
-          *ngIf="details"
-          mat-raised-button
-          color="accent"
-          [disabled]="!cambioEstadoSkus?.length"
-          (click)="openBottomSheet()"
-        >
-          <mat-icon>category</mat-icon>{{ strings.strings.changeState }}
-        </button>
-        <button mat-raised-button color="primary" matStepperNext>
-          <mat-icon>navigate_next</mat-icon>{{ strings.strings.generateGuide }}
-        </button>
-      </div>
-    </form>
-  </mat-step>
-
-  <mat-step state="widgets" [completed]="stepTwo">
-    <form>
-      <div class="step-container">
-        <ng-template matStepLabel>{{ strings.strings.packConfig }}</ng-template>
-        <app-packages-config></app-packages-config>
-      </div>
-      <div class="stepper-buttons">
-        <button mat-stroked-button color="warn" matStepperPrevious>
-          <mat-icon>navigate_before</mat-icon>{{ strings.strings.back }}
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="sendPackages(stepper)"
-        >
-          <mat-icon>navigate_next</mat-icon>{{ strings.strings.next }}
-        </button>
-      </div>
-    </form>
-  </mat-step>
-
-  <mat-step state="location" [completed]="stepThree">
-    <form>
+            <mat-icon>category</mat-icon>{{ strings.strings.changeState }}
+          </button>
+          <button *ngIf="genera_guia" mat-raised-button color="primary" matStepperNext>
+            <mat-icon>navigate_next</mat-icon>{{ strings.strings.generateGuide }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  
+    <mat-step *ngIf="genera_guia" state="widgets" [completed]="stepTwo">
+      <form>
+        <div class="step-container">
+          <ng-template matStepLabel>{{ strings.strings.packConfig }}</ng-template>
+          <app-packages-config></app-packages-config>
+        </div>
+        <div class="stepper-buttons">
+          <button mat-stroked-button color="warn" matStepperPrevious>
+            <mat-icon>navigate_before</mat-icon>{{ strings.strings.back }}
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="sendPackages(stepper)"
+          >
+            <mat-icon>navigate_next</mat-icon>{{ strings.strings.next }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  
+    <mat-step *ngIf="genera_guia" state="location" [completed]="stepThree">
+      <form>
+        <div class="step-container">
+          <ng-template matStepLabel>{{
+            strings.strings.originDeliverAddress
+          }}</ng-template>
+          <app-origin-deliver-address></app-origin-deliver-address>
+          <span *ngIf="stepThreeMessg !== '' || isLoading">
+            <div *ngIf="isLoading" [@fade]>
+              <mat-spinner mode="indeterminate" [diameter]="20"></mat-spinner>
+            </div>
+            {{ stepThreeMessg }}
+          </span>
+        </div>
+        <div class="stepper-buttons">
+          <button mat-stroked-button color="warn" matStepperPrevious>
+            <mat-icon>navigate_before</mat-icon>{{ strings.strings.back }}
+          </button>
+          <button mat-raised-button color="primary" (click)="buildBody(stepper)">
+            <mat-icon>navigate_next</mat-icon>{{ strings.strings.next }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  
+    <mat-step *ngIf="genera_guia" state="shipping" [completed]="stepFour">
       <div class="step-container">
         <ng-template matStepLabel>{{
-          strings.strings.originDeliverAddress
+          strings.strings.confirmGuideGeneration
         }}</ng-template>
-        <app-origin-deliver-address></app-origin-deliver-address>
-        <span *ngIf="stepThreeMessg !== '' || isLoading">
-          <div *ngIf="isLoading" [@fade]>
-            <mat-spinner mode="indeterminate" [diameter]="20"></mat-spinner>
-          </div>
-          {{ stepThreeMessg }}
-        </span>
+        {{ finalMessg }}
+        <div *ngIf="isLoading" [@fade]>
+          <mat-spinner mode="indeterminate" [diameter]="20"></mat-spinner>
+        </div>
       </div>
       <div class="stepper-buttons">
         <button mat-stroked-button color="warn" matStepperPrevious>
           <mat-icon>navigate_before</mat-icon>{{ strings.strings.back }}
         </button>
-        <button mat-raised-button color="primary" (click)="buildBody(stepper)">
-          <mat-icon>navigate_next</mat-icon>{{ strings.strings.next }}
+        <button mat-raised-button color="primary" (click)="generarGuia(stepper)" [disabled]="guideQuery?.length">
+          <mat-icon>description</mat-icon>{{ strings.strings.generateGuide }}
         </button>
       </div>
-    </form>
-  </mat-step>
-
-  <mat-step state="shipping" [completed]="stepFour">
-    <div class="step-container">
-      <ng-template matStepLabel>{{
-        strings.strings.confirmGuideGeneration
-      }}</ng-template>
-      {{ finalMessg }}
-      <div *ngIf="isLoading" [@fade]>
-        <mat-spinner mode="indeterminate" [diameter]="20"></mat-spinner>
-      </div>
-    </div>
-    <div class="stepper-buttons">
-      <button mat-stroked-button color="warn" matStepperPrevious>
-        <mat-icon>navigate_before</mat-icon>{{ strings.strings.back }}
-      </button>
-      <button mat-raised-button color="primary" (click)="generarGuia(stepper)" [disabled]="guideQuery?.length">
-        <mat-icon>description</mat-icon>{{ strings.strings.generateGuide }}
-      </button>
-    </div>
-  </mat-step>
-
-  <ng-template matStepperIcon="tab">
-    <mat-icon>table_chart</mat-icon>
-  </ng-template>
-  <ng-template matStepperIcon="widgets">
-    <mat-icon>widgets</mat-icon>
-  </ng-template>
-  <ng-template matStepperIcon="location">
-    <mat-icon>location_on</mat-icon>
-  </ng-template>
-  <ng-template matStepperIcon="shipping">
-    <mat-icon>local_shipping</mat-icon>
-  </ng-template>
-</mat-horizontal-stepper>
+    </mat-step>
+  
+    <ng-template matStepperIcon="tab">
+      <mat-icon>table_chart</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="widgets">
+      <mat-icon>widgets</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="location">
+      <mat-icon>location_on</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="shipping">
+      <mat-icon>local_shipping</mat-icon>
+    </ng-template>
+  </mat-horizontal-stepper>
+  
