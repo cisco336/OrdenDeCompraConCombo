@@ -228,59 +228,57 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading = true;
     this.routeSubscription = this._route.queryParams;
-    this.routeSubscription.pipe(skip(1)).subscribe(
-      params => {
-        if (!params['token']) {
+    this.routeSubscription.pipe(skip(1)).subscribe(params => {
+      if (!params['token']) {
+        this.usr = '';
+        this.isLoading = false;
+        this.errorMessage = this.errorMessagesText.noPrivileges;
+      } else {
+        const y = atob(params['token']);
+
+        // const y = params['token'];
+
+        if (!y.split(';')[0] || !y.split(';')[1] || !y.split(';')[2]) {
+          this.errorMessage = 'Datos de inicio de sesión incorrectos.';
           this.usr = '';
-          this.isLoading = false;
-          this.errorMessage = this.errorMessagesText.noPrivileges;
-        } else {
-          const y = atob(params['token']);
+        }
+        this.usr = y.split(';')[0];
+        this.key = y.split(';')[1];
+        this.TOKEN = y.split(';')[2];
 
-          // const y = params['token'];
+        // this.appStart(this.key);
 
-          if (!y.split(';')[0] || !y.split(';')[1] || !y.split(';')[2]) {
-            this.errorMessage = 'Datos de inicio de sesión incorrectos.';
-            this.usr = '';
+        if (this.TOKEN) {
+          try {
+            this._dataService.setToken(this.TOKEN);
+          } catch (error) {
+            this._toastr.error('Error al decodificar token');
           }
-          this.usr = y.split(';')[0];
-          this.key = y.split(';')[1];
-          this.TOKEN = y.split(';')[2];
-
-          // this.appStart(this.key);
-          
-          if (this.TOKEN) {
-            try {
-              this._dataService.setToken(this.TOKEN);
-            } catch (error) {
-              this._toastr.error('Error al decodificar token');
-            }
-            this._dataService.getAutorizar().subscribe(
-              data => {
-                if (data) {
-                  this._componentService.setUser(this.usr);
-                  this.appStart(this.key);
-                }
-              },
-              error => {
-                switch (error.status) {
-                  case 401:
-                    this._toastr.warning('Usuario No autorizado.');
-                    break;
-                  case 500:
-                    this._toastr.error('Error en el servicio de autorización.');
-                    break;
-                  default:
-                    this._toastr.error('Error de comunicación.');
-                    break;
-                }
-                this.isLoading = false;
+          this._dataService.getAutorizar().subscribe(
+            data => {
+              if (data) {
+                this._componentService.setUser(this.usr);
+                this.appStart(this.key);
               }
-            );
-          }
+            },
+            error => {
+              switch (error.status) {
+                case 401:
+                  this._toastr.warning('Usuario No autorizado.');
+                  break;
+                case 500:
+                  this._toastr.error('Error en el servicio de autorización.');
+                  break;
+                default:
+                  this._toastr.error('Error de comunicación.');
+                  break;
+              }
+              this.isLoading = false;
+            }
+          );
         }
       }
-    );
+    });
   }
 
   appStart(key?) {
@@ -560,6 +558,20 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       if (!this.aux) {
         this.aux = true;
         this.queryDetallesDialog.p_pmg_po_number = element.PMG_PO_NUMBER;
+        this._dataService
+          .GetInfoBaseOc(element.PMG_PO_NUMBER)
+          .toPromise()
+          .then(data => {
+            this._componentService.detalleOC.next(data['Value'][0]);
+            this._componentService.setDireccionDestino({
+              direccion: data['Value'][0].DIRECCION_ENTREGA,
+              ciudad: data['Value'][0].CODIGO_DANE_DESTINO
+            });
+            this._componentService.setDireccionOrigen({
+              direccion: data['Value'][0].DIRECCION_ORIGEN,
+              ciudad: data['Value'][0].CODIGO_DANE_ORIGEN
+            });
+          });
         this._componentService.fechasOC.next({
           FECHA_MAXIMA_OC: element.FECHA_MAXIMA_OC,
           FECHA_MINIMA_OC: element.FECHA_MINIMA_OC
