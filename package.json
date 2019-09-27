@@ -8,7 +8,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-prod": "ng build --prod --extract-css=false"
+    "dev": "ng build --outputPath=dist/dev --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
+    "qa": "ng build -c qa --outputPath=dist/qa --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
+    "prod": "ng build -c production --outputPath=dist/prod --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
+    "all": "npm run-script dev & npm run-script qa & npm run-script prod"
   },
   "private": true,
   "dependencies": {
