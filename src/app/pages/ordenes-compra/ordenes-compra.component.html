@@ -73,7 +73,7 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="mainFilterForm.invalid || !proveedor.length"
+        [disabled]="mainFilterForm.invalid || !proveedor"
         (click)="consultar()"
       >
         <mat-icon mat-list-icon>search</mat-icon>{{ strings.consult }}
