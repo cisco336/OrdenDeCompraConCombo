@@ -4,7 +4,7 @@
 <div class="the-wrapper" [@entering]="render">
   <mat-card
     class="no-privileges mat-elevation-z4"
-    *ngIf="!render && errorMessage && !isLoading"
+    *ngIf="!render && errorMessage"
     [@entering]="errorMessage"
   >
     <h2>{{ errorMessage }}</h2>
@@ -12,9 +12,7 @@
   <div *ngIf="render">
     <h1 [@entering]>
       <span>{{ strings.provider }}:</span
-      ><span [@child]="proveedor !== undefined">{{
-        proveedor[0]?.DESCRIPCION || 'Proveedor no encontrado.'
-      }}</span>
+      ><span [@child]="proveedor !== undefined">{{ proveedor }}</span>
     </h1>
     <button mat-mini-fab color="accent" disabled>
       <mat-icon mat-list-icon>help_outline</mat-icon>
@@ -22,6 +20,29 @@
   </div>
   <mat-card class="mat-elevation-z4 first" *ngIf="render">
     <div [formGroup]="mainFilterForm">
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          placeholder="{{ strings.provider }}"
+          aria-label="strings.provider"
+          matInput
+          required
+          formControlName="proveedorControl"
+          [matAutocomplete]="proveedor"
+        />
+        <mat-autocomplete
+          #proveedor="matAutocomplete"
+          [displayWith]="displayProveedor"
+        >
+          <mat-option
+            *ngFor="let option of filteredProveedores | async"
+            [value]="option"
+          >
+            {{ option.DESCRIPCION }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error>{{ strings.requiredField }}</mat-error>
+      </mat-form-field>
       <mat-form-field>
         <input
           type="text"
@@ -73,7 +94,7 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="mainFilterForm.invalid || !proveedor"
+        [disabled]="mainFilterForm.invalid"
         (click)="consultar()"
       >
         <mat-icon mat-list-icon>search</mat-icon>{{ strings.consult }}
@@ -295,15 +316,15 @@
             <mat-list>
               <!-- <mat-list-item>
                 <mat-icon mat-list-icon>today</mat-icon>
-                <span mat-line class="break" >{{ strings.dispatchDate }}:</span>
-                <span mat-line class="break" >
+                <span mat-line class="break">{{ strings.dispatchDate }}:</span>
+                <span mat-line class="break">
                   {{ element.PMG_SHIP_DATE || errorMessagesText.noData }}
                 </span>
-              </mat-list-item>
-              <mat-list-item>
+              </mat-list-item> -->
+              <!-- <mat-list-item>
                 <mat-icon mat-list-icon>business</mat-icon>
-                <span mat-line class="break" >{{ strings.deliverStore }}:</span>
-                <span mat-line class="break" >
+                <span mat-line class="break">{{ strings.origin }}:</span>
+                <span mat-line class="break">
                   {{ element.ORIGEN || errorMessagesText.noData | titlecase }}
                 </span>
               </mat-list-item> -->
@@ -330,10 +351,10 @@
               </mat-list-item>
               <!-- <mat-list-item>
                 <mat-icon mat-list-icon>assignment</mat-icon>
-                <span mat-line class="break" >{{ strings.orderNoteNumber }}:</span>
-                <span mat-line class="break" >
+                <span mat-line class="break">{{ strings.orderNoteNumber }}:</span>
+                <span mat-line class="break">
                   {{
-                    element['Consecutivo nota pedido'] ||
+                    element['NOTA_PEDIDO'] ||
                       errorMessagesText.noData
                   }}
                 </span>
@@ -369,27 +390,24 @@
               </mat-list-item>
               <mat-list-item>
                 <mat-icon mat-list-icon>local_shipping</mat-icon>
-                <span mat-line class="break"
-                  >{{ strings.conveyor | titlecase }}:</span
-                >
+                <span mat-line class="break">{{ strings.conveyor | titlecase }}:</span>
                 <span mat-line class="break">
                   {{
-                    element.TRANSPORTADORA || errorMessagesText.noData
-                      | titlecase
+                    element.TRANSPORTADORA || errorMessagesText.noData | titlecase
                   }}
                 </span>
               </mat-list-item>
               <!-- <mat-list-item>
                 <mat-icon mat-list-icon>call_merge</mat-icon>
-                <span mat-line class="break" >{{ strings.integrationState }}:</span>
-                <span mat-line class="break" >
+                <span mat-line class="break">{{ strings.integrationState }}:</span>
+                <span mat-line class="break">
                   {{ element['null'] || errorMessagesText.noData }}
                 </span>
               </mat-list-item> -->
               <!-- <mat-list-item>
                 <mat-icon mat-list-icon>today</mat-icon>
-                <span mat-line class="break" >{{ strings.integrationDate }}:</span>
-                <span mat-line class="break" >
+                <span mat-line class="break">{{ strings.integrationDate }}:</span>
+                <span mat-line class="break">
                   {{ element.PMG_ENTRY_DATE || errorMessagesText.noData }}
                 </span>
               </mat-list-item> -->
