@@ -62,12 +62,15 @@ export const strings = {
   state: 'Estado',
   requiredField: 'Campo requerido.',
   creationDate: 'Fecha creación',
-  changeDate: 'Fecha del cambio',
-  changeTime: 'Hora del cambio',
+  changeDate: 'Fecha real',
+  changeTime: 'Hora real',
   deliverDate: 'Fecha entrega',
   deliverType: 'Tipo de entrega',
+  red: 'Red', 
+  promise: 'Promesa', 
+  orderDate: 'Fecha Orden', 
   realDeliverDate: 'Fecha real de entrega',
-  realEventDate: 'Fecha real cambio de estado',
+  realEventDate: 'Fecha real',
   startDate: 'Fecha incio',
   endDate: 'Fecha fin',
   editDate: 'Fecha modificación',
@@ -101,6 +104,7 @@ export const strings = {
   destinyAddress: 'Dirección destino',
   city: 'Ciudad',
   cities: 'Ciudades',
+  billingData: 'Sitio de radicación factura', 
   deliveryData: 'Datos de entrega',
   providerData: 'Datos de proveedor',
   deliveryAddress: 'Dirección de entrega',
@@ -111,6 +115,7 @@ export const strings = {
   orderNumber: 'Número de orden',
   sticker: 'Sticker',
   observations: 'Observaciones',
+  comments: 'Comentarios', 
   skuList: 'Lista de SKU',
   sku: 'Sku',
   next: 'Siguiente',
@@ -292,4 +297,6 @@ export class Constants {
   // PROD
   static readonly SUBSCRIPTIONKEYCONFIGURACION =
     '209fa70e5b0c4b5c8bddaf0aa54b8e19';
+
+  static readonly Secret_Key = '$G1Int3rnet*.**';
 }

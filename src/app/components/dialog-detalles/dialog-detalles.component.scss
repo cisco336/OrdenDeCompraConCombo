@@ -44,6 +44,10 @@
   &-fourth {
     border: 1px solid $HC-primary;
   }
+  &-full { 
+    grid-row: 2; 
+    grid-column: 1/-1; 
+  } 
   &-wrapper {
     justify-content: center;
     padding: 1rem 1rem 3rem 1rem;
@@ -56,6 +60,7 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     padding: 0.5rem;
+    font-weight: bold; 
     // font-size: 21px;
     display: flex;
     flex-flow: row-reverse nowrap;

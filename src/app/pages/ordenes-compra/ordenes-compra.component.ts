@@ -44,6 +44,7 @@ import * as moment from 'moment';
 import * as constants from '../../constants/constants';
 import { GenerateOrderGuideComponent } from 'src/app/components/generate-order-guide/generate-order-guide.component';
 import { DialogService } from 'src/app/services/dialog.service';
+import { Helper } from 'src/app/common/helper.class';
 
 @Component({
   selector: 'app-ordenes-compra',
@@ -234,17 +235,17 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.errorMessage = this.errorMessagesText.noPrivileges;
       } else {
-        const y = atob(params['token']);
+        const y = Helper.decrypt(params.id.toString());
 
         // const y = params['token'];
 
-        if (!y.split(';')[0] || !y.split(';')[1] || !y.split(';')[2]) {
+        if (!y.split(';')[3] || !y.split(';')[4] || !y.split(';')[5]) {
           this.errorMessage = 'Datos de inicio de sesión incorrectos.';
           this.usr = '';
         }
-        this.usr = y.split(';')[0];
-        this.key = y.split(';')[1];
-        this.TOKEN = y.split(';')[2];
+        this.usr = y.split(';')[3];
+        this.key = y.split(';')[4];
+        this.TOKEN = y.split(';')[5];
 
         // this.appStart(this.key);
 
@@ -616,6 +617,11 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
           .toPromise()
           .then(data => {
             this._componentService.setTracking(data);
+            if (data["Value"][0]["Código"] === "4") {
+              this._componentService.setIsTracking(false);
+            } else {
+              this._componentService.setIsTracking(true);
+            }  
           })
           .catch(() => {
             this._toastr.error(this.errorMessagesText.trackingError);
@@ -628,7 +634,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   openDialogDetalles() {
     this._componentService.setQueryDetalles(this.queryDetallesDialog);
     const dialogData = {
-      maxWidth: '900px',
+      maxWidth: '1100px',
       width: '95vw',
       maxHeight: '90vh',
       data: {

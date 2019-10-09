@@ -41,6 +41,10 @@
             <span>{{ strings.strings.city }}:</span
             ><span>{{ infoBaseOC.CIUDAD_CTE | titlecase }}</span>
           </li>
+          <li *ngIf="infoBaseOC.TELEFONOS && infoBaseOC.TELEFONOS !== ''">
+            <span>{{ strings.strings.phone }}:</span
+            ><span>{{ infoBaseOC.TELEFONOS | titlecase }}</span>
+          </li>
         </ul>
       </div>
     </mat-card>
@@ -75,6 +79,22 @@
               {{ infoBaseOC.TRANSPORTADORA | titlecase }}
             </span>
           </li> -->
+        </ul>
+      </div>
+      <div class="card-title">
+        <mat-icon>attach_money</mat-icon>
+        {{ strings.strings.billingData }}:
+      </div>
+      <div class="card-body">
+        <ul>
+          <li *ngIf="infoBaseOC.DIRECCION_FACTURACION && infoBaseOC.DIRECCION_FACTURACION !== ''">
+            <span>{{ strings.strings.address }}:</span
+            ><span>{{ infoBaseOC.DIRECCION_FACTURACION | titlecase }}</span>
+          </li>
+          <li *ngIf="infoBaseOC.CIUDAD_FACTURACION && infoBaseOC.CIUDAD_FACTURACION !== ''">
+            <span>{{ strings.strings.city }}:</span
+            ><span>{{ infoBaseOC.CIUDAD_FACTURACION | titlecase }}</span>
+          </li>
         </ul>
       </div>
     </mat-card>
@@ -118,28 +138,30 @@
       </div>
     </mat-card>
 
-    <!-- <mat-card
-      class="card-fourth mat-elevation-z10"
-      *ngIf="ordenCompra['observaciones']"
+    <mat-card
+      class="card-fourth card-full mat-elevation-z10"
+      *ngIf="observaciones"
     >
       <div class="card-title">
         <mat-icon>insert_comment</mat-icon>
         {{ strings.strings.observations }}:
       </div>
       <div class="card-body">
-        {{
-          ordenCompra['observaciones'] ||
-            strings.errorMessagesText.noObservations
-        }}
+        <ul>
+          <li *ngIf="infoBaseOC.observaciones !== ''">
+            <span>{{ strings.strings.comments }}:</span
+            ><span>{{ infoBaseOC.OBSERVACIONES }}</span>
+          </li>
+        </ul>
       </div>
-    </mat-card> -->
+    </mat-card>
   </div>
 
   <mat-tab-group dynamicHeight mat-stretch-tabs>
     <mat-tab label="SKU">
       <app-stepper-detalles [details]="true"></app-stepper-detalles>
     </mat-tab>
-    <mat-tab label="Tracking">
+    <mat-tab label="Tracking" [disabled]="!isTracking">
       <app-tracking></app-tracking>
     </mat-tab>
   </mat-tab-group>

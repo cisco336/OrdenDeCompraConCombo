@@ -81,8 +81,9 @@ export class DataService {
   }
 
   GetInfoBaseOc(data) {
-    return this.http.get(
-      environment.APIORDENDECOMPRA + this.getInfoBaseOcCall + data,
+    return this.http.post(
+      environment.APIORDENDECOMPRA + this.postTablaPrincipalOCCall,
+      data,
       {
         headers: this.generateBasicHeadersJWT()
       }
