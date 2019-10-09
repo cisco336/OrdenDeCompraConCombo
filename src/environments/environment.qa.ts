@@ -3,23 +3,25 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+         production: false,
 
-  PATHROTULO: 'https://portal.envia.co/2IMPRESIONGUIAS/ISticker_ZEA2.aspx',
+         PATHROTULO:
+           "https://portal.envia.co/2IMPRESIONGUIASpruebas/ISticker_ZEA.aspx",
 
-  APIORDENDECOMPRA: 'https://apim-dev-proxy.sodhc.co/logistica-ordenescompra',
-  USRPASSWD: 'EMPCAR01:EMPCAR1',
-  USR: 'EMPCAR01',
-  PASSWD: 'EMPCAR1',
-  AUTH:
-    'https://apim-dev-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated',
-  GUIA:
-    'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion',
-  APIPROVEEDOR: 'https://apim-dev-proxy.sodhc.co/inventario/api',
-  APIGUIA: 'https://apim-dev-proxy.sodhc.co/logistica-transportadora',
-  SUBSCRIPTIONKEY: 'dfeb9e69860f45258647cc7ba45fb040',
-  SUBSCRIPTIONKEYCONFIGURACION: '9b33c33d833340e0839653420edf6a89'
-};
+         APIORDENDECOMPRA:
+           "https://apim-qa-proxy.sodhc.co/logistica-ordenescompra",
+         USRPASSWD: "EMPCAR01:EMPCAR1",
+         USR: "EMPCAR01",
+         PASSWD: "EMPCAR1",
+         AUTH:
+           "https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated",
+         GUIA:
+           "https://portal.envia.co/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion",
+         APIPROVEEDOR: "https://apim-qa-proxy.sodhc.co/inventario/api",
+         APIGUIA: "https://apim-qa-proxy.sodhc.co/logistica-transportadora",
+         SUBSCRIPTIONKEY: "442c55ae313642028c9eb69dc4220dad",
+         SUBSCRIPTIONKEYCONFIGURACION: "442c55ae313642028c9eb69dc4220dad"
+       };
 
 /*
  * For easier debugging in development mode, you can import the following file
