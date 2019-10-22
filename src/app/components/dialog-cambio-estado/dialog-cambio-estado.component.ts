@@ -88,9 +88,10 @@ export class DialogCambioEstadoComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   isLoading = false;
+  now = moment().format('hh:mm:ss A');
   estadosControl = new FormControl('', [Validators.required, RequireMatch]);
   fechaCambioControl = new FormControl(moment(), [Validators.required]);
-  horaCambioControl = new FormControl('00:00:00', [Validators.required]);
+  horaCambioControl = new FormControl(this.now, [Validators.required]);
   responseMessage: Response;
   estados: Estado[] = [];
   today = moment();
@@ -104,6 +105,13 @@ export class DialogCambioEstadoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.horaCambioControl.valueChanges.subscribe(s => {
+      if (moment(s, 'hh:mm:ss A').isValid()) {
+        this.horaCambioControl.setErrors(null);
+      } else {
+        this.horaCambioControl.setErrors({ invalid: true });
+      }
+    });
     this.responseMessage = {
       message: '',
       ID: 0
@@ -142,15 +150,16 @@ export class DialogCambioEstadoComponent implements OnInit {
 
   cambiarEstados() {
     this.isLoading = true;
-    let query = {
+    const query = {
       p_transaccion: 'UO',
+      p_prd_lvl_child: -1,
       p_pmg_po_number: null,
       p_vpc_tech_key: '-1',
       p_fecha_inicio: '-1',
       p_fecha_fin: '-1',
-      p_fecha_real: `${this.fechaCambioControl.value.format('DD/MM/YYYY')} ${
-        this.horaCambioControl.value
-      }:00`,
+      p_fecha_real: `${this.fechaCambioControl.value.format(
+        'DD/MM/YYYY'
+      )} ${moment(this.horaCambioControl.value, 'hh:mm:ss A').format('hh:mm:ss A')}`,
       p_id_estado: this.estadosControl.value.ID,
       p_origen: '-1',
       p_usuario: this.data.data.usr
@@ -162,10 +171,7 @@ export class DialogCambioEstadoComponent implements OnInit {
         .toPromise()
         .then(response => {
           this.responseMessage = {
-            message:
-              response['Value'][0]['ID'] <= 0
-                ? this.strings.errorMessagesText.queryError
-                : this.strings.successMessagesText.querySuccess,
+            message: response['Value'][0]['MENSAJE'],
             ID: response['Value'][0]['ID']
           };
         });

@@ -8,10 +8,10 @@
 </mat-toolbar>
 
 <div class="the-wrapper" mat-dialog-content>
+  <div *ngIf="error !== ''">
+    {{ error }}
+  </div>
   <div [@cardGroup]="ordenCompra !== null ? true : false" class="card-wrapper">
-    <div *ngIf="error === ''">
-      {{ error }}
-    </div>
     <mat-card *ngIf="cliente" class="card-first mat-elevation-z10">
       <div class="card-title">
         <mat-icon>person</mat-icon>
@@ -41,6 +41,10 @@
             <span>{{ strings.strings.city }}:</span
             ><span>{{ infoBaseOC.CIUDAD_CTE | titlecase }}</span>
           </li>
+          <li *ngIf="infoBaseOC.TELEFONOS && infoBaseOC.TELEFONOS !== ''">
+            <span>{{ strings.strings.phone }}:</span
+            ><span>{{ infoBaseOC.TELEFONOS | titlecase }}</span>
+          </li>
         </ul>
       </div>
     </mat-card>
@@ -65,7 +69,7 @@
             <span>{{ strings.strings.city }}:</span
             ><span>{{ ciudad | titlecase }}</span>
           </li>
-          <li
+          <!-- <li
             *ngIf="
               infoBaseOC.TRANSPORTADORA && infoBaseOC.TRANSPORTADORA !== ''
             "
@@ -74,6 +78,22 @@
             ><span>
               {{ infoBaseOC.TRANSPORTADORA | titlecase }}
             </span>
+          </li> -->
+        </ul>
+      </div>
+      <div class="card-title">
+        <mat-icon>attach_money</mat-icon>
+        {{ strings.strings.billingData }}:
+      </div>
+      <div class="card-body">
+        <ul>
+          <li *ngIf="infoBaseOC.DIRECCION_FACTURACION && infoBaseOC.DIRECCION_FACTURACION !== ''">
+            <span>{{ strings.strings.address }}:</span
+            ><span>{{ infoBaseOC.DIRECCION_FACTURACION | titlecase }}</span>
+          </li>
+          <li *ngIf="infoBaseOC.CIUDAD_FACTURACION && infoBaseOC.CIUDAD_FACTURACION !== ''">
+            <span>{{ strings.strings.city }}:</span
+            ><span>{{ infoBaseOC.CIUDAD_FACTURACION | titlecase }}</span>
           </li>
         </ul>
       </div>
@@ -106,23 +126,33 @@
             <span>{{ strings.strings.orderNote }}:</span
             ><span>{{ infoBaseOC.NOTA_PEDIDO }}</span>
           </li>
+          <li *ngIf="fechasOC.FECHA_MINIMA_OC">
+            <span>{{ strings.strings.minDeliverDate }}:</span
+            ><span>{{ fechasOC.FECHA_MINIMA_OC }}</span>
+          </li>
+          <li *ngIf="fechasOC.FECHA_MAXIMA_OC">
+            <span>{{ strings.strings.maxDeliverDate }}:</span
+            ><span>{{ fechasOC.FECHA_MAXIMA_OC }}</span>
+          </li>
         </ul>
       </div>
     </mat-card>
 
     <mat-card
-      class="card-fourth mat-elevation-z10"
-      *ngIf="ordenCompra['observaciones']"
+      class="card-fourth card-full mat-elevation-z10"
+      *ngIf="observaciones"
     >
       <div class="card-title">
         <mat-icon>insert_comment</mat-icon>
         {{ strings.strings.observations }}:
       </div>
       <div class="card-body">
-        {{
-          ordenCompra['observaciones'] ||
-            strings.errorMessagesText.noObservations
-        }}
+        <ul>
+          <li *ngIf="infoBaseOC.observaciones !== ''">
+            <span>{{ strings.strings.comments }}:</span
+            ><span>{{ infoBaseOC.OBSERVACIONES }}</span>
+          </li>
+        </ul>
       </div>
     </mat-card>
   </div>
@@ -131,7 +161,7 @@
     <mat-tab label="SKU">
       <app-stepper-detalles [details]="true"></app-stepper-detalles>
     </mat-tab>
-    <mat-tab label="Tracking">
+    <mat-tab label="Tracking" [disabled]="!isTracking">
       <app-tracking></app-tracking>
     </mat-tab>
   </mat-tab-group>

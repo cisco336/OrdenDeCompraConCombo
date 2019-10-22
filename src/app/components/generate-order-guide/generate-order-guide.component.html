@@ -1,5 +1,5 @@
 <mat-toolbar class="toolbar mat-elevation-z10" color="primary" mat-dialog-title>
-  <span>{{ strings.longMessages.generateOrderGuideTitle }} {{ oc }}</span>
+  <span>{{ skus.length ? strings.longMessages.generateOrderGuideTitle : 'La orden no tiene skus sin guía.' }} {{ oc }}</span>
   <span>
     <button mat-icon-button (click)="closeDialog()">
       <mat-icon>close</mat-icon>

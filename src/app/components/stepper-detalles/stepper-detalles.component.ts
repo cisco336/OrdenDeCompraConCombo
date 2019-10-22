@@ -56,11 +56,13 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   selectedSku;
+  cambioEstadoSkus;
   estadosSubscription: Subscription;
   getSelectedSkuSubscription: Subscription;
   estados: Estado[] = [];
   strings = strings;
   queryResponse = '';
+  error: number;
   showQueryResponse = false;
   oc: any;
   skus: any;
@@ -96,6 +98,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   finalMessg: string;
   stepThreeMessg = '';
   isLoading = false;
+  genera_guia: boolean;
   queryRotulo;
   guideQuery: any;
 
@@ -108,6 +111,8 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this._componentService.generaGuia.subscribe(change => this.genera_guia = change);
+    this._componentService.aux.subscribe(val => (this.stepOne = val));
     this.finalMessg = strings.longMessages.generateOrderGuideAlertFinal;
     this.stepOne = false;
     this.magnitudes = this._componentService.getMagnitudes().value;
@@ -139,22 +144,40 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
     this.selectedSkuSubscription = this._componentService
       .getSelectedSku()
       .subscribe(skusSub => {
-        this.selectedSku = skusSub;
-        this.stepOne = this.selectedSku.length > 0;
+        this.cambioEstadoSkus = skusSub;
+        if (skusSub.length) {
+          this.selectedSku = skusSub.filter(
+            s => s.GUIA === 'NA' || s.GUIA === '--'
+          );
+        }
+        if (this.hasDetails) {
+          if (this.selectedSku) {
+            this.stepOne = this.selectedSku && this.selectedSku.length > 0;
+          } else {
+            this.stepOne = false;
+          }
+        } else if (this.selectedSku && this.selectedSku.length > 0) {
+          this.stepOne = true;
+        } else {
+          this.stepOne = false;
+        }
       });
   }
 
   noDetails() {
-    this.stepOne = true;
     const detalleOC = this._componentService.getDetalleOC().value;
     this.oc = detalleOC[0]['PMG_PO_NUMBER'];
-    this.skus = detalleOC.map(
-      number =>
-        (number = {
-          sku: number['PRD_LVL_NUMBER'],
-          description: number['PRD_NAME_FULL']
-        })
-    );
+    this.skus = detalleOC
+      .map(
+        number =>
+          (number = {
+            guia: number['GUIA'],
+            sku: number['PRD_LVL_NUMBER'],
+            description: number['PRD_NAME_FULL']
+          })
+      )
+      .filter(s => s.guia === '--' || s.guia === 'NA');
+    this.stepOne = this.skus.length > 0;
   }
   openBottomSheet(): void {
     const sheet = this._bottomSheet.open(BottomSheetComponent, {
@@ -170,7 +193,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
             this.cambioEstado(response);
           }
         },
-        error => {
+        () => {
           this.showQueryResponse = true;
           this.queryResponse = strings.errorMessagesText.errorUnknown;
           setTimeout(() => (this.showQueryResponse = false), 2000);
@@ -191,7 +214,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
       p_origen: '-1',
       p_usuario: this._componentService.getUser().value
     };
-    this.selectedSku.forEach(data => {
+    this.cambioEstadoSkus.forEach(data => {
       query.p_pmg_po_number = data.PMG_PO_NUMBER;
       query.p_prd_lvl_child = data.PRD_LVL_CHILD;
       const postTablaPrincipalOC = this._dataService
@@ -200,7 +223,8 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
         .then(
           resolve => {
             this.showQueryResponse = true;
-            this.queryResponse = resolve['Mensaje'];
+            this.queryResponse = resolve['Value'][0]['MENSAJE'];
+            this.error = resolve['Value'][0]['ID'];
             setTimeout(() => (this.showQueryResponse = false), 5000);
             this.refreshTable();
           },
@@ -219,7 +243,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
       .postTablaPrincipalOC(this._componentService.getQueryDetalles().value)
       .toPromise()
       .then(data => {
-        this._componentService.setTablaDetalles(data);
+        this._componentService.setTablaDetalles(data['Value']);
       });
   }
 
@@ -259,13 +283,13 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   buildBody(stepper: MatStepper) {
     const x = this._componentService;
     const query = {
-      Transportadora: x.getInfoBaseOC().value['TRANSPORTADORA'],
-      CodigoInterno: x.getInfoBaseOC().value['PMG_PO_NUMBER'],
-      IdBulto: x.getIdBulto().value,
-      Sku: x.getClearSkus().value,
-      Direccion: x.getDireccionOrigen().value.direccion,
-      CodDane: x.getDireccionOrigen().value.ciudad['ID'],
-      info_cubicacion: x.getMagnitudes().value
+      Transportadora: x.infoBaseOC.value.TRANSPORTADORA,
+      CodigoInterno: x.infoBaseOC.value.PMG_PO_NUMBER,
+      IdBulto: x.idBulto.value,
+      Sku: x.clearSkus.value,
+      DireccionOrigen: x.direccionOrigen.value.direccion || null,
+      DireccionDestino: x.direccionDestino.value.direccion || null,
+      info_cubicacion: x.magnitudes.value
     };
     this._dataService
       .PostInfoGuia(query)
@@ -309,11 +333,11 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   }
 
   generarGuia(stepper: MatStepper) {
+    this.isLoading = true;
     this._dataService
       .PostSolicitarGuia(this.guideQuery)
       .toPromise()
       .then(data => {
-        this.isLoading = true;
         const y = this._componentService;
         this.queryRotulo = {
           Sticker: y.getInfoBaseOC().value.STICKER,
@@ -331,7 +355,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
         this._dataService
           .SetDatosGuia(this.queryRotulo)
           .toPromise()
-          .then(guideQueryResponse => {
+          .then(() => {
             this.isLoading = false;
             this.finalMessg = strings.longMessages.generateGuideSuccess;
             this._componentService.setCloseDialog(true);
@@ -341,8 +365,8 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
             this.finalMessg = strings.errorMessagesText.errorGeneratingGuide;
           });
       })
-      .catch(error => {
-        this.stepThreeMessg = error['error']['respuesta'];
+      .catch(() => {
+        this.stepThreeMessg = this.strings.errorMessagesText.errorGeneratingGuide;
         setTimeout(() => {
           this.stepThreeMessg = '';
           this.isLoading = false;

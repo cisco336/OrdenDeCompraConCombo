@@ -60,3 +60,8 @@ mat-step {
     grid-template-columns: repeat(auto-fit, minmax(100px, 100px));
   }
 }
+
+.error {
+  background: $HC-danger;
+  color: $HC-white;
+}

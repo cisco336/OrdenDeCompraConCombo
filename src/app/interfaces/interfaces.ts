@@ -73,16 +73,13 @@ export interface Proveedores {
   DESCRIPCION: string;
 }
 export interface TrackingObject {
-  ORIGEN: string;
-  OBJECT_ID: number;
-  DESCRIPCION: string;
-  FECHA_ESTADO: string;
+  DESCRIPCION_ESTADO_HO: string;
+  DESCRIPCION_ESTADO_OC: string;
   FECHA_CREACION: string;
-  USR_CREACION: string;
-  CAUSAL: string;
-  DESCRIPCION_CAUSAL: string;
-  SKU: number;
-  DESCRIPCION_SKU: string;
+  FECHA_INTEGRACION: string;
+  ID_ESTADO_HOMOLOGADO: number;
+  ID_ESTADO_OC: number;
+  USUARIO_CREACION: string;
 }
 export interface InfoBaseOC {
   CEDULA: number;
@@ -101,6 +98,7 @@ export interface InfoBaseOC {
   GUIA: string;
   CUMPLIDO: string;
   TRANSPORTADORA: string;
+  OBSERVACIONES: string;
 }
 export interface Bultos {
   PESO: number;

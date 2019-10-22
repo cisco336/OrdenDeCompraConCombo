@@ -14,7 +14,7 @@
       <span>{{ strings.provider }}:</span
       ><span [@child]="proveedor !== undefined">{{ proveedor }}</span>
     </h1>
-    <button mat-mini-fab color="accent">
+    <button mat-mini-fab color="accent" disabled>
       <mat-icon mat-list-icon>help_outline</mat-icon>
     </button>
   </div>
@@ -61,7 +61,7 @@
             *ngFor="let option of filteredEstados | async"
             [value]="option"
           >
-            {{ option.DESCRIPCION }}
+            {{ option.DESCRIPCION | titlecase }}
           </mat-option>
         </mat-autocomplete>
         <mat-error>{{ strings.requiredField }}</mat-error>
@@ -102,7 +102,7 @@
       <mat-icon
         matTooltip="{{ tooltips.mainFilterInfo }}"
         [matTooltipPosition]="'right'"
-        matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+        matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
         >info_outline</mat-icon
       >
     </div>
@@ -118,7 +118,7 @@
         <mat-icon
           matTooltip="{{ tooltips.optionsInfo }}"
           [matTooltipPosition]="'right'"
-          matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+          matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
           >info_outline</mat-icon
         >
       </h2>
@@ -145,11 +145,12 @@
     <mat-form-field class="filter" *ngIf="tableMessage === ''">
       <input
         matInput
+        [formControl]="filterInput"
         (keyup)="applyFilter($event.target.value)"
         placeholder="{{ strings.filter }}"
         matTooltip="{{ tooltips.tableFilterInfo }}"
         [matTooltipPosition]="'above'"
-        matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+        matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
       />
       <mat-icon matSuffix>filter_list</mat-icon>
     </mat-form-field>
@@ -173,7 +174,7 @@
             [aria-label]="checkboxLabel()"
             matTooltip="{{ tooltips.checkBoxInfo }}"
             [matTooltipPosition]="'above'"
-            matTooltipClass="mat-elevation-z8 HC-tooltip-success"
+            matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
           >
           </mat-checkbox>
         </th>
@@ -198,6 +199,7 @@
           mat-cell
           *matCellDef="let element"
           class="position-label"
+          (dblclick)="getOrdenDetalle(element)"
           (click)="
             expandedElement = expandedElement === element ? null : element
           "
@@ -219,13 +221,47 @@
                 >{{ element.ESTADO | titlecase }}</span
               >
             </li>
-            <li *ngIf="element.FECHA_CREACION">
-              <span>{{ strings.creationDate }}:</span
-              ><span>{{ element.FECHA_CREACION }}</span>
+            <li *ngIf="element.FECHA_MINIMA_OC">
+              <span>{{ strings.minDeliverDate }}:</span
+              ><span>{{ element.FECHA_MINIMA_OC }}</span>
             </li>
-            <li *ngIf="element.PMG_EXP_RCT_DATE">
-              <span>{{ strings.deliverDate }}:</span
-              ><span>{{ element.PMG_EXP_RCT_DATE }}</span>
+            <li *ngIf="element.FECHA_MAXIMA_OC">
+              <span>{{ strings.maxDeliverDate }}:</span
+              ><span>{{ element.FECHA_MAXIMA_OC }}</span>
+            </li>
+          </ul>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="AUX">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="position-label click"
+          (click)="
+            expandedElement = expandedElement === element ? null : element
+          "
+          (dblclick)="getOrdenDetalle(element)"
+          matRipple
+          [matRippleColor]="primary"
+        >
+          <ul>
+            <li *ngIf="element.NOTA_PEDIDO">
+              <span>{{ strings.orderNote }}:</span>
+              <span>{{ element.NOTA_PEDIDO }}</span>
+            </li>
+            <li *ngIf="element.STICKER">
+              <span>{{ strings.sticker }}:</span>
+              <span>{{ element.STICKER }}</span>
+            </li>
+            <li *ngIf="element.FLUJO">
+              <span>{{ strings.flow }}:</span>
+              <span>{{ element.FLUJO }}</span>
+            </li>
+            <li *ngIf="element.TIPO_ENTREGA">
+              <span>{{ strings.deliverType }}:</span>
+              <span>{{ element.TIPO_ENTREGA }}</span>
             </li>
           </ul>
         </td>
@@ -236,19 +272,31 @@
         <th mat-header-cell *matHeaderCellDef>{{ strings.actions }}</th>
         <td mat-cell *matCellDef="let element">
           <button
+            class="click"
             mat-icon-button
             color="primary"
-            (click)="getOrdenDetalle(element.PMG_PO_NUMBER)"
+            matTooltip="{{ tooltips.purchaseOrderDetailToolTip }}"
+            matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
+            (click)="getOrdenDetalle(element)"
           >
             <mat-icon>assignment</mat-icon>
           </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="getOrdenDetalle(element.PMG_PO_NUMBER, 1)"
+          <span
+            [matTooltipDisabled]="element.GENERA_GUIA > 0"
+            matTooltip="{{ errorMessagesText.guideUnabled }}"
           >
-            <mat-icon>local_shipping</mat-icon>
-          </button>
+            <button
+              class="click"
+              mat-icon-button
+              color="warn"
+              [disabled]="!element.GENERA_GUIA"
+              matTooltip="{{ tooltips.purchaseOrderGuideTooltip }}"
+              matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
+              (click)="getOrdenDetalle(element, 1)"
+            >
+              <mat-icon>local_shipping</mat-icon>
+            </button>
+          </span>
         </td>
       </ng-container>
 
@@ -266,53 +314,69 @@
             "
           >
             <mat-list>
-              <mat-list-item>
+              <!-- <mat-list-item>
                 <mat-icon mat-list-icon>today</mat-icon>
-                <span mat-line>{{ strings.dispatchDate }}:</span>
-                <span mat-line>
+                <span mat-line class="break">{{ strings.dispatchDate }}:</span>
+                <span mat-line class="break">
                   {{ element.PMG_SHIP_DATE || errorMessagesText.noData }}
                 </span>
-              </mat-list-item>
-              <mat-list-item>
+              </mat-list-item> -->
+              <!-- <mat-list-item>
                 <mat-icon mat-list-icon>business</mat-icon>
-                <span mat-line>{{ strings.deliverStore }}:</span>
-                <span mat-line>
+                <span mat-line class="break">{{ strings.origin }}:</span>
+                <span mat-line class="break">
                   {{ element.ORIGEN || errorMessagesText.noData | titlecase }}
+                </span>
+              </mat-list-item> -->
+              <mat-list-item>
+                <mat-icon mat-list-icon>today</mat-icon>
+                <span mat-line class="break">{{ strings.orderDate }}:</span>
+                <span mat-line class="break">
+                  {{ element['PMG_RELEASE_DATE'] | date: 'medium' }}
                 </span>
               </mat-list-item>
               <mat-list-item>
                 <mat-icon mat-list-icon>today</mat-icon>
-                <span mat-line>{{ strings.realDeliverDate }}:</span>
-                <span mat-line>
-                  {{
-                    element['Fecha real de entrega'] || errorMessagesText.noData
-                  }}
+                <span mat-line class="break"
+                  >{{ strings.realDeliverDate }}:</span
+                >
+                <span mat-line class="break">
+                  {{ element['FECHA_REAL_ENTREGA'] | date: 'medium' }}
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon mat-list-icon>language</mat-icon>
+                <span mat-line class="break">{{ strings.red }}:</span>
+                <span mat-line class="break">
+                  {{ element['RED'] }}
                 </span>
               </mat-list-item>
               <mat-list-item>
                 <mat-icon mat-list-icon>attach_money</mat-icon>
-                <span mat-line>{{ strings.value }}:</span>
-                <span mat-line>
+                <span mat-line class="break">{{ strings.value }}:</span>
+                <span mat-line class="break">
                   {{
-                    element.PMG_TOT_PO_COST | currency: 'COP':'symbol-narrow' || errorMessagesText.noData
-                      
+                    element.PMG_TOT_PO_COST
+                      | currency
+                        : 'COP'
+                        : 'symbol-narrow' || errorMessagesText.noData
                   }}
                 </span>
               </mat-list-item>
-              <mat-list-item>
+              <!-- <mat-list-item>
                 <mat-icon mat-list-icon>assignment</mat-icon>
-                <span mat-line>{{ strings.orderNoteNumber }}:</span>
-                <span mat-line>
+                <span mat-line class="break">{{ strings.orderNoteNumber }}:</span>
+                <span mat-line class="break">
                   {{
-                    element['Consecutivo nota pedido'] ||
+                    element['NOTA_PEDIDO'] ||
                       errorMessagesText.noData
                   }}
                 </span>
-              </mat-list-item>
+              </mat-list-item> -->
               <mat-list-item>
                 <mat-icon mat-list-icon>assignment</mat-icon>
-                <span mat-line>{{ strings.orderState }}:</span>
-                <span mat-line>
+                <span mat-line class="break">{{ strings.orderState }}:</span>
+                <span mat-line class="break">
                   {{
                     element.PMG_STAT_NAME || errorMessagesText.noData
                       | titlecase
@@ -321,39 +385,53 @@
               </mat-list-item>
               <mat-list-item>
                 <mat-icon mat-list-icon>inbox</mat-icon>
-                <span mat-line>{{ strings.deliverType }}:</span>
-                <span mat-line>
+                <span mat-line class="break">{{ strings.deliverType }}:</span>
+                <span mat-line class="break">
                   {{
-                    element['Tipo de entrega'] || errorMessagesText.noData
+                    element['TIPO_ENTREGA'] || errorMessagesText.noData
                       | titlecase
                   }}
                 </span>
               </mat-list-item>
               <mat-list-item>
-                <mat-icon mat-list-icon>local_shipping</mat-icon>
-                <span mat-line
-                  >{{ strings.operator }} ({{ strings.conveyor }}):</span
-                >
-                <span mat-line>
+                <mat-icon mat-list-icon>store</mat-icon>
+                <span mat-line class="break">{{ strings.provider }}:</span>
+                <span mat-line class="break">
                   {{
                     element.VENDOR_NAME || errorMessagesText.noData | titlecase
                   }}
                 </span>
               </mat-list-item>
               <mat-list-item>
-                <mat-icon mat-list-icon>call_merge</mat-icon>
-                <span mat-line>{{ strings.integrationState }}:</span>
-                <span mat-line>
-                  {{ element['null'] || errorMessagesText.noData }}
+                <mat-icon mat-list-icon>local_shipping</mat-icon>
+                <span mat-line class="break">{{ strings.conveyor | titlecase }}:</span>
+                <span mat-line class="break">
+                  {{
+                    element.TRANSPORTADORA || errorMessagesText.noData | titlecase
+                  }}
                 </span>
               </mat-list-item>
               <mat-list-item>
-                <mat-icon mat-list-icon>today</mat-icon>
-                <span mat-line>{{ strings.integrationDate }}:</span>
-                <span mat-line>
-                  {{ element.PMG_ENTRY_DATE || errorMessagesText.noData }}
+                <mat-icon mat-list-icon>pan_tool</mat-icon>
+                <span mat-line class="break">{{ strings.promise }}:</span>
+                <span mat-line class="break">
+                  {{ element['PROMESA'] }}
                 </span>
               </mat-list-item>
+              <!-- <mat-list-item>
+                <mat-icon mat-list-icon>call_merge</mat-icon>
+                <span mat-line class="break">{{ strings.integrationState }}:</span>
+                <span mat-line class="break">
+                  {{ element['null'] || errorMessagesText.noData }}
+                </span>
+              </mat-list-item> -->
+              <!-- <mat-list-item>
+                <mat-icon mat-list-icon>today</mat-icon>
+                <span mat-line class="break">{{ strings.integrationDate }}:</span>
+                <span mat-line class="break">
+                  {{ element.PMG_ENTRY_DATE || errorMessagesText.noData }}
+                </span>
+              </mat-list-item> -->
             </mat-list>
           </div>
         </td>

@@ -1,65 +1,83 @@
 <form [formGroup]="addresses">
-  <mat-card class="mat-elevation-z8">
-    <div class="mat-card-header">
-      <span>Origen:</span><mat-icon>local_shipping</mat-icon>
-    </div>
-    <mat-card-content>
-      <mat-form-field>
-        <textarea
-          matInput
-          placeholder="{{ strings.strings.address }}"
-          formControlName="originAddress"
-        ></textarea>
-      </mat-form-field>
-      <mat-form-field class="example-full-width">
-        <input
-          type="text"
-          placeholder="{{ strings.strings.cities }}"
-          aria-label="strings.strings.cities"
-          matInput
-          required
-          formControlName="originCity"
-          [matAutocomplete]="ciudadOrigen"
-        />
-        <mat-autocomplete
-          #ciudadOrigen="matAutocomplete"
-          [displayWith]="displayOrigen"
-        >
-          <mat-option
-            *ngFor="let option of filteredOrigen | async"
-            [value]="option"
+    <mat-card class="mat-elevation-z8">
+      <div class="mat-card-header">
+        <span>Origen:</span><mat-icon>local_shipping</mat-icon>
+      </div>
+      <mat-card-content>
+        <mat-form-field>
+          <input
+            matInput
+            aria-label="strings.provider"
+            placeholder="{{ strings.strings.address }}"
+            formControlName="originAddress"
+            #direccionOrigen
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input
+            type="text"
+            placeholder="{{ strings.strings.cities }}"
+            aria-label="strings.strings.cities"
+            matInput
+            required
+            formControlName="originCity"
+            [matAutocomplete]="ciudadOrigen"
+          />
+          <mat-autocomplete
+            #ciudadOrigen="matAutocomplete"
+            [displayWith]="displayOrigen"
           >
-            {{ option.DESCRIPCION }}
-          </mat-option>
-        </mat-autocomplete>
-        <!-- <mat-error>{{ strings.requiredField }}</mat-error> -->
-      </mat-form-field>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="mat-elevation-z0">
-    <div class="mat-card-header">
-      <span>Destino:</span><mat-icon>home</mat-icon>
-    </div>
-    <mat-card-content>
-      <mat-form-field>
-        <input
-          type="text"
-          placeholder="{{ strings.strings.address }}"
-          aria-label="strings.provider"
-          matInput
-          disabled
-          #direccionDestino
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="{{ strings.strings.cities }}"
-          disabled
-          #ciudadDestino
-        />
-      </mat-form-field>
-    </mat-card-content>
-  </mat-card>
-</form>
-<div *ngIf="error !== ''">{{ error }}</div>
+            <mat-option
+              *ngFor="let option of filteredOrigen | async"
+              [value]="option"
+            >
+              {{ option.DESCRIPCION }}
+            </mat-option>
+          </mat-autocomplete>
+          <!-- <mat-error>{{ strings.requiredField }}</mat-error> -->
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card class="mat-elevation-z0">
+      <div class="mat-card-header">
+        <span>Destino:</span><mat-icon>home</mat-icon>
+      </div>
+      <mat-card-content>
+        <mat-form-field>
+          <input
+            placeholder="{{ strings.strings.address }}"
+            aria-label="strings.provider"
+            matInput
+            formControlName="destinyAddress"
+            #direccionDestino
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <input
+              type="text"
+              placeholder="{{ strings.strings.cities }}"
+              aria-label="strings.strings.cities"
+              matInput
+              required
+              formControlName="destinyCity"
+              [matAutocomplete]="ciudadDestino"
+            />
+            <mat-autocomplete
+              #ciudadDestino="matAutocomplete"
+              [displayWith]="displayOrigen"
+            >
+              <mat-option
+                *ngFor="let option of filteredDestino | async"
+                [value]="option"
+              >
+                {{ option.DESCRIPCION }}
+              </mat-option>
+            </mat-autocomplete>
+            <!-- <mat-error>{{ strings.requiredField }}</mat-error> -->
+          </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </form>
+  <div *ngIf="error !== ''">{{ error }}</div>
+  

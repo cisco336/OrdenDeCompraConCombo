@@ -45,7 +45,7 @@
           *ngFor="let estado of filteredEstados | async"
           [value]="estado"
         >
-          {{ estado.DESCRIPCION }}
+          {{ estado.DESCRIPCION | titlecase }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -63,13 +63,14 @@
     </mat-form-field>
     <mat-form-field>
       <input
-        type="time"
+        type="text"
         matInput
         required
         placeholder="{{ strings.strings.changeTime }}"
         [formControl]="horaCambioControl"
-        value="00:00"
+        value="{{ now }}"
       />
+      <mat-error>{{ strings.errorMessagesText.timeError }}</mat-error>
     </mat-form-field>
   </form>
   <button
@@ -95,7 +96,7 @@
     success: responseMessage.ID < 0
   }"
 >
-  {{ responseMessage.message }}
+  {{ responseMessage.message | titlecase }}
 </div>
 <div class="loading" *ngIf="isLoading" [@fade]>
   <mat-spinner mode="indeterminate" [diameter]="60"></mat-spinner>

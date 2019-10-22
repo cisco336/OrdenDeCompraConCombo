@@ -69,9 +69,9 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
       });
     });
     this.displayedColumns = [
-      'ID_BULTO',
+      // 'ID_BULTO',
       'BULTOS',
-      'CANTIDAD',
+      // 'CANTIDAD',
       'LARGO',
       'ANCHO',
       'ALTO',
@@ -94,9 +94,13 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
     this.oc = this.detalleOc[0].PMG_PO_NUMBER;
     this.hasDetails = this._componentService.getHasDetails().value;
     this.selectedSkusSubscription = this.hasDetails
-      ? this._componentService
-          .getSelectedSku()
-          .subscribe(skuData => (this.selectedSkus = skuData))
+      ? this._componentService.getSelectedSku().subscribe(skuData => {
+          if (skuData.length) {
+            this.selectedSkus = skuData.filter(
+              s => s.GUIA === 'NA' || s.GUIA === '--'
+            );
+          }
+        })
       : null;
   }
 

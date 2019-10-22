@@ -1,24 +1,43 @@
 @import '../../../assets/css/vars';
+.tracking-list {
+  &:not(:last-of-type) {
+    border-bottom: 1px solid $HC-primary;
+  }
+}
 .mat-list.mat-list-base {
-    display: grid;
-    padding: 0;
-    margin: 1rem 0;
-    width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
-    align-items: center;
-    justify-content: center;
-    & mat-list-item {
-        transition: all .2s ease-out;
-        &:hover {
-            font-weight: 600;
-        }
+  display: grid;
+  padding: 0;
+  margin: 1rem 0;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+  align-items: center;
+  justify-content: center;
+  & mat-list-item {
+    transition: all 0.2s ease-out;
+    &:hover {
+      font-weight: 600;
     }
+  }
 }
 .no-data {
-    font-weight: bold;
-    font-size: 130%;
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-weight: bold;
+  font-size: 130%;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep table {
+  & * {
+    font-size: 12px;
+  }
+  & td.mat-cell:not(:first-of-type),
+  & td.mat-footer-cell:not(:first-of-type),
+  & th.mat-header-cell:not(:first-of-type) {
+    padding: 0 10px;
+  }
+  & td.block span {
+    display: block;
+  }
 }

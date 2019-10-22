@@ -26,44 +26,45 @@ import { BottomSheetImgComponent } from '../bottom-sheet-img/bottom-sheet-img.co
 import * as strings from '../../constants/constants';
 
 @Component({
-  selector: 'app-dialog-detalles',
-  templateUrl: './dialog-detalles.component.html',
-  styleUrls: ['./dialog-detalles.component.scss'],
+  selector: "app-dialog-detalles",
+  templateUrl: "./dialog-detalles.component.html",
+  styleUrls: ["./dialog-detalles.component.scss"],
   animations: [
-    trigger('cardGroup', [
-      state('true', style({ opacity: 1, height: '*' })),
-      state('false', style({ opacity: 0, height: 0 })),
-      transition('*<=>*', [
-        animate('5s ease-out'),
-        query('*', [query('@card', [animateChild()], { optional: true })], {
+    trigger("cardGroup", [
+      state("true", style({ opacity: 1, height: "*" })),
+      state("false", style({ opacity: 0, height: 0 })),
+      transition("*<=>*", [
+        animate("5s ease-out"),
+        query("*", [query("@card", [animateChild()], { optional: true })], {
           optional: true
         })
       ])
     ]),
-    trigger('card', [
+    trigger("card", [
       state(
-        'true',
+        "true",
         style({
-          position: 'relative',
-          transform: 'translateY(0)',
-          visibility: 'visible'
+          position: "relative",
+          transform: "translateY(0)",
+          visibility: "visible"
         })
       ),
       state(
-        'false',
+        "false",
         style({
-          position: 'absolute',
-          transform: 'translateY(-200px)',
-          visibility: 'hidden'
+          position: "absolute",
+          transform: "translateY(-200px)",
+          visibility: "hidden"
         })
       ),
-      transition('0 <=> 1', animate('.2s ease-out'))
+      transition("0 <=> 1", animate(".2s ease-out"))
     ])
   ]
 })
 export class DialogDetallesComponent implements OnInit, OnDestroy {
-  @ViewChild('stepper', { static: false }) stepper;
+  @ViewChild("stepper", { static: false }) stepper;
   background: string;
+  isTracking = false;
   color: string;
   ordenCompra: DetalleOrdenDeCompra[] = [];
   estados: Estado[] = [];
@@ -71,21 +72,22 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
   skus: any[] = [];
   public infoBaseOC: InfoBaseOC = {
     CEDULA: 0,
-    CLIENTE: '',
-    TELEFONOS: '',
-    DIRECCION_CTE: '',
-    CIUDAD_CTE: '',
-    DIRECCION_ENTREGA: '',
-    CIUDAD_ENTREGA: '',
+    CLIENTE: "",
+    TELEFONOS: "",
+    DIRECCION_CTE: "",
+    CIUDAD_CTE: "",
+    DIRECCION_ENTREGA: "",
+    CIUDAD_ENTREGA: "",
     PMG_PO_NUMBER: 0,
-    TIPO_ENTREGA: '',
-    STICKER: '',
-    ORIGEN: '',
-    NOTA_PEDIDO: '',
-    PROVEEDOR: '',
-    GUIA: '',
-    CUMPLIDO: '',
-    TRANSPORTADORA: ''
+    TIPO_ENTREGA: "",
+    STICKER: "",
+    ORIGEN: "",
+    NOTA_PEDIDO: "",
+    PROVEEDOR: "",
+    GUIA: "",
+    CUMPLIDO: "",
+    TRANSPORTADORA: "",
+    OBSERVACIONES: ""
   };
   numeroOrden = 0;
   strings = strings;
@@ -95,7 +97,8 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
   GetInfoBaseOcSubscription;
   ciudad;
   direccionDestino;
-  error: string;
+  error = "";
+  fechasOC;
 
   constructor(
     public dialogRef: MatDialogRef<DialogDetallesComponent>,
@@ -105,6 +108,8 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
     private _bottomSheet: MatBottomSheet
   ) {}
   ngOnInit() {
+    this.isTracking = this._componentService.getIsTracking().value;
+    this.fechasOC = this._componentService.fechasOC.value;
     this._componentService.setCloseDialog(false);
     this._componentService.setSteps({
       two: false,
@@ -120,32 +125,53 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
     this.ordenCompra = this.data.data.ordenCompra;
     const ordenNumber = this.ordenCompra[0].PMG_PO_NUMBER;
     this._componentService.setTablaDetalles(this.ordenCompra);
+
+    const queryConsultar = {
+      p_transaccion: "IB",
+      p_pmg_po_number: ordenNumber,
+      p_prd_lvl_child: -1,
+      p_vpc_tech_key: -1,
+      p_fecha_inicio: "-1",
+      p_fecha_fin: "-1",
+      p_fecha_real: "-1",
+      p_id_estado: -1,
+      p_origen: "-1",
+      p_usuario: ""
+    };
+
     this.GetInfoBaseOcSubscription = this._dataService
-      .GetInfoBaseOc(ordenNumber)
+      .GetInfoBaseOc(queryConsultar)
       .toPromise()
       .then(data => {
-        this.direccionDestino = data['Value'][0]['DIRECCION_ENTREGA'];
+        this.direccionDestino = data["Value"][0]["DIRECCION_ENTREGA"];
         this._dataService
-          .GetCiudades('DANESAPS')
+          .GetCiudades("DANESAPS")
           .toPromise()
           .then(ciudades => {
             this.ciudad = ciudades;
             this.ciudad = this.ciudad.filter(
-              s => s.ID === data['Value'][0]['CODIGO_DANE_DESTINO']
-            )[0]['DESCRIPCION'];
+              s => s.ID === data["Value"][0]["CODIGO_DANE_DESTINO"]
+            )[0]["DESCRIPCION"];
           })
           .catch(() => {
             this.error = strings.errorMessagesText.citiesError;
-            setTimeout(
-              () => (this.error = ''),
-              3000
-            );
+            setTimeout(() => (this.error = ""), 3000);
           });
-        this._componentService.setInfoBaseOC(data['Value'][0]);
-        this.infoBaseOC = data['Value'][0];
-        if (this.infoBaseOC['Código'] === '4') {
+        this._componentService.setInfoBaseOC(data["Value"][0]);
+        this.infoBaseOC = data["Value"][0];
+        const address = this._componentService.infoBaseOC.value;
+        this._componentService.setDireccionDestino({
+          direccion: address.DIRECCION_ENTREGA,
+          ciudad: address.CODIGO_DANE_DESTINO
+        });
+        this._componentService.setDireccionOrigen({
+          direccion: address.DIRECCION_ORIGEN,
+          ciudad: address.CODIGO_DANE_ORIGEN
+        });
+        if (this.infoBaseOC["Código"] === "4") {
           this.cliente = false;
           this.entrega = false;
+          this.observaciones = false;
         } else {
           this.cliente =
             this.infoBaseOC.CEDULA === undefined &&
@@ -162,11 +188,13 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
             this.infoBaseOC.CUMPLIDO === undefined
               ? false
               : true;
+          this.observaciones =
+            this.infoBaseOC.OBSERVACIONES === undefined ? false : true;
         }
       });
     this.numeroOrden = this.ordenCompra[0].PMG_PO_NUMBER;
-    this.background = this.background ? '' : 'primary';
-    this.color = this.color ? '' : 'accent';
+    this.background = this.background ? "" : "primary";
+    this.color = this.color ? "" : "accent";
     this.skus = this._componentService.getSelectedSku().value;
   }
 
@@ -188,7 +216,7 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
   }
 
   showImg(data) {
-    window.open(data, '_blank');
+    window.open(data, "_blank");
   }
 
   closeDialog() {

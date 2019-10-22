@@ -64,10 +64,14 @@ export class GenerateOrderGuideComponent implements OnInit, OnDestroy {
     this.skus = this.data.data.ordenCompra.map(
       number =>
         (number = {
+          guia: number['GUIA'],
           sku: number['PRD_LVL_NUMBER'],
           description: number['PRD_NAME_FULL']
         })
     );
+    if (this.skus) {
+      this._componentService.aux.next(true);
+    }
   }
 
   ngOnDestroy() {}

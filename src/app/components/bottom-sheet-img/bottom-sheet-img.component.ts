@@ -15,8 +15,6 @@ export class BottomSheetImgComponent implements OnInit {
   @ViewChild('img', { static: true }) img: any;
 
   ngOnInit() {
-    console.log(this.data.img);
-    console.log(this.img);
   }
 
   closeSheet(data?) {

@@ -1,37 +1,70 @@
-<mat-list *ngIf="show">
-  <mat-list-item>
-    <mat-icon mat-list-icon>flag</mat-icon>
-    <h4 mat-line>Origen:</h4>
-    <p mat-line>{{ items.ORIGEN }}</p>
-  </mat-list-item>
-  <mat-list-item>
-    <mat-icon mat-list-icon>fingerprint</mat-icon>
-    <h4 mat-line>{{ items.OBJECT_ID }}</h4>
-    <p mat-line>{{ items.DESCRIPCION }}</p>
-    <p mat-line>{{ items.FECHA_ESTADO }}</p>
-  </mat-list-item>
-  <mat-list-item>
-    <mat-icon mat-list-icon>date_range</mat-icon>
-    <h4 mat-line>Fecha creación:</h4>
-    <p mat-line>{{ items.FECHA_CREACION }}</p>
-  </mat-list-item>
-  <mat-list-item>
-    <mat-icon mat-list-icon>assignment_ind</mat-icon>
-    <h4 mat-line>Creado por:</h4>
-    <p mat-line>{{ items.USR_CREACION }}</p>
-  </mat-list-item>
-  <mat-list-item>
-    <mat-icon mat-list-icon>help_outline</mat-icon>
-    <h4 mat-line>{{ items.CAUSAL }}</h4>
-    <p mat-line>{{ items.DESCRIPCION_CAUSAL }}</p>
-  </mat-list-item>
-  <mat-list-item>
-    <mat-icon mat-list-icon>confirmation_number</mat-icon>
-    <h4 mat-line>SKU:</h4>
-    <p mat-line>{{ items.SKU }}</p>
-    <p mat-line>{{ items.DESCRIPCION_SKU }}</p>
-  </mat-list-item>
-</mat-list>
-<div class="no-data" *ngIf="!show">
-  Sin datos
-</div>
+<table #table mat-table [dataSource]="dataSource" multiTemplateDataRows *ngIf="dataSource">
+    <!-- TIPO_TRACKING -->
+    <ng-container matColumnDef="TIPO_TRACKING">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ strings.strings.trackingType }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.TIPO_TRACKING | titlecase }}</td>
+    </ng-container>
+    <!-- ID_ESTADO_OC -->
+    <ng-container matColumnDef="ID_ESTADO_OC">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ strings.strings.idOC }}
+      </th>
+      <td mat-cell *matCellDef="let element" class="block">
+        <span mat-line>
+          {{ strings.strings.id }}: {{ element.ID_ESTADO_OC }}
+        </span>
+        <span mat-line>
+          {{ strings.strings.desc }}: {{ element.DESCRIPCION_ESTADO_OC | titlecase }}
+        </span>
+      </td>
+    </ng-container>
+    <!-- FECHA_INTEGRACION -->
+    <ng-container matColumnDef="FECHA_INTEGRACION">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ strings.strings.integrationDate }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.FECHA_INTEGRACION }}</td>
+    </ng-container>
+    <!-- FECHA_EVENTO -->
+    <ng-container matColumnDef="FECHA_EVENTO">
+      <th mat-header-cell *matHeaderCellDef>{{ strings.strings.eventDate }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.FECHA_EVENTO }}</td>
+    </ng-container>
+    <!-- ID_ESTADO_HOMOLOGADO -->
+    <ng-container matColumnDef="ID_ESTADO_HOMOLOGADO">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ strings.strings.homologationState }}
+      </th>
+      <td mat-cell *matCellDef="let element" class="block">
+        <span mat-line>
+          {{ strings.strings.id }}: {{ element.ID_ESTADO_HOMOLOGADO }}
+        </span>
+        <span mat-line>
+          {{ strings.strings.desc }}: {{ element.DESCRIPCION_ESTADO_HO | titlecase }}
+        </span>
+      </td>
+    </ng-container>
+    <!-- USUARIO_CREACION -->
+    <ng-container matColumnDef="USUARIO_CREACION">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ strings.strings.creation }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <span mat-line>
+          {{ strings.strings.user }}: {{ element.USUARIO_CREACION | titlecase }}
+        </span>
+        <span mat-line>
+          {{ strings.strings.date }}: {{ element.FECHA_CREACION }}
+        </span>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  
+  <div class="no-data" *ngIf="!dataSource">
+    Sin datos
+  </div>
+  

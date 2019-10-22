@@ -1,137 +1,169 @@
 <table #table mat-table [dataSource]="dataSource" multiTemplateDataRows>
-  <!-- Checkbox Column -->
-  <ng-container matColumnDef="Select">
-    <th mat-header-cell *matHeaderCellDef class="check" class="check">
-      <mat-checkbox
-        (change)="$event ? masterToggle() : null"
-        [checked]="selection.hasValue() && isAllSelected()"
-        [indeterminate]="selection.hasValue() && !isAllSelected()"
-        [aria-label]="checkboxLabel()"
-      >
-      </mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let row" class="">
-      <mat-checkbox
-        (click)="$event.stopPropagation()"
-        (change)="$event ? selection.toggle(row) : null"
-        [checked]="selection.isSelected(row)"
-        [aria-label]="checkboxLabel(row)"
-      >
-      </mat-checkbox>
-    </td>
-  </ng-container>
-
-  <ng-container
-    [matColumnDef]="column"
-    *ngFor="let column of displayedColumnsAux; let i = index"
-  >
-    <th mat-header-cell *matHeaderCellDef>
-      {{ strings.longMessages.tableClick }}
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let element"
-      [matTooltip]="column === 'PRD_NAME_FULL' ? element[column] : null"
-      (click)="
-        expandedElement = expandedElement === element ? null : element;
-        details(element)
-      "
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="Select">
+      <th mat-header-cell *matHeaderCellDef class="check" class="check">
+        <mat-checkbox
+          (change)="$event ? masterToggle() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()"
+          [aria-label]="checkboxLabel()"
+        >
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row" class="">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)"
+          [aria-label]="checkboxLabel(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
+  
+    <ng-container
+      [matColumnDef]="column"
+      *ngFor="let column of displayedColumnsAux; let i = index"
     >
-      <ul>
-        <li>{{ element[column] }}</li>
-        <li>
-          <span>{{ strings.strings.guideNumber }}:</span
-          ><span>{{ numeroGuia || strings.errorMessagesText.noGuide }}</span>
-        </li>
-        <li *ngIf="element.PRD_UPC">
-          <span>{{ strings.strings.barCode }}:</span
-          ><span>{{ element.PRD_UPC }}</span>
-        </li>
-        <li *ngIf="element.PRD_NAME_FULL">
-          <span>{{ strings.strings.description }}:</span
-          ><span>{{ element.PRD_NAME_FULL }}</span>
-        </li>
-        <li *ngIf="element.ESTADO" id="state">
-          <span>{{ strings.strings.state }}:</span
-          ><span
-            [ngClass]="{
-              info: element.ESTADO === 'EN TRANSPORTE',
-              success: element.ESTADO === 'ESTADO FINAL',
-              warning: element.ESTADO === 'PREPARADO',
-              danger: element.ESTADO === 'PENDIENTE'
-            }"
-            >{{ element.ESTADO }}</span
-          >
-        </li>
-        <li *ngIf="element.PMG_SHIP_DATE">
-          <span>{{ strings.strings.creationDate }}</span
-          ><span>{{ element.PMG_SHIP_DATE }}:</span>
-        </li>
-        <li *ngIf="element.PMG_SHIP_DATE1">
-          <span>{{ strings.strings.deliverDate }}</span
-          ><span>{{ element.PMG_SHIP_DATE1 }}:</span>
-        </li>
-        <li *ngIf="element.FECHA_MODIFICACION">
-          <span>{{ strings.strings.editDate }}:</span
-          ><span>{{ element.FECHA_MODIFICACION }} </span>
-        </li>
-      </ul>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="guia">
-    <th mat-header-cell *matHeaderCellDef>{{ strings.strings.guide }}</th>
-    <td mat-cell *matCellDef="let element">
-      <button color="accent" mat-icon-button [disabled]="element.GUIA === 'NA' || !element.GUIA" [matTooltipDisabled]="element.GUIA !== 'NA'" [matTooltip]="strings.tooltips.noGuideTooltip" (click)="openLink(element.URL_GUIA)">
-        <mat-icon>receipt</mat-icon>
-      </button>
-    </td>
-  </ng-container>
-
-  <!-- Detalles -->
-  <ng-container matColumnDef="expandedDetail">
-    <td
-      mat-cell
-      *matCellDef="let element"
-      [attr.colspan]="displayedColumns.length || null"
-    >
-      <div
-        class="element-detail "
-        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+      <th mat-header-cell *matHeaderCellDef>
+        {{ strings.longMessages.tableClick }}
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [matTooltip]="column === 'PRD_NAME_FULL' ? element[column] : null"
+        (click)="
+          expandedElement = expandedElement === element ? null : element;
+          details(element)
+        "
       >
-        <mat-list>
-          <mat-list-item *ngFor="let x of jsonToBeUsed">
-            <span mat-line> {{ x.key }}: </span>
-            <span mat-line *ngIf="isNumber(x.value, x.key)">
-              {{ x.value }}
-            </span>
-            <span mat-line *ngIf="!isNumber(x.value)">
-              {{ x.value | titlecase }}
-            </span>
-            <span mat-line *ngIf="isCost(x.key)">
-              {{ x.value | currency: 'COP':'symbol-narrow' }}
-            </span>
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr
-    mat-row
-    *matRowDef="let element; columns: displayedColumns"
-    class="element-row"
-    [class.expanded-row]="expandedElement === element"
-  ></tr>
-  <tr
-    mat-row
-    *matRowDef="let row; columns: ['expandedDetail']"
-    class="detail-row"
-  ></tr>
-</table>
-
-<mat-paginator
-  [pageSizeOptions]="[5, 10, 20, 50, 100]"
-  showFirstLastButtons
-></mat-paginator>
+        <ul>
+          <li>{{ element[column] }}</li>
+          <li>
+            <span>{{ strings.strings.guideNumber }}:</span
+            ><span>{{ element.GUIA || strings.errorMessagesText.noGuide }}</span>
+          </li>
+          <li *ngIf="element.PRD_UPC">
+            <span>{{ strings.strings.barCode }}:</span
+            ><span>{{ element.PRD_UPC }}</span>
+          </li>
+          <li *ngIf="element.PRD_NAME_FULL">
+            <span>{{ strings.strings.description }}:</span
+            ><span>{{ element.PRD_NAME_FULL }}</span>
+          </li>
+          <li *ngIf="element.ESTADO" id="state">
+            <span>{{ strings.strings.state }}:</span
+            ><span
+              [ngClass]="{
+                info: element.ESTADO === 'EN TRANSPORTE',
+                success: element.ESTADO === 'ESTADO FINAL',
+                warning: element.ESTADO === 'PREPARADO',
+                danger: element.ESTADO === 'PENDIENTE'
+              }"
+              >{{ element.ESTADO }}</span
+            >
+          </li>
+          <li *ngIf="element.PMG_SHIP_DATE">
+            <span>{{ strings.strings.creationDate }}</span
+            ><span>{{ element.PMG_SHIP_DATE }}:</span>
+          </li>
+          <li *ngIf="element.PMG_SHIP_DATE1">
+            <span>{{ strings.strings.deliverDate }}</span
+            ><span>{{ element.PMG_SHIP_DATE1 }}:</span>
+          </li>
+          <li *ngIf="element.FECHA_MODIFICACION">
+            <span>{{ strings.strings.editDate }}:</span
+            ><span>{{ element.FECHA_MODIFICACION }} </span>
+          </li>
+        </ul>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="guia">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ strings.strings.guide }} / {{ strings.strings.label }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          color="accent"
+          mat-icon-button
+          [disabled]="
+            element.GUIA === 'NA' || element.GUIA === '--' || !element.GUIA
+          "
+          [matTooltip]="toolTip(element.GUIA, true)"
+          (click)="openLink(element.URL_GUIA)"
+        >
+          <mat-icon>receipt</mat-icon>
+        </button>
+        <button
+          color="primary"
+          mat-icon-button
+          [disabled]="
+            element.URL_ROTULO === 'NA' ||
+            element.URL_ROTULO === '--' ||
+            !element.URL_ROTULO
+          "
+          [matTooltip]="toolTip(element.URL_ROTULO, false)"
+          (click)="openLink(element.URL_ROTULO)"
+        >
+          <mat-icon>card_membership</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+  
+    <!-- Detalles -->
+    <ng-container matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [attr.colspan]="displayedColumns.length || null"
+      >
+        <div
+          class="element-detail "
+          [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+        >
+          <mat-list>
+            <mat-list-item *ngFor="let x of jsonToBeUsed">
+              <span *ngIf="x.key !== strings.strings.realEventDate">
+                <span mat-line class="break" > {{ x.key }}: </span>
+                <span mat-line class="break"  *ngIf="isNumber(x.value, x.key)">
+                  {{ x.value }}
+                </span>
+                <span mat-line class="break"  *ngIf="!isNumber(x.value)">
+                  {{ x.value | titlecase }}
+                </span>
+                <span mat-line class="break"  *ngIf="isCost(x.key)">
+                  {{ x.value | currency: 'COP':'symbol-narrow' }}
+                </span>
+              </span>
+              <span *ngIf="x.key === strings.strings.realEventDate">
+                <span mat-line class="break" > {{ x.key }}: </span>
+                <span mat-line class="break" >
+                  {{ x.value | date }}
+                </span>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let element; columns: displayedColumns"
+      class="element-row"
+      [class.expanded-row]="expandedElement === element"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="detail-row"
+    ></tr>
+  </table>
+  
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20, 50, 100]"
+    showFirstLastButtons
+  ></mat-paginator>
+  
