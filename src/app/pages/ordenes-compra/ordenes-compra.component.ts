@@ -239,7 +239,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       } else {
         const y = Helper.decrypt(params.token.toString());
 
-        // const y = params['token'];
+        const y = params['token'];
 
         if (!y.split(";")[1] || !y.split(";")[2] || !y.split(";")[3]) {
           this.errorMessage = "Datos de inicio de sesión incorrectos.";
@@ -249,7 +249,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         this.key = y.split(";")[2];
         this.TOKEN = y.split(";")[3];
 
-        // this.appStart(this.key);
+        this.appStart(this.key);
 
         if (this.TOKEN) {
           try {

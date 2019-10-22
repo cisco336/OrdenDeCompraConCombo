@@ -233,41 +233,41 @@ export class Constants {
   // DEV
   // static readonly APIORDENDECOMPRA = 'https://apim-dev-proxy.sodhc.co/logistica-ordenescompra';
   // QA
-  // static readonly APIORDENDECOMPRA =
-  //   'https://apim-qa-proxy.sodhc.co/logistica-ordenescompra';
+  static readonly APIORDENDECOMPRA =
+    'https://apim-qa-proxy.sodhc.co/logistica-ordenescompra';
   // PROD
-  static readonly APIORDENDECOMPRA = 'https://apim-prod-proxy.sodhc.co/logistica-ordenescompra';
+  // static readonly APIORDENDECOMPRA = 'https://apim-prod-proxy.sodhc.co/logistica-ordenescompra';
 
   // DEV & QA
-  // static readonly USRPASSWD = 'EMPCAR01:EMPCAR1';
-  // static readonly USR = 'EMPCAR01';
-  // static readonly PASSWD = 'EMPCAR1';
+  static readonly USRPASSWD = 'EMPCAR01:EMPCAR1';
+  static readonly USR = 'EMPCAR01';
+  static readonly PASSWD = 'EMPCAR1';
   // PROD
-  static readonly USRPASSWD = 'EAE6VELE:EAE6VELE';
-  static readonly USR = 'EAE6VELE';
-  static readonly PASSWD = 'EAE6VELE';
+  // static readonly USRPASSWD = 'EAE6VELE:EAE6VELE';
+  // static readonly USR = 'EAE6VELE';
+  // static readonly PASSWD = 'EAE6VELE';
 
   // DEV
   // static readonly AUTH = 'https://apim-dev-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
   // QA
-  // static readonly AUTH =
-  //   'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
+  static readonly AUTH =
+    'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
   // PROD
-  static readonly AUTH = 'https://apim-prod-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
+  // static readonly AUTH = 'https://apim-prod-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated';
 
   // DEV & QA
-  // static readonly GUIA =
-  // 'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion';
+  static readonly GUIA =
+  'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion';
   // PROD
-  static readonly GUIA = 'https://portal.envia.co/ServicioLiquidacionREST/Service1.svc/Generacion';
+  // static readonly GUIA = 'https://portal.envia.co/ServicioLiquidacionREST/Service1.svc/Generacion';
 
   // DEV
   // static readonly APIPROVEEDOR = 'https://apim-dev-proxy.sodhc.co/inventario/api';
   // QA
-  // static readonly APIPROVEEDOR =
-  //   'https://apim-qa-proxy.sodhc.co/inventario/api';
+  static readonly APIPROVEEDOR =
+    'https://apim-qa-proxy.sodhc.co/inventario/api';
   // PROD
-  static readonly APIPROVEEDOR = 'https://apim-prod-proxy.sodhc.co/inventario/api';
+  // static readonly APIPROVEEDOR = 'https://apim-prod-proxy.sodhc.co/inventario/api';
 
   // TEMPORAL
   // static readonly APIGUIA = 'http://10.23.14.164:9001/Servicios/Transportadora_1.0.0/api';
@@ -275,28 +275,28 @@ export class Constants {
   // DEV
   // static readonly APIGUIA = 'https://apim-dev-proxy.sodhc.co/logistica-transportadora';
   // QA
-  // static readonly APIGUIA =
-  //   'https://apim-qa-proxy.sodhc.co/logistica-transportadora';
+  static readonly APIGUIA =
+    'https://apim-qa-proxy.sodhc.co/logistica-transportadora';
   // PROD
-  static readonly APIGUIA = 'https://apim-prod-proxy.sodhc.co/logistica-transportadora';
+  // static readonly APIGUIA = 'https://apim-prod-proxy.sodhc.co/logistica-transportadora';
 
   // Local
   // static readonly APIGUIA = 'http://localhost/Abastecimiento/Servicios/Transportadoras/api';
   // DEV
   // static readonly SUBSCRIPTIONKEY = 'dfeb9e69860f45258647cc7ba45fb040';
   // QA
-  // static readonly SUBSCRIPTIONKEY = '442c55ae313642028c9eb69dc4220dad';
+  static readonly SUBSCRIPTIONKEY = '442c55ae313642028c9eb69dc4220dad';
   // PROD
-  static readonly SUBSCRIPTIONKEY = '209fa70e5b0c4b5c8bddaf0aa54b8e19';
+  // static readonly SUBSCRIPTIONKEY = '209fa70e5b0c4b5c8bddaf0aa54b8e19';
 
   // DEV
   // static readonly SUBSCRIPTIONKEYCONFIGURACION = '9b33c33d833340e0839653420edf6a89';
   // QA
-  // static readonly SUBSCRIPTIONKEYCONFIGURACION =
-  //   '442c55ae313642028c9eb69dc4220dad';
-  // PROD
   static readonly SUBSCRIPTIONKEYCONFIGURACION =
-    '209fa70e5b0c4b5c8bddaf0aa54b8e19';
+    '442c55ae313642028c9eb69dc4220dad';
+  // PROD
+  // static readonly SUBSCRIPTIONKEYCONFIGURACION =
+  //   '209fa70e5b0c4b5c8bddaf0aa54b8e19';
 
   static readonly Secret_Key = '$G1Int3rnet*.**';
 }
