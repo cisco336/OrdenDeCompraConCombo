@@ -45,6 +45,7 @@ import * as constants from '../../constants/constants';
 import { GenerateOrderGuideComponent } from 'src/app/components/generate-order-guide/generate-order-guide.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { Helper } from 'src/app/common/helper.class';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-ordenes-compra',
@@ -228,24 +229,25 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
-    this.routeSubscription = this._route.queryParams;
-    this.routeSubscription.pipe(skip(1)).subscribe(params => {
-      if (!params['token']) {
-        this.usr = '';
+
+    this.routeSubscription = this._route.params;
+    this._route.queryParams.pipe(skip(1)).subscribe(params => {
+      if (!params["token"]) {
+        this.usr = "";
         this.isLoading = false;
         this.errorMessage = this.errorMessagesText.noPrivileges;
       } else {
-        const y = Helper.decrypt(params.id.toString());
+        const y = Helper.decrypt(params.token.toString());
 
         // const y = params['token'];
 
-        if (!y.split(';')[3] || !y.split(';')[4] || !y.split(';')[5]) {
-          this.errorMessage = 'Datos de inicio de sesión incorrectos.';
-          this.usr = '';
+        if (!y.split(";")[1] || !y.split(";")[2] || !y.split(";")[3]) {
+          this.errorMessage = "Datos de inicio de sesión incorrectos.";
+          this.usr = "";
         }
-        this.usr = y.split(';')[3];
-        this.key = y.split(';')[4];
-        this.TOKEN = y.split(';')[5];
+        this.usr = y.split(";")[1];
+        this.key = y.split(";")[2];
+        this.TOKEN = y.split(";")[3];
 
         // this.appStart(this.key);
 
@@ -253,7 +255,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
           try {
             this._dataService.setToken(this.TOKEN);
           } catch (error) {
-            this._toastr.error('Error al decodificar token');
+            this._toastr.error("Error al decodificar token");
           }
           this._dataService.getAutorizar().subscribe(
             data => {
@@ -265,13 +267,13 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
             error => {
               switch (error.status) {
                 case 401:
-                  this._toastr.warning('Usuario No autorizado.');
+                  this._toastr.warning("Usuario No autorizado.");
                   break;
                 case 500:
-                  this._toastr.error('Error en el servicio de autorización.');
+                  this._toastr.error("Error en el servicio de autorización.");
                   break;
                 default:
-                  this._toastr.error('Error de comunicación.');
+                  this._toastr.error("Error de comunicación.");
                   break;
               }
               this.isLoading = false;

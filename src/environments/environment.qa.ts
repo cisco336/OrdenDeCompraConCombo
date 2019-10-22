@@ -16,7 +16,7 @@ export const environment = {
          AUTH:
            "https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated",
          GUIA:
-           "https://portal.envia.co/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion",
+           "https://portal.envia.co/servicioliquidacionrestpruebas/Service1.svc/Generacion/",
          APIPROVEEDOR: "https://apim-qa-proxy.sodhc.co/inventario/api",
          APIGUIA: "https://apim-qa-proxy.sodhc.co/logistica-transportadora",
          SUBSCRIPTIONKEY: "442c55ae313642028c9eb69dc4220dad",
