@@ -140,7 +140,7 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
     };
 
     this.GetInfoBaseOcSubscription = this._dataService
-      .GetInfoBaseOc(queryConsultar)
+      .postTablaPrincipalOC(queryConsultar)
       .toPromise()
       .then(data => {
         this.direccionDestino = data["Value"][0]["DIRECCION_ENTREGA"];
