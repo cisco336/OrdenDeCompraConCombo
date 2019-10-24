@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
 
-  PATHROTULO: 'https://portal.envia.co/2IMPRESIONGUIAS/ISticker_ZEA2.aspx',
+  PATHROTULO: 'https://portal.envia.co/2IMPRESIONGUIAS/ISticker_ZEA2.aspx?',
 
   APIORDENDECOMPRA: 'https://apim-dev-proxy.sodhc.co/logistica-ordenescompra',
   USRPASSWD: 'EMPCAR01:EMPCAR1',

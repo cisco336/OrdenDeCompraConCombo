@@ -40,3 +40,8 @@ $danger-gradient: linear-gradient(
     @content;
   }
 }
+@mixin custom-media-query-2 {
+  @media (max-width: 1029px) {
+    @content;
+  }
+}

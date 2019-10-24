@@ -138,10 +138,7 @@
       </div>
     </mat-card>
 
-    <mat-card
-      class="card-fourth card-full mat-elevation-z10"
-      *ngIf="observaciones"
-    >
+    <mat-card class="card-fourth mat-elevation-z10">
       <div class="card-title">
         <mat-icon>insert_comment</mat-icon>
         {{ strings.strings.observations }}:
@@ -149,7 +146,7 @@
       <div class="card-body">
         <ul>
           <li *ngIf="infoBaseOC.observaciones !== ''">
-            <span>{{ strings.strings.comments }}:</span
+            <span *ngIf="observaciones">{{ strings.strings.observations }}:</span
             ><span>{{ infoBaseOC.OBSERVACIONES }}</span>
           </li>
         </ul>

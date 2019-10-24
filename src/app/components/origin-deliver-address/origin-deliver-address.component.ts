@@ -47,12 +47,33 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.addresses.get('originCity').valueChanges.subscribe(change => {
-      // this._componentService.setDireccionOrigen({
-      //   direccion: this._componentService.getDireccionOrigen().value.direccion,
-      //   ciudad: change
-      // });
-    });
+    this.addresses
+      .get('originAddress')
+      .valueChanges.subscribe(originAddress => {
+        const y = this._componentService.infoBaseOC.value;
+        const x = {
+          CEDULA: y.CEDULA,
+          CIUDAD_CTE: y.CIUDAD_CTE,
+          CIUDAD_FACTURACION: y.CIUDAD_FACTURACION,
+          CLIENTE: y.CLIENTE,
+          CODIGO_DANE_DESTINO: y.CODIGO_DANE_DESTINO,
+          CODIGO_DANE_ORIGEN: y.CODIGO_DANE_ORIGEN,
+          DIRECCION_CTE: y.DIRECCION_CTE,
+          DIRECCION_ENTREGA: y.DIRECCION_ENTREGA,
+          DIRECCION_FACTURACION: y.DIRECCION_FACTURACION,
+          DIRECCION_ORIGEN: originAddress,
+          NOTA_PEDIDO: y.NOTA_PEDIDO,
+          OBSERVACIONES: y.OBSERVACIONES,
+          ORIGEN: y.ORIGEN,
+          PMG_PO_NUMBER: y.PMG_PO_NUMBER,
+          PROVEEDOR: y.PROVEEDOR,
+          STICKER: y.STICKER,
+          TELEFONOS: y.TELEFONOS,
+          TIPO_ENTREGA: y.TIPO_ENTREGA,
+          TRANSPORTADORA: y.TRANSPORTADORA
+        };
+        this._componentService.infoBaseOC.next(x);
+      });
     this._dataService.GetCiudades(this.TAG).subscribe(
       ciudades => {
         if (!ciudades) {
@@ -102,18 +123,18 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
             .setValue(component.direccionDestino.value.direccion);
           form.get('originCity').setValue(ciudadOrigen[0]);
           form.get('destinyCity').setValue(ciudadDestino[0]);
-          form
-            .get('originAddress')
-            .valueChanges.subscribe(a => this._componentService.direccionOrigen.next({
+          form.get('originAddress').valueChanges.subscribe(a =>
+            this._componentService.direccionOrigen.next({
               direccion: a,
               ciudad: form.get('originCity').value
-            }));
-          form
-            .get('destinyAddress')
-            .valueChanges.subscribe(b => this._componentService.direccionDestino.next({
+            })
+          );
+          form.get('destinyAddress').valueChanges.subscribe(b =>
+            this._componentService.direccionDestino.next({
               direccion: b,
               ciudad: form.get('destinyCity').value
-            }));
+            })
+          );
         }
       },
       () => {}
