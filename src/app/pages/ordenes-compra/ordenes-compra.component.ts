@@ -211,7 +211,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this._route.queryParams.pipe(skip(1)).subscribe(params => {
       if (!params['token']) {
         this.usr = '';
-        this._componentService.isLoading.next(false);;
+        this._componentService.isLoading.next(false);
         this.errorMessage = this.errorMessagesText.noPrivileges;
       } else {
         const y = Helper.decrypt(params.token.toString());
@@ -255,7 +255,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
                   this._toastr.error('Error de comunicación.');
                   break;
               }
-              this._componentService.isLoading.next(false);;
+              this._componentService.isLoading.next(false);
             }
           );
         }
@@ -264,7 +264,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   }
 
   appStart(key?) {
-    this._componentService.isLoading.next(true);;
+    this._componentService.isLoading.next(true);
     this._dataService
       .getProveedores()
       .toPromise()
@@ -275,7 +275,9 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
             getProveedoresData['Value'][0]['Código']
           ) {
             this.errorHandling(this.errorMessagesText.providersError);
+            this._componentService.isLoading.next(false);
           } else {
+            
             this.proveedores = getProveedoresData['Value'];
             this.filteredProveedores = this.mainFilterForm
               .get('proveedorControl')
@@ -315,7 +317,9 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
                   ) {
                     this.errorHandling(this.errorMessagesText.statesError);
                     this.render = false;
+                    this._componentService.isLoading.next(false);
                   } else {
+                    this._componentService.isLoading.next(false);
                     this._componentService.estados.next(data['Value']);
                     this.estados = data['Value'];
                     const x = this.estados[0];
@@ -323,7 +327,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
                       x.DESCRIPCION.charAt(0).toUpperCase() +
                       x.DESCRIPCION.substr(1).toLowerCase();
                     this.mainFilterForm.get('estadosControl').setValue(x);
-                    this._componentService.isLoading.next(false);;
+                    this._componentService.isLoading.next(false);
                     this._componentService.estados.next(this.estados);
                     this.filteredEstados = this.mainFilterForm
                       .get('estadosControl')
@@ -362,6 +366,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
                     .get('estadosControl')
                     .setErrors({ incorrect: true });
                   this.mainFilterForm.get('estadosControl').disable();
+                  this._componentService.isLoading.next(false);
                 }
               );
             this.fechaInicioSubscription = this.mainFilterForm
@@ -408,7 +413,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     }
     this._toastr.error(toastrError);
     this.noData = true;
-    this._componentService.isLoading.next(false);;
+    this._componentService.isLoading.next(false);
   }
 
   ngOnDestroy() {
@@ -422,7 +427,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   }
 
   consultar() {
-    this._componentService.isLoading.next(true);;
+    this._componentService.isLoading.next(true);
     if (this.dataSource !== undefined) {
       this.dataSource.data = [];
     }
@@ -454,9 +459,11 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
             this.tableMessage = '';
             this.dataSource.data = data['Value'];
           }
+          this._componentService.isLoading.next(false);
         },
         error => {
           this.errorHandling(error);
+          this._componentService.isLoading.next(false);
         }
       );
   }
