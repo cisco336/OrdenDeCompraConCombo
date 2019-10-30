@@ -23,17 +23,95 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              "src/fonts.scss",
               "src/styles.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
           "configurations": {
+            "internet-dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/internet/environment.ts"
+                }
+              ]
+            },
+            "internet-qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/internet/environment.qa.ts"
+                }
+              ]
+            },
+            "internet-prod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/internet/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "combo-dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/combo/environment.ts"
+                }
+              ]
+            },
+            "combo-qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/combo/environment.qa.ts"
+                }
+              ]
+            },
+            "combo-prod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/combo/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "qa": {
               "fileReplacements": [
                 {
@@ -42,19 +120,18 @@
                 }
               ],
               "optimization": false,
-              "outputHashing": "all",
               "sourceMap": false,
               "extractCss": false,
               "namedChunks": false,
-              "aot": false,
-              "extractLicenses": false,
+              "aot": true,
+              "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": false,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "10mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ]
             },
@@ -68,7 +145,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": false,
+              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -77,8 +154,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "10mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ]
             }
@@ -90,6 +167,24 @@
             "browserTarget": "FormularioOrdenDeCompra:build"
           },
           "configurations": {
+            "internet-dev": {
+              "browserTarget": "FormularioOrdenDeCompra:build:internet-dev"
+            },
+            "internet-qa": {
+              "browserTarget": "FormularioOrdenDeCompra:build:internet-qa"
+            },
+            "internet-prod": {
+              "browserTarget": "FormularioOrdenDeCompra:build:internet-prod"
+            },
+            "combo-dev": {
+              "browserTarget": "FormularioOrdenDeCompra:build:combo-dev"
+            },
+            "combo-qa": {
+              "browserTarget": "FormularioOrdenDeCompra:build:combo-qa"
+            },
+            "combo-prod": {
+              "browserTarget": "FormularioOrdenDeCompra:build:combo-prod"
+            },
             "qa": {
               "browserTarget": "FormularioOrdenDeCompra:build:qa"
             },
@@ -111,13 +206,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },
@@ -129,9 +219,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -150,6 +238,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "FormularioOrdenDeCompra"
 }
