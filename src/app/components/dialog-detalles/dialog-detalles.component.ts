@@ -22,7 +22,6 @@ import {
 import { DataService } from 'src/app/services/data.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BottomSheetComponent } from '../bottom-sheet/bottom-sheet.component';
-import { BottomSheetImgComponent } from '../bottom-sheet-img/bottom-sheet-img.component';
 import * as strings from '../../constants/constants';
 
 @Component({
@@ -108,15 +107,15 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
     private _bottomSheet: MatBottomSheet
   ) {}
   ngOnInit() {
-    this.isTracking = this._componentService.getIsTracking().value;
+    this.isTracking = this._componentService.isTracking.value;
     this.fechasOC = this._componentService.fechasOC.value;
-    this._componentService.setCloseDialog(false);
-    this._componentService.setSteps({
+    this._componentService.closeDialogBJ.next(false);
+    this._componentService.steps.next({
       two: false,
       three: false,
       four: false
     });
-    this._componentService.closeDialog().subscribe(close => {
+    this._componentService.closeDialogBJ.subscribe(close => {
       if (close) {
         setTimeout(() => this.closeDialog(), 3000);
       }
@@ -124,7 +123,7 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
     this.estados = this.data.data.estados;
     this.ordenCompra = this.data.data.ordenCompra;
     const ordenNumber = this.ordenCompra[0].PMG_PO_NUMBER;
-    this._componentService.setTablaDetalles(this.ordenCompra);
+    this._componentService.tablaDetalle.next(this.ordenCompra);
 
     const queryConsultar = {
       p_transaccion: 'IB',
@@ -157,14 +156,14 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
             this.error = strings.errorMessagesText.citiesError;
             setTimeout(() => (this.error = ''), 3000);
           });
-        this._componentService.setInfoBaseOC(data['Value'][0]);
+        this._componentService.infoBaseOC.next(data['Value'][0]);
         this.infoBaseOC = data['Value'][0];
         const address = this._componentService.infoBaseOC.value;
-        this._componentService.setDireccionDestino({
+        this._componentService.direccionDestino.next({
           direccion: address.DIRECCION_ENTREGA,
           ciudad: address.CODIGO_DANE_DESTINO
         });
-        this._componentService.setDireccionOrigen({
+        this._componentService.direccionOrigen.next({
           direccion: address.DIRECCION_ORIGEN,
           ciudad: address.CODIGO_DANE_ORIGEN
         });
@@ -195,7 +194,7 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
     this.numeroOrden = this.ordenCompra[0].PMG_PO_NUMBER;
     this.background = this.background ? '' : 'primary';
     this.color = this.color ? '' : 'accent';
-    this.skus = this._componentService.getSelectedSku().value;
+    this.skus = this._componentService.selectedSku.value;
   }
 
   ngOnDestroy() {}
@@ -211,7 +210,7 @@ export class DialogDetallesComponent implements OnInit, OnDestroy {
       .postTablaPrincipalOC(this.data.data.queryDetalles)
       .toPromise()
       .then(data => {
-        this._componentService.setTablaDetalles(data);
+        this._componentService.tablaDetalle.next(data);
       });
   }
 

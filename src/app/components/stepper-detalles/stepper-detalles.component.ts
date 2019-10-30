@@ -85,7 +85,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
         declarado: -1
       }
     ],
-    Usuario: this._componentService.getUser().value
+    Usuario: this._componentService.user.value
   };
   stepOne: boolean;
   stepTwo: boolean;
@@ -115,15 +115,15 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
     this._componentService.aux.subscribe(val => (this.stepOne = val));
     this.finalMessg = strings.longMessages.generateOrderGuideAlertFinal;
     this.stepOne = false;
-    this.magnitudes = this._componentService.getMagnitudes().value;
+    this.magnitudes = this._componentService.magnitudes.value;
     this.stepsSubscription = this._componentService
-      .getSteps()
+      .steps
       .subscribe(change => {
         this.stepTwo = change.two;
         this.stepThree = change.three;
         this.stepFour = change.four;
       });
-    this._componentService.setHasDetails(this.details);
+    this._componentService.hasDetails.next(this.details);
     if (this.details) {
       this.hasDetails();
     } else {
@@ -133,7 +133,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
 
   hasDetails() {
     this.estadosSubscription = this._componentService
-      .getEstados()
+      .estados
       .subscribe(estados => (this.estados = estados));
     this.firstFormGroup = this._formBuilder.group({
       selectedSkuControl: ['', Validators.required]
@@ -142,7 +142,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
       secondCtrl: ['', Validators.required]
     });
     this.selectedSkuSubscription = this._componentService
-      .getSelectedSku()
+      .selectedSku
       .subscribe(skusSub => {
         this.cambioEstadoSkus = skusSub;
         if (skusSub.length) {
@@ -165,7 +165,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   }
 
   noDetails() {
-    const detalleOC = this._componentService.getDetalleOC().value;
+    const detalleOC = this._componentService.detalleOC.value;
     this.oc = detalleOC[0]['PMG_PO_NUMBER'];
     this.skus = detalleOC
       .map(
@@ -212,7 +212,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
       p_fecha_real: response.fecha_real,
       p_id_estado: response.ID,
       p_origen: '-1',
-      p_usuario: this._componentService.getUser().value
+      p_usuario: this._componentService.user.value
     };
     this.cambioEstadoSkus.forEach(data => {
       query.p_pmg_po_number = data.PMG_PO_NUMBER;
@@ -240,31 +240,31 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
 
   refreshTable() {
     this._dataService
-      .postTablaPrincipalOC(this._componentService.getQueryDetalles().value)
+      .postTablaPrincipalOC(this._componentService.queryDetalles.value)
       .toPromise()
       .then(data => {
-        this._componentService.setTablaDetalles(data['Value']);
+        this._componentService.tablaDetalle.next(data['Value']);
       });
   }
 
   sendPackages(stepper: MatStepper) {
-    if (this._componentService.getIdBulto().value !== '') {
+    if (this._componentService.idBulto.value !== '') {
       const query: QueryBulto = {
         Transaccion: 'UD',
-        ID_BULTO: this._componentService.getIdBulto().value,
+        ID_BULTO: this._componentService.idBulto.value,
         Sticker: '',
         Ordencompra: 0,
         Cantidad: 0,
         Sku: '',
-        Magnitudes: this._componentService.getMagnitudes().value,
-        Usuario: this._componentService.getUser().value
+        Magnitudes: this._componentService.magnitudes.value,
+        Usuario: this._componentService.user.value
       };
       this._dataService
         .PostBultos(query)
         .toPromise()
         .then(response => {
-          this._componentService.setSteps({
-            two: this._componentService.getSteps().value.two,
+          this._componentService.steps.next({
+            two: this._componentService.steps.value.two,
             three: true,
             four: false
           });
@@ -296,9 +296,9 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
       .toPromise()
       .then(response => {
         this.isLoading = true;
-        this._componentService.setSteps({
-          two: this._componentService.getSteps().value.two,
-          three: this._componentService.getSteps().value.three,
+        this._componentService.steps.next({
+          two: this._componentService.steps.value.two,
+          three: this._componentService.steps.value.three,
           four: true
         });
         if (response['State']) {
@@ -340,17 +340,17 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
       .then(data => {
         const y = this._componentService;
         this.queryRotulo = {
-          Sticker: y.getInfoBaseOC().value.STICKER,
-          CodigoDaneOrigen: y.getInfoBaseOC().value.CODIGO_DANE_ORIGEN,
-          DireccionOrigen: y.getInfoBaseOC().value.DIRECCION_ORIGEN,
-          CodigoDaneDestino: y.getInfoBaseOC().value.CODIGO_DANE_DESTINO,
-          DireccionDestino: y.getInfoBaseOC().value.DIRECCION_ENTREGA,
+          Sticker: y.infoBaseOC.value.STICKER,
+          CodigoDaneOrigen: y.infoBaseOC.value.CODIGO_DANE_ORIGEN,
+          DireccionOrigen: y.infoBaseOC.value.DIRECCION_ORIGEN,
+          CodigoDaneDestino: y.infoBaseOC.value.CODIGO_DANE_DESTINO,
+          DireccionDestino: y.infoBaseOC.value.DIRECCION_ENTREGA,
           Guia: data['guia'],
           UrlGuia: data['urlguia'],
           UrlRotulo: `${Constants.PATHROTULO}Guia=${data['guia']}&Usuario=${Constants.USR}`,
           OrdenServicio: data['num_ordens'],
-          IdBulto: y.getIdBulto().value,
-          Usuario: y.getUser().value
+          IdBulto: y.idBulto.value,
+          Usuario: y.user.value
         };
         this._dataService
           .SetDatosGuia(this.queryRotulo)
@@ -358,7 +358,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
           .then(() => {
             this.isLoading = false;
             this.finalMessg = strings.longMessages.generateGuideSuccess;
-            this._componentService.setCloseDialog(true);
+            this._componentService.closeDialogBJ.next(true);
           })
           .catch(() => {
             this.isLoading = false;

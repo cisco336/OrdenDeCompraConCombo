@@ -45,13 +45,13 @@ export class GenerateOrderGuideComponent implements OnInit, OnDestroy {
     this.stepBultos = _formBuilder.group({});
   }
   ngOnInit() {
-    this._componentService.setCloseDialog(false);
-    this._componentService.setSteps({
+    this._componentService.closeDialogBJ.next(false);
+    this._componentService.steps.next({
       two: false,
       three: false,
       four: false
     });
-    this._componentService.closeDialog().subscribe(close => {
+    this._componentService.closeDialogBJ.subscribe(close => {
       if (close) {
         setTimeout(() => this.closeDialog(), 3000);
       }
@@ -60,7 +60,7 @@ export class GenerateOrderGuideComponent implements OnInit, OnDestroy {
     this._dataService
       .GetInfoBaseOc(this.oc)
       .toPromise()
-      .then(data => this._componentService.setInfoBaseOC(data['Value'][0]));
+      .then(data => this._componentService.infoBaseOC.next(data['Value'][0]));
     this.skus = this.data.data.ordenCompra.map(
       number =>
         (number = {

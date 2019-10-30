@@ -80,7 +80,7 @@ export class TablaDetallesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<DetalleOrdenDeCompra>();
-    this._componentService.getTablaDetalles().subscribe(data => this.dataSource.data = data);
+    this._componentService.tablaDetalle.subscribe(data => this.dataSource.data = data);
     this.selection.clear();
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
@@ -95,7 +95,7 @@ export class TablaDetallesComponent implements OnInit, OnDestroy {
   }
 
   setSkus(data) {
-    this._componentService.setSelectedSku(data);
+    this._componentService.selectedSku.next(data);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

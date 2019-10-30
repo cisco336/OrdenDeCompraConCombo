@@ -119,7 +119,7 @@ export class DialogCambioEstadoComponent implements OnInit {
     this.chips = this.data.data.selected;
     this.background = this.background ? '' : 'primary';
     this.color = this.color ? '' : 'accent';
-    this.estados = this._componentService.getEstados().value;
+    this.estados = this._componentService.estados.value;
     this.filteredEstados = this.estadosControl.valueChanges.pipe(
       startWith(''),
       map(value => (typeof value === 'string' ? value : value.DESCRIPCION)),

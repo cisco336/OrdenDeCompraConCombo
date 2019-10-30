@@ -110,7 +110,7 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
             );
           const form = this.addresses;
           const component = this._componentService;
-          const origen = this._componentService.getDireccionOrigen().value
+          const origen = this._componentService.direccionOrigen.value
             .ciudad;
           const destino = this._componentService.direccionDestino.value.ciudad;
           const ciudadOrigen = this.ciudades.filter(s => s.ID === origen);

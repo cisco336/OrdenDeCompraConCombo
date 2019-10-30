@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as strings from '../../constants/constants';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
-import { Bultos, QueryBulto } from 'src/app/models/models';
+import { QueryBulto } from 'src/app/models/models';
 import { ComponentsService } from 'src/app/services/components.service';
 import {
   trigger,
@@ -55,17 +55,17 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const reset = this._componentService.getResetBultos().value;
+    const reset = this._componentService.resetBultos.value;
     if (reset) {
       this.dataSource._data.next(
-        this._componentService.getDataSourceBackup().value
+        this._componentService.dataSourceBackup.value
       );
     }
     this.packagesForm.get('unities').valueChanges.subscribe(change => {
-      this._componentService.setSteps({
+      this._componentService.steps.next({
         two: this.packagesForm.valid,
-        three: this._componentService.getSteps().value.three,
-        four: this._componentService.getSteps().value.four
+        three: this._componentService.steps.value.three,
+        four: this._componentService.steps.value.four
       });
     });
     this.displayedColumns = [
@@ -90,11 +90,11 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
       this.strings.strings.declared
     ];
     this.dataSource = new MatTableDataSource();
-    this.detalleOc = this._componentService.getDetalleOC().value;
+    this.detalleOc = this._componentService.detalleOC.value;
     this.oc = this.detalleOc[0].PMG_PO_NUMBER;
-    this.hasDetails = this._componentService.getHasDetails().value;
+    this.hasDetails = this._componentService.hasDetails.value;
     this.selectedSkusSubscription = this.hasDetails
-      ? this._componentService.getSelectedSku().subscribe(skuData => {
+      ? this._componentService.selectedSku.subscribe(skuData => {
           if (skuData.length) {
             this.selectedSkus = skuData.filter(
               s => s.GUIA === 'NA' || s.GUIA === '--'
@@ -139,7 +139,7 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
         : this.cleanString(this.detalleOc),
       ID_BULTO: this.IDBulto === null ? -1 : this.IDBulto,
       Magnitudes: null,
-      Usuario: this._componentService.getUser().value
+      Usuario: this._componentService.user.value
     };
     this.postBultosSubscription = this._dataService.PostBultos(query).subscribe(
       response => {
@@ -162,18 +162,18 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
               })
           );
           this.dataSource.data = this.newResponse;
-          this._componentService.setMagnitudes(this.newResponse);
-          this._componentService.setBultos(this.newResponse);
+          this._componentService.magnitudes.next(this.newResponse);
+          this._componentService.bultos.next(this.newResponse);
           if (this.IDBulto === null) {
-            this._componentService.setDataSourceBackup([
+            this._componentService.dataSourceBackup.next([
               ...this.dataSource.data
             ]);
           } else {
-            this._componentService.setIdBultoPost(this.IDBulto);
+            this._componentService.idBultoPost.next(this.IDBulto);
           }
           this.IDBulto = response['Value'][0]['ID_BULTO'];
 
-          this._componentService.setIdBulto(this.IDBulto);
+          this._componentService.idBulto.next(this.IDBulto);
         }
         this.isLoading = false;
       },
@@ -192,7 +192,7 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
     skuForQuery = skuForQuery.replace(/\[/g, '');
     skuForQuery = skuForQuery.replace(/\]/g, '');
 
-    this._componentService.setClearSkus(skuForQuery);
+    this._componentService.clearSkus.next(skuForQuery);
 
     return skuForQuery;
   }
@@ -202,6 +202,6 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
   }
 
   addMagnitud() {
-    this._componentService.setMagnitudes(this.newResponse);
+    this._componentService.magnitudes.next(this.newResponse);
   }
 }

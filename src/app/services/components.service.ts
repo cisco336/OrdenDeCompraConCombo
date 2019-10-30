@@ -17,7 +17,7 @@ export class ComponentsService {
   hasDetails = new BehaviorSubject<boolean>(false);
   resetBultos = new BehaviorSubject<boolean>(false);
   isTracking = new BehaviorSubject<boolean>(false);
-  steps = new BehaviorSubject<{ two: false; three: false; four: false }>({
+  steps = new BehaviorSubject<{ two: boolean; three: boolean; four: boolean }>({
     two: false,
     three: false,
     four: false
