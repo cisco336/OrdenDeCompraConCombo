@@ -2,22 +2,22 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+export const type = {
+  combo: true,
+  internet: false,
+};
+
 export const environment = {
   production: false,
 
-  PATHROTULO:
-    'https://portal.envia.co/2IMPRESIONGUIASpruebas/ISticker_ZEA.aspx?',
-
-  APIORDENDECOMPRA: 'https://apim-qa-proxy.sodhc.co/logistica-ordenescompra',
+  PATHROTULO: 'http://200.69.100.66/2IMPRESIONGUIASpruebas/ISticker_ZEA.aspx?',
+  APIORDENDECOMPRA: 'http://10.23.14.164:9002/Servicios/ORDEN_COMPRA_1.0.0/api',
   USRPASSWD: 'EMPCAR01:EMPCAR1',
   USR: 'EMPCAR01',
   PASSWD: 'EMPCAR1',
-  AUTH:
-    'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated',
-  GUIA:
-    'https://portal.envia.co/servicioliquidacionrestpruebas/Service1.svc/Generacion/',
-  APIPROVEEDOR: 'https://apim-qa-proxy.sodhc.co/inventario/api',
-  APIGUIA: 'https://apim-qa-proxy.sodhc.co/logistica-transportadora',
+  GUIA: 'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion',
+  APIGUIA: 'http://10.23.14.163:9001/Servicios/Transportadora_1.0.0/api',
+  APIPROVEEDOR: 'http://10.23.14.163:9002/Servicios/INV_INVENTARIO_1.0.0/api',
   SUBSCRIPTIONKEY: '442c55ae313642028c9eb69dc4220dad',
   SUBSCRIPTIONKEYCONFIGURACION: '442c55ae313642028c9eb69dc4220dad'
 };

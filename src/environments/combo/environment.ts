@@ -4,20 +4,24 @@
 
 export const type = {
   combo: true,
-  internet: false,
+  internet: true,
 };
 
 export const environment = {
   production: false,
 
-  PATHROTULO: 'http://200.69.100.66/2IMPRESIONGUIASpruebas/ISticker_ZEA.aspx?',
-  APIORDENDECOMPRA: 'http://10.23.14.164:9002/Servicios/ORDEN_COMPRA_1.0.0/api',
+  PATHROTULO: 'https://portal.envia.co/2IMPRESIONGUIAS/ISticker_ZEA2.aspx?',
+
+  APIORDENDECOMPRA: 'https://apim-dev-proxy.sodhc.co/logistica-ordenescompra',
   USRPASSWD: 'EMPCAR01:EMPCAR1',
   USR: 'EMPCAR01',
   PASSWD: 'EMPCAR1',
-  GUIA: 'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion',
-  APIGUIA: 'http://10.23.14.164:9001/Servicios/Transportadora_1.0.0/api',
-  APIPROVEEDOR: 'http://10.23.14.164:9002/Servicios/INV_INVENTARIO_1.0.0/api',
+  AUTH:
+    'https://apim-dev-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated',
+  GUIA:
+    'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion',
+  APIPROVEEDOR: 'https://apim-dev-proxy.sodhc.co/inventario/api',
+  APIGUIA: 'https://apim-dev-proxy.sodhc.co/logistica-transportadora',
   SUBSCRIPTIONKEY: 'dfeb9e69860f45258647cc7ba45fb040',
   SUBSCRIPTIONKEYCONFIGURACION: '9b33c33d833340e0839653420edf6a89'
 };
