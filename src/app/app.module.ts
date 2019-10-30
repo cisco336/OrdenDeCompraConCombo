@@ -44,7 +44,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { BottomSheetComponent } from './components/bottom-sheet/bottom-sheet.component';
 import { TrackingComponent } from './components/tracking/tracking.component';
-import { BottomSheetImgComponent } from './components/bottom-sheet-img/bottom-sheet-img.component';
 import { getSpanishPaginatorIntl } from './spanishPaginator';
 import { PackagesConfigComponent } from './components/packages-config/packages-config.component';
 import { OriginDeliverAddressComponent } from './components/origin-deliver-address/origin-deliver-address.component';
@@ -63,7 +62,6 @@ import { LoaderComponent } from './components/loader/loader.component';
     TablaDetallesComponent,
     BottomSheetComponent,
     TrackingComponent,
-    BottomSheetImgComponent,
     PackagesConfigComponent,
     OriginDeliverAddressComponent,
     ConfirmGenerateGuideComponent,
@@ -75,7 +73,6 @@ import { LoaderComponent } from './components/loader/loader.component';
     DialogDetallesComponent,
     DialogCambioEstadoComponent,
     BottomSheetComponent,
-    BottomSheetImgComponent,
     GenerateOrderGuideComponent,
     PackageUpdateConfirmComponent
   ],
