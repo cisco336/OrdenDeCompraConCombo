@@ -8,10 +8,23 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dev": "ng build --outputPath=dist/dev --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
-    "qa": "ng build -c qa --outputPath=dist/qa --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
-    "prod": "ng build --prod -c production --outputPath=dist/prod --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
-    "all": "npm run-script dev & npm run-script qa & npm run-script prod"
+
+    "dev": "ng build --outputPath=dist/dev --baseHref=/Aplicaciones/HUB_OC_2.0.0/",
+    "qa": "ng build -c qa --outputPath=dist/qa --baseHref=/Aplicaciones/HUB_OC_2.0.0/",
+    "prod": "ng build --prod -c production --outputPath=dist/prod --baseHref=/Aplicaciones/HUB_OC_2.0.0/",
+    "intranet-all": "npm run-script dev & npm run-script qa & npm run-script prod",
+
+    "internet-dev": "ng build -c internet-dev --outputPath=dist/internet/dev --baseHref=/Aplicaciones/OrdenesProveedores_1.0.0/",
+    "internet-qa": "ng build -c internet-qa --outputPath=dist/internet/qa --baseHref=/Aplicaciones/OrdenesProveedores_1.0.0/",
+    "internet-prod": "ng build -c internet-prod --prod --outputPath=dist/internet/prod --baseHref=/Aplicaciones/OrdenesProveedores_1.0.0/",
+    "internet-all": "npm run-script internet-dev & npm run-script internet-qa & npm run-script internet-prod",
+
+    "combo-dev": "ng build -c combo-dev --outputPath=dist/combo/dev --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
+    "combo-qa": "ng build -c combo-qa --outputPath=dist/combo/qa --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
+    "combo-prod": "ng build -c combo-prod --prod --outputPath=dist/combo/prod --baseHref=/Aplicaciones/OrdenesSodimac_1.0.0/",
+    "combo-all": "npm run-script combo-dev & npm run-script combo-qa & npm run-script combo-prod",
+
+    "all": "npm run-script intranet-all & npm run-script internet-all & npm run-script combo-all"
   },
   "private": true,
   "dependencies": {
