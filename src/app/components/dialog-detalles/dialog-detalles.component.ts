@@ -8,7 +8,7 @@ import {
   DetalleOrdenDeCompra,
   Estado,
   InfoBaseOC
-} from 'src/app/interfaces/interfaces';
+} from 'src/app/models/models';
 import { ComponentsService } from 'src/app/services/components.service';
 import {
   trigger,

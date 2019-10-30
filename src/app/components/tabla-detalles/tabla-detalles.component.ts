@@ -17,7 +17,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ComponentsService } from 'src/app/services/components.service';
-import { DetalleOrdenDeCompra } from '../../interfaces/interfaces';
+import { DetalleOrdenDeCompra } from '../../models/models';
 import * as strings from '../../constants/constants';
 
 @Component({

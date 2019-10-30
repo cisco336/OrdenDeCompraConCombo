@@ -23,9 +23,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
-              "src/fonts.scss",
               "src/styles.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
@@ -206,8 +208,13 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": []
           }
         },
@@ -219,7 +226,9 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
@@ -229,6 +238,24 @@
             "devServerTarget": "FormularioOrdenDeCompra:serve"
           },
           "configurations": {
+            "internet-dev": {
+              "devServerTarget": "FormularioOrdenDeCompra:serve:internet-dev"
+            },
+            "internet-qa": {
+              "devServerTarget": "FormularioOrdenDeCompra:serve:internet-qa"
+            },
+            "internet-prod": {
+              "devServerTarget": "FormularioOrdenDeCompra:serve:internet-prod"
+            },
+            "combo-dev": {
+              "devServerTarget": "FormularioOrdenDeCompra:serve:combo-dev"
+            },
+            "combo-qa": {
+              "devServerTarget": "FormularioOrdenDeCompra:serve:combo-qa"
+            },
+            "combo-prod": {
+              "devServerTarget": "FormularioOrdenDeCompra:serve:combo-prod"
+            },
             "qa": {
               "devServerTarget": "FormularioOrdenDeCompra:serve:qa"
             },
@@ -238,7 +265,6 @@
           }
         }
       }
-    }
-  },
+    }},
   "defaultProject": "FormularioOrdenDeCompra"
 }

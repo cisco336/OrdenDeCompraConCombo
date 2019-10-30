@@ -5,7 +5,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { RequireMatch } from 'src/app/pages/ordenes-compra/customValidators';
 import { ComponentsService } from 'src/app/services/components.service';
-import { Estado } from '../../interfaces/interfaces';
+import { Estado } from '../../models/models';
 import { DataService } from 'src/app/services/data.service';
 import {
   trigger,

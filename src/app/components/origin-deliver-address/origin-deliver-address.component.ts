@@ -11,7 +11,7 @@ import { DataService } from 'src/app/services/data.service';
 import { Subscription, Observable } from 'rxjs';
 import { ComponentsService } from 'src/app/services/components.service';
 import { startWith, map } from 'rxjs/operators';
-import { Proveedor } from 'src/app/interfaces/interfaces';
+import { Proveedor } from 'src/app/models/models';
 
 @Component({
   selector: 'app-origin-deliver-address',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Envia } from 'src/app/interfaces/interfaces';
+import { Envia } from 'src/app/models/models';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TrackingObject } from '../../interfaces/interfaces';
+import { TrackingObject } from '../../models/models';
 import { ComponentsService } from 'src/app/services/components.service';
 import * as strings from '../../constants/constants';
 import { MatTableDataSource } from '@angular/material';

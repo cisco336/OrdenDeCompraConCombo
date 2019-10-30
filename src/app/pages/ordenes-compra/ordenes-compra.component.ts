@@ -38,7 +38,7 @@ import {
   Estado,
   Proveedores,
   OrdenDeCompra
-} from '../../interfaces/interfaces';
+} from '../../models/models';
 import { HostListener } from '@angular/core';
 import * as moment from 'moment';
 import * as constants from '../../constants/constants';
@@ -149,9 +149,6 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     'Select',
     'PMG_PO_NUMBER',
     'AUX',
-    // 'ESTADO',
-    // 'FECHA_CREACION',
-    // 'PMG_EXP_RCT_DATE',
     'ACTIONS'
   ];
   aux: any;

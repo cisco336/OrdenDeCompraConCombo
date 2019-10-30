@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as strings from '../../constants/constants';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
-import { Bultos, QueryBulto } from 'src/app/interfaces/interfaces';
+import { Bultos, QueryBulto } from 'src/app/models/models';
 import { ComponentsService } from 'src/app/services/components.service';
 import {
   trigger,

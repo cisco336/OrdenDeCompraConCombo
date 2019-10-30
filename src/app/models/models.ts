@@ -1,4 +1,4 @@
-export interface OrdenDeCompra {
+export class OrdenDeCompra {
   CNTRY_NAME: string;
   ESTADO: string;
   FECHA_CREACION: string;
@@ -24,7 +24,7 @@ export interface OrdenDeCompra {
   VPC_TECH_KEY: number;
   observaciones: string;
 }
-export interface DetalleOrdenDeCompra {
+export class DetalleOrdenDeCompra {
   ESTADO: string;
   FECHA_CREACION: string;
   FECHA_MODIFICACION: string;
@@ -58,21 +58,21 @@ export interface DetalleOrdenDeCompra {
   VPC_PRD_TECH_KEY: number;
   observaciones: string;
 }
-export interface Proveedor {
+export class Proveedor {
   ACTIVO: string;
   EMAIL: string;
   NOMBRE_PROVEEDOR: string;
   PROVEEDOR_ID: number;
 }
-export interface Estado {
+export class Estado {
   ID: number;
   DESCRIPCION: string;
 }
-export interface Proveedores {
+export class Proveedores {
   ID: number;
   DESCRIPCION: string;
 }
-export interface TrackingObject {
+export class TrackingObject {
   DESCRIPCION_ESTADO_HO: string;
   DESCRIPCION_ESTADO_OC: string;
   FECHA_CREACION: string;
@@ -81,7 +81,7 @@ export interface TrackingObject {
   ID_ESTADO_OC: number;
   USUARIO_CREACION: string;
 }
-export interface InfoBaseOC {
+export class InfoBaseOC {
   CEDULA: number;
   CLIENTE: string;
   TELEFONOS: string;
@@ -100,12 +100,12 @@ export interface InfoBaseOC {
   TRANSPORTADORA: string;
   OBSERVACIONES: string;
 }
-export interface Bultos {
+export class Bultos {
   PESO: number;
   VOLUMEN: number;
   DECLARADO: number;
 }
-export interface Envia {
+export class Envia {
   State: boolean;
   Message: string;
   Value: {
@@ -120,7 +120,7 @@ export interface Envia {
     num_ordens: string;
   };
 }
-export interface QueryMagnitudes {
+export class QueryMagnitudes {
   cantidad: number;
   IdDetalle: number;
   largo: number;
@@ -129,7 +129,7 @@ export interface QueryMagnitudes {
   peso: number;
   declarado: number;
 }
-export interface QueryBulto {
+export class QueryBulto {
   Transaccion: string;
   Ordencompra: number;
   Cantidad: number;
@@ -139,16 +139,7 @@ export interface QueryBulto {
   Magnitudes: QueryMagnitudes[];
   Usuario: string;
 }
-// export interface Butlo {
-//   ID_BULTO: number;
-//   STICKER: number;
-//   PMG_PO_NUMBER: number;
-//   BULTOS: number;
-//   ID_BULTO_DETALLE: number;
-//   BULTO: number;
-//   CANTIDAD: number;
-//   LARGO: number;
-//   ANCHO: number;
-//   PESO: number;
-//   DECLARADO: number;
-// }
+export class Environment {
+  combo: boolean;
+  internet: boolean;
+}

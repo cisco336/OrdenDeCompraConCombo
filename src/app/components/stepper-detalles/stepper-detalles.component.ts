@@ -4,7 +4,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ComponentsService } from 'src/app/services/components.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BottomSheetComponent } from '../bottom-sheet/bottom-sheet.component';
-import { Estado, QueryBulto } from 'src/app/interfaces/interfaces';
+import { Estado, QueryBulto } from 'src/app/models/models';
 import { DataService } from 'src/app/services/data.service';
 import * as strings from '../../constants/constants';
 import {
@@ -15,7 +15,7 @@ import {
   animate
 } from '@angular/animations';
 import { Subscription } from 'rxjs';
-import * as Interfaces from '../../interfaces/interfaces';
+import * as Interfaces from '../../models/models';
 import { DialogService } from 'src/app/services/dialog.service';
 import { MatStepper } from '@angular/material';
 import { Constants } from '../../constants/constants';
