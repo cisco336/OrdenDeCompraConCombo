@@ -1,6 +1,4 @@
-<div class="no-data-grid" *ngIf="isLoading" [@fade]>
-  <mat-spinner mode="indeterminate" [diameter]="60"></mat-spinner>
-</div>
+<app-loader [diameter]="80" [color]="accent"></app-loader>
 <div class="the-wrapper" [@entering]="render">
   <mat-card
     class="no-privileges mat-elevation-z4"

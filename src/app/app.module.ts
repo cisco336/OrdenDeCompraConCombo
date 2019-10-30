@@ -51,6 +51,7 @@ import { OriginDeliverAddressComponent } from './components/origin-deliver-addre
 import { ConfirmGenerateGuideComponent } from './components/confirm-generate-guide/confirm-generate-guide.component';
 import { GenerateOrderGuideComponent } from './components/generate-order-guide/generate-order-guide.component';
 import { PackageUpdateConfirmComponent } from './components/package-update-confirm/package-update-confirm.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { PackageUpdateConfirmComponent } from './components/package-update-confi
     OriginDeliverAddressComponent,
     ConfirmGenerateGuideComponent,
     GenerateOrderGuideComponent,
-    PackageUpdateConfirmComponent
+    PackageUpdateConfirmComponent,
+    LoaderComponent
   ],
   entryComponents: [
     DialogDetallesComponent,
