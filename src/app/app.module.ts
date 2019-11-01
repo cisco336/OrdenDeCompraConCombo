@@ -51,6 +51,10 @@ import { ConfirmGenerateGuideComponent } from './components/confirm-generate-gui
 import { GenerateOrderGuideComponent } from './components/generate-order-guide/generate-order-guide.component';
 import { PackageUpdateConfirmComponent } from './components/package-update-confirm/package-update-confirm.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { loaderReducer } from './redux/reducers/loader.reducer';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/combo/environment.prod';
 
 @NgModule({
   declarations: [
@@ -80,7 +84,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     BrowserModule,
     BrowserAnimationsModule,
 
-    // Material
+    // #region Material
     MatDatepickerModule,
     MatInputModule,
     MatFormFieldModule,
@@ -109,6 +113,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     MatLineModule,
     MatMenuModule,
     MatBottomSheetModule,
+    //#endregion Material
 
     HttpClientModule,
     RouterModule.forRoot([]),
@@ -122,7 +127,14 @@ import { LoaderComponent } from './components/loader/loader.component';
     ReactiveFormsModule,
 
     // Toastr notifications
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+
+    // REDUX
+    StoreModule.forRoot({ loader: loaderReducer }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    })
   ],
   providers: [
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },

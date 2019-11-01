@@ -1,0 +1,34 @@
+export class DetalleOrdenDeCompra {
+  ESTADO: string;
+  FECHA_CREACION: string;
+  FECHA_MODIFICACION: string;
+  ID_ESTADO: number;
+  NAME_FAMILIA: string;
+  ORG_LVL_CHILD: number;
+  ORG_NAME_FULL: string;
+  ORIGEN_DESC: string;
+  PMG_CANCEL_DATE: string;
+  PMG_DTL_TECH_KEY: number;
+  PMG_DTL_TYPE: number;
+  PMG_EXP_RCT_DATE: string;
+  PMG_PACK_COST: number;
+  PMG_PACK_QTY: number;
+  PMG_PAY_DATE: string;
+  PMG_PO_NUMBER: number;
+  PMG_RETAIL: number;
+  PMG_SELL_COST: number;
+  PMG_SELL_QTY: number;
+  PMG_SEQ_NUM: number;
+  PMG_SHIP_DATE: string;
+  PMG_STATUS: number;
+  PMG_STAT_NAME: string;
+  PMG_TOT_DTL_COST: number;
+  PRD_LVL_CHILD: number;
+  PRD_LVL_NUMBER: string;
+  PRD_NAME_FULL: string;
+  PRD_UPC: number;
+  USR_CREACION: string;
+  USR_MODIFICACION: string;
+  VPC_PRD_TECH_KEY: number;
+  observaciones: string;
+}

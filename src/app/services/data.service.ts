@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment, type } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +51,7 @@ export class DataService {
     return this.http.get(
       environment.APIPROVEEDOR + this.getDatosProveedorCall + '/' + data,
       {
-        headers: this.generateBasicHeadersJWT()
+        headers: type.internet ? this.generateBasicHeadersJWT() : null
       }
     );
   }
@@ -66,7 +66,7 @@ export class DataService {
 
   getEstados() {
     return this.http.get(environment.APIORDENDECOMPRA + this.getEstadosCall, {
-      headers: this.generateBasicHeadersJWT()
+      headers: type.internet ? this.generateBasicHeadersJWT() : null
     });
   }
 
@@ -75,7 +75,7 @@ export class DataService {
       environment.APIORDENDECOMPRA + this.postTablaPrincipalOCCall,
       data,
       {
-        headers: this.generateBasicHeadersJWT()
+        headers: type.internet ? this.generateBasicHeadersJWT() : null
       }
     );
   }
@@ -85,7 +85,7 @@ export class DataService {
       environment.APIORDENDECOMPRA + this.getInfoBaseOcCall +
       data,
       {
-        headers: this.generateBasicHeadersJWT()
+        headers: type.internet ? this.generateBasicHeadersJWT() : null
       }
     );
   }
@@ -96,25 +96,25 @@ export class DataService {
 
   PostBultos(data) {
     return this.http.post(environment.APIGUIA + this.postBultosCall, data, {
-      headers: this.generateBasicHeadersJWT()
+      headers: type.internet ? this.generateBasicHeadersJWT() : null
     });
   }
 
   GetCiudades(data) {
     return this.http.get(environment.APIGUIA + this.getCiudadesCall + data, {
-      headers: this.generateBasicHeadersJWT()
+      headers: type.internet ? this.generateBasicHeadersJWT() : null
     });
   }
 
   PostInfoGuia(data) {
     return this.http.post(environment.APIGUIA + this.postInfoGuiaCall, data, {
-      headers: this.generateBasicHeadersJWT()
+      headers: type.internet ? this.generateBasicHeadersJWT() : null
     });
   }
 
   SetDatosGuia(data) {
     return this.http.put(environment.APIGUIA + this.putSetDatosGuiaCall, data, {
-      headers: this.generateBasicHeadersJWT()
+      headers: type.internet ? this.generateBasicHeadersJWT() : null
     });
   }
 
@@ -130,7 +130,7 @@ export class DataService {
 
   getAutorizar(): Observable<HttpResponse<any>> {
     return this.http.get(environment.AUTH, {
-      headers: this.generateBasicHeadersJWT(),
+      headers: type.internet ? this.generateBasicHeadersJWT() : null,
       observe: 'response'
     });
   }

@@ -33,6 +33,12 @@ import * as constants from '../../constants/constants';
 import { DialogService } from 'src/app/services/dialog.service';
 import { Helper } from 'src/app/common/helper.class';
 
+// REDUX
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import * as fromLoader from '../../redux/actions/loader.actions';
+import { dispatch } from 'rxjs/internal/observable/range';
+
 @Component({
   selector: 'app-ordenes-compra',
   templateUrl: './ordenes-compra.component.html',
@@ -182,7 +188,8 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     private _dataService: DataService,
     private _excelExport: ExportAsExcelFileService,
     private _componentService: ComponentsService,
-    private _dialogService: DialogService
+    private _dialogService: DialogService,
+    private store: Store<AppState>
   ) {
     // Validators
     this.mainFilterForm = _formBuilder.group({
@@ -197,6 +204,17 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this.onResize();
   }
 
+  loader(value?) {
+    switch (value) {
+      case 1:
+        this.store.dispatch(new fromLoader.StartLoader());
+        break;
+      default:
+        this.store.dispatch(new fromLoader.StopLoader());
+        break;
+    }
+  }
+
   exportXlsx() {
     this._excelExport.exportAsExcelFile(
       this.dataSource.data,
@@ -206,6 +224,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._componentService.isLoading.next(true);
+    this.loader(1);
 
     this.routeSubscription = this._route.params;
     this._route.queryParams.pipe(skip(1)).subscribe(params => {
@@ -214,9 +233,9 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         this._componentService.isLoading.next(false);
         this.errorMessage = this.errorMessagesText.noPrivileges;
       } else {
-        const y = Helper.decrypt(params.token.toString());
+        // const y = Helper.decrypt(params.token.toString());
 
-        // const y = params['token'];
+        const y = params['token'];
 
         if (!y.split(';')[1] || !y.split(';')[2] || !y.split(';')[3]) {
           this.errorMessage = 'Datos de inicio de sesión incorrectos.';
@@ -226,39 +245,40 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         this.key = y.split(';')[2];
         this.TOKEN = y.split(';')[3];
 
-        // this.appStart(this.key);
+        this.appStart(this.key);
         this._componentService.user.next(this.usr);
         localStorage.setItem('user', this.usr);
 
-        if (this.TOKEN) {
-          try {
-            this._dataService.setToken(this.TOKEN);
-          } catch (error) {
-            this._toastr.error('Error al decodificar token');
-          }
-          this._dataService.getAutorizar().subscribe(
-            data => {
-              if (data) {
-                this._componentService.user.next(this.usr);
-                this.appStart(this.key);
-              }
-            },
-            error => {
-              switch (error.status) {
-                case 401:
-                  this._toastr.warning('Usuario No autorizado.');
-                  break;
-                case 500:
-                  this._toastr.error('Error en el servicio de autorización.');
-                  break;
-                default:
-                  this._toastr.error('Error de comunicación.');
-                  break;
-              }
-              this._componentService.isLoading.next(false);
-            }
-          );
-        }
+        // if (this.TOKEN) {
+        //   try {
+        //     this._dataService.setToken(this.TOKEN);
+        //   } catch (error) {
+        //     this._toastr.error('Error al decodificar token');
+        //   }
+        //   this._dataService.getAutorizar().subscribe(
+        //     data => {
+        //       if (data) {
+        //         this._componentService.user.next(this.usr);
+        //         this.appStart(this.key);
+        //       }
+        //     },
+        //     error => {
+        //       switch (error.status) {
+        //         case 401:
+        //           this._toastr.warning('Usuario No autorizado.');
+        //           break;
+        //         case 500:
+        //           this._toastr.error('Error en el servicio de autorización.');
+        //           break;
+        //         default:
+        //           this._toastr.error('Error de comunicación.');
+        //           break;
+        //       }
+        //       this._componentService.isLoading.next(false);
+        //       this.loader();
+        //     }
+        //   );
+        // }
       }
     });
   }
@@ -276,8 +296,8 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
           ) {
             this.errorHandling(this.errorMessagesText.providersError);
             this._componentService.isLoading.next(false);
+            this.loader();
           } else {
-            
             this.proveedores = getProveedoresData['Value'];
             this.filteredProveedores = this.mainFilterForm
               .get('proveedorControl')

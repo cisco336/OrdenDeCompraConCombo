@@ -15,6 +15,8 @@ export const environment = {
   USRPASSWD: 'EMPCAR01:EMPCAR1',
   USR: 'EMPCAR01',
   PASSWD: 'EMPCAR1',
+  AUTH:
+    'https://apim-qa-proxy.sodhc.co/logisticaSeguridadAutenticacion/authenticated',
   GUIA: 'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion',
   APIGUIA: 'http://10.23.14.163:9001/Servicios/Transportadora_1.0.0/api',
   APIPROVEEDOR: 'http://10.23.14.163:9002/Servicios/INV_INVENTARIO_1.0.0/api',
