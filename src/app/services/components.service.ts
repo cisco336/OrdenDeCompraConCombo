@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.reducer';
+import * as actions from '../redux/actions';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +60,20 @@ export class ComponentsService {
 
   isLoading = new BehaviorSubject<boolean>(false);
 
-  constructor() {}
+  constructor(private store: Store<AppState>) {}
+
+  /**
+   * Mostrar / ocultar el loader
+   * @param value number
+   */
+  loader(value?) {
+    switch (value) {
+      case 1:
+        this.store.dispatch(new actions.StartLoader());
+        break;
+      default:
+        this.store.dispatch(new actions.StopLoader());
+        break;
+    }
+  }
 }

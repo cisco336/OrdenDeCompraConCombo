@@ -1,44 +1,6 @@
 @import './assets/css/vars';
-/* You can add global styles to this file, and also import other style files */
-// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
-// Theming
 @import '~@angular/material/theming';
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat-core();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-
-/* fallback */
-
-// @font-face {
-//   font-family: 'Material Icons';
-//   font-style: normal;
-//   font-weight: 400;
-//   src: url(./assets/fonts/google/icons.woff2) format('woff2');
-// }
-
-// .material-icons {
-//   font-family: 'Material Icons';
-//   font-weight: normal;
-//   font-style: normal;
-//   font-size: 24px;
-//   line-height: 1;
-//   letter-spacing: normal;
-//   text-transform: none;
-//   display: inline-block;
-//   white-space: nowrap;
-//   word-wrap: normal;
-//   direction: ltr;
-//   -webkit-font-feature-settings: 'liga';
-//   -webkit-font-smoothing: antialiased;
-// }
 
 html,
 body {
@@ -94,11 +56,7 @@ $sd-danger: (
 $sodimac-app-primary: mat-palette($sd-primary, 1);
 $sodimac-app-accent: mat-palette($sd-success, 1);
 $sodimac-app-secondary: mat-palette($sd-secondary, 1);
-
-// The warn palette is optional (defaults to red).
 $sodimac-app-warn: mat-palette($sd-danger, 1);
-
-// Create the theme object (a Sass map containing all of the palettes).
 $sodimac-app-theme: mat-light-theme(
   $sodimac-app-primary,
   // $sodimac-app-secondary,
@@ -106,14 +64,10 @@ $sodimac-app-theme: mat-light-theme(
   $sodimac-app-warn
 );
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include angular-material-theme($sodimac-app-theme);
 @import '~saturn-datepicker/bundle.css';
 @import '~saturn-datepicker/theming';
 @include sat-datepicker-theme($sodimac-app-theme);
-
 
 @font-face {
   font-family: 'Material Icons';
@@ -140,20 +94,7 @@ body {
   & *:not(button span) {
     color: #333 !important;
   }
-  & button:not([mat-icon-button]) {
-    &.mat-primary {
-      border-radius: 0 !important;
-    }
-    & span {
-      // font-size: 21px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      & mat-icon {
-        margin-right: 10px;
-      }
-    }
-  }
+  
   .dialog-detalles {
     mat-dialog-container {
       overflow-y: hidden;

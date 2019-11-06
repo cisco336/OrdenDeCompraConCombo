@@ -35,13 +35,27 @@ $danger-gradient: linear-gradient(
 );
 
 // Mixins
+
+// Borrar despues
 @mixin custom-media-query-1 {
+  @media (max-width: 520px) {
+    @content;
+  }
+}
+
+
+@mixin screen-520 {
   @media (max-width: 520px) {
     @content;
   }
 }
 @mixin custom-media-query-2 {
   @media (max-width: 1029px) {
+    @content;
+  }
+}
+@mixin screen-768 {
+  @media (max-width: 768px) {
     @content;
   }
 }

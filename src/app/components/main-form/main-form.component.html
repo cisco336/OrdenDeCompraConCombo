@@ -1,0 +1,73 @@
+<form [formGroup]="mainFilterForm">
+  <!-- Autocomplete Proveedor -->
+  <mat-form-field id="proveedor">
+    <input
+      type="text"
+      placeholder="{{ strings.strings.provider }}"
+      aria-label="strings.strings.provider"
+      matInput
+      required
+      formControlName="proveedorControl"
+      [matAutocomplete]="proveedor"
+    />
+    <mat-autocomplete #proveedor="matAutocomplete" [displayWith]="displayInfo">
+      <mat-option
+        *ngFor="let option of filteredProviders | async"
+        [value]="option"
+      >
+        {{ option.DESCRIPCION }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error>{{ strings.strings.requiredField }}</mat-error>
+  </mat-form-field>
+
+  <!-- Autocomplete Estados -->
+  <mat-form-field id="estados">
+    <input
+      type="text"
+      placeholder="{{ strings.strings.states }}"
+      aria-label="strings.strings.states"
+      matInput
+      required
+      formControlName="estadosControl"
+      [matAutocomplete]="estados"
+    />
+    <mat-autocomplete #estados="matAutocomplete" [displayWith]="displayInfo">
+      <mat-option
+        *ngFor="let option of filteredStates | async"
+        [value]="option"
+      >
+        {{ option.DESCRIPCION | titlecase }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error>{{ strings.strings.requiredField }}</mat-error>
+  </mat-form-field>
+
+  <!-- Start Date -->
+  <mat-form-field id="fechaInicio">
+    <input
+      matInput
+      required
+      [matDatepicker]="dp1"
+      placeholder="{{ strings.startDate }}"
+      formControlName="fechaInicioControl"
+    />
+    <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+    <mat-datepicker #dp1></mat-datepicker>
+  </mat-form-field>
+
+  <!-- End date -->
+  <mat-form-field id="fechaFin">
+    <input
+      matInput
+      required
+      [matDatepicker]="dp2"
+      placeholder="{{ strings.endDate }}"
+      formControlName="fechaFinControl"
+    />
+    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+    <mat-datepicker #dp2></mat-datepicker>
+  </mat-form-field>
+
+  <app-button id="boton" [data]="{ text: 'Consultar', raised: true, icon: 'home', disabled: mainFilterForm.invalid }"></app-button>
+</form>

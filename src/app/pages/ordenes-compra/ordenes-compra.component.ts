@@ -36,8 +36,7 @@ import { Helper } from 'src/app/common/helper.class';
 // REDUX
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
-import * as fromLoader from '../../redux/actions/loader.actions';
-import { dispatch } from 'rxjs/internal/observable/range';
+import * as actions from '../../redux/actions/';
 
 @Component({
   selector: 'app-ordenes-compra',
@@ -171,6 +170,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   strings = constants.strings;
   longMessages = constants.longMessages;
   errorMessage = '';
+  helper = Helper;
 
   filterInput = new FormControl('', []);
 
@@ -204,16 +204,40 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this.onResize();
   }
 
-  loader(value?) {
-    switch (value) {
-      case 1:
-        this.store.dispatch(new fromLoader.StartLoader());
-        break;
-      default:
-        this.store.dispatch(new fromLoader.StopLoader());
-        break;
-    }
+  //#region REDUX
+  /**
+   * Obtener proveedores y asignarlos en el store
+   */
+  getProveedores() {
+    // Se enciende el Loader
+    this._dataService
+      .getProveedores()
+      .toPromise()
+      .then(
+        proveedores => {
+          this.store.dispatch(
+            new actions.GetProvidersSuccessAction(proveedores['Value'])
+          );
+        },
+        () => {
+          this.store.dispatch(new actions.GetProvidersFailAction());
+        }
+      );
   }
+
+  /**
+   * Obtener los estados y asignarlos en el store
+   */
+  getEstados() {
+    this._dataService.getEstados()
+      .toPromise()
+      .then(estados => {
+        this.store.dispatch(new actions.GetStatesSuccessAction(estados['Value']));
+      }, () => {
+          this.store.dispatch(new actions.GetStatesFailAction());
+      });
+  }
+  //#endregion REDUX
 
   exportXlsx() {
     this._excelExport.exportAsExcelFile(
@@ -223,11 +247,9 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._componentService.isLoading.next(true);
-    this.loader(1);
-
+    debugger
     this.routeSubscription = this._route.params;
-    this._route.queryParams.pipe(skip(1)).subscribe(params => {
+    this._route.queryParams.pipe(skip(0)).subscribe(params => {
       if (!params['token']) {
         this.usr = '';
         this._componentService.isLoading.next(false);
@@ -244,6 +266,11 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         this.usr = y.split(';')[1];
         this.key = y.split(';')[2];
         this.TOKEN = y.split(';')[3];
+
+        // REDUX
+        this.getProveedores();
+        this.getEstados();
+        // REDUX
 
         this.appStart(this.key);
         this._componentService.user.next(this.usr);
@@ -275,7 +302,6 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         //           break;
         //       }
         //       this._componentService.isLoading.next(false);
-        //       this.loader();
         //     }
         //   );
         // }
@@ -284,129 +310,129 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   }
 
   appStart(key?) {
-    this._componentService.isLoading.next(true);
-    this._dataService
-      .getProveedores()
-      .toPromise()
-      .then(
-        getProveedoresData => {
-          if (
-            !getProveedoresData['Estado'] ||
-            getProveedoresData['Value'][0]['Código']
-          ) {
-            this.errorHandling(this.errorMessagesText.providersError);
-            this._componentService.isLoading.next(false);
-            this.loader();
-          } else {
-            this.proveedores = getProveedoresData['Value'];
-            this.filteredProveedores = this.mainFilterForm
-              .get('proveedorControl')
-              .valueChanges.pipe(
-                startWith(''),
-                map(value =>
-                  typeof value === 'string' ? value : value.DESCRIPCION
-                ),
-                map(descripcion =>
-                  descripcion
-                    ? this._filterProveedor(descripcion)
-                    : this.proveedores.slice()
-                )
-              );
-            if (this.proveedores.length === 1) {
-              this.mainFilterForm
-                .get('proveedorControl')
-                .setValue(this.proveedores[0]);
-              this.mainFilterForm.get('proveedorControl').disable();
-              this.proveedor = this.proveedores[0]['NOMBRE_PROVEEDOR'];
-            } else {
-              this.proveedoresControlSubscription = this.mainFilterForm
-                .get('proveedorControl')
-                .valueChanges.subscribe(data => {
-                  this.proveedor = data.DESCRIPCION;
-                });
-            }
-            this._dataService
-              .getEstados()
-              .toPromise()
-              .then(
-                data => {
-                  if (
-                    !data['Estado'] ||
-                    data['Value'][0]['Código'] ||
-                    data['Value'][0]['ID_ERROR']
-                  ) {
-                    this.errorHandling(this.errorMessagesText.statesError);
-                    this.render = false;
-                    this._componentService.isLoading.next(false);
-                  } else {
-                    this._componentService.isLoading.next(false);
-                    this._componentService.estados.next(data['Value']);
-                    this.estados = data['Value'];
-                    const x = this.estados[0];
-                    x.DESCRIPCION =
-                      x.DESCRIPCION.charAt(0).toUpperCase() +
-                      x.DESCRIPCION.substr(1).toLowerCase();
-                    this.mainFilterForm.get('estadosControl').setValue(x);
-                    this._componentService.isLoading.next(false);
-                    this._componentService.estados.next(this.estados);
-                    this.filteredEstados = this.mainFilterForm
-                      .get('estadosControl')
-                      .valueChanges.pipe(
-                        startWith(''),
-                        map(value =>
-                          typeof value === 'string' ? value : value.DESCRIPCION
-                        ),
-                        map(descripcion =>
-                          descripcion
-                            ? this._filterEstados(descripcion)
-                            : this.estados.slice()
-                        )
-                      );
-                    const form = this.mainFilterForm;
-                    this.queryDetallesDialog = {
-                      p_transaccion: 'GD',
-                      p_pmg_po_number: null,
-                      p_vpc_tech_key: form.get('proveedorControl').value['ID'],
-                      p_fecha_inicio: form
-                        .get('fechaInicioControl')
-                        .value.format('DD/MM/YYYY'),
-                      p_fecha_fin: form
-                        .get('fechaFinControl')
-                        .value.format('DD/MM/YYYY'),
-                      p_fecha_real: '-1',
-                      p_id_estado: form.get('estadosControl').value.ID,
-                      p_origen: '-1',
-                      p_usuario: this._componentService.user.value
-                    };
-                  }
-                },
-                error => {
-                  this.errorHandling(error);
-                  this.mainFilterForm
-                    .get('estadosControl')
-                    .setErrors({ incorrect: true });
-                  this.mainFilterForm.get('estadosControl').disable();
-                  this._componentService.isLoading.next(false);
-                }
-              );
-            this.fechaInicioSubscription = this.mainFilterForm
-              .get('fechaInicioControl')
-              .valueChanges.subscribe(() => {
-                this.compareDates();
-              });
-            this.fechaFinSubscription = this.mainFilterForm
-              .get('fechaFinControl')
-              .valueChanges.subscribe(() => {
-                this.compareDates();
-              });
+    // this._dataService
+    //   .getProveedores()
+    //   .toPromise()
+    //   .then(
+    //     getProveedoresData => {
+    //       if (
+    //         !getProveedoresData['Estado'] ||
+    //         getProveedoresData['Value'][0]['Código']
+    //       ) {
+    //         this.errorHandling(this.errorMessagesText.providersError);
+    //         this._componentService.isLoading.next(false);
+    //       } else {
+    //         this.proveedores = getProveedoresData['Value'];
 
-            this.render = true;
-          }
-        },
-        error => {
-          this.errorHandling(error);
-        }
-      );
+            // this.filteredProveedores = this.mainFilterForm
+            //   .get('proveedorControl')
+            //   .valueChanges.pipe(
+            //     startWith(''),
+            //     map(value =>
+            //       typeof value === 'string' ? value : value.DESCRIPCION
+            //     ),
+            //     map(descripcion =>
+            //       descripcion
+            //         ? this._filterProveedor(descripcion)
+            //         : this.proveedores.slice()
+            //     )
+            //   );
+    
+    //         if (this.proveedores.length === 1) {
+    //           this.mainFilterForm
+    //             .get('proveedorControl')
+    //             .setValue(this.proveedores[0]);
+    //           this.mainFilterForm.get('proveedorControl').disable();
+    //           this.proveedor = this.proveedores[0]['NOMBRE_PROVEEDOR'];
+    //         } else {
+    //           this.proveedoresControlSubscription = this.mainFilterForm
+    //             .get('proveedorControl')
+    //             .valueChanges.subscribe(data => {
+    //               this.proveedor = data.DESCRIPCION;
+    //             });
+    //         }
+    //         this._dataService
+    //           .getEstados()
+    //           .toPromise()
+    //           .then(
+    //             data => {
+    //               if (
+    //                 !data['Estado'] ||
+    //                 data['Value'][0]['Código'] ||
+    //                 data['Value'][0]['ID_ERROR']
+    //               ) {
+    //                 this.errorHandling(this.errorMessagesText.statesError);
+    //                 this.render = false;
+    //                 this._componentService.isLoading.next(false);
+    //               } else {
+    //                 this._componentService.isLoading.next(false);
+    //                 this._componentService.estados.next(data['Value']);
+    //                 this.estados = data['Value'];
+    //                 const x = this.estados[0];
+    //                 x.DESCRIPCION =
+    //                   x.DESCRIPCION.charAt(0).toUpperCase() +
+    //                   x.DESCRIPCION.substr(1).toLowerCase();
+    //                 this.mainFilterForm.get('estadosControl').setValue(x);
+    //                 this._componentService.isLoading.next(false);
+    //                 this._componentService.estados.next(this.estados);
+    //                 this.filteredEstados = this.mainFilterForm
+    //                   .get('estadosControl')
+    //                   .valueChanges.pipe(
+    //                     startWith(''),
+    //                     map(value =>
+    //                       typeof value === 'string' ? value : value.DESCRIPCION
+    //                     ),
+    //                     map(descripcion =>
+    //                       descripcion
+    //                         ? this._filterEstados(descripcion)
+    //                         : this.estados.slice()
+    //                     )
+    //                   );
+    //                 const form = this.mainFilterForm;
+    //                 this.queryDetallesDialog = {
+    //                   p_transaccion: 'GD',
+    //                   p_pmg_po_number: null,
+    //                   p_vpc_tech_key: form.get('proveedorControl').value['ID'],
+    //                   p_fecha_inicio: form
+    //                     .get('fechaInicioControl')
+    //                     .value.format('DD/MM/YYYY'),
+    //                   p_fecha_fin: form
+    //                     .get('fechaFinControl')
+    //                     .value.format('DD/MM/YYYY'),
+    //                   p_fecha_real: '-1',
+    //                   p_id_estado: form.get('estadosControl').value.ID,
+    //                   p_origen: '-1',
+    //                   p_usuario: this._componentService.user.value
+    //                 };
+    //               }
+    //             },
+    //             error => {
+    //               this.errorHandling(error);
+    //               this.mainFilterForm
+    //                 .get('estadosControl')
+    //                 .setErrors({ incorrect: true });
+    //               this.mainFilterForm.get('estadosControl').disable();
+    //               this._componentService.isLoading.next(false);
+    //             }
+    //           );
+    //         this.fechaInicioSubscription = this.mainFilterForm
+    //           .get('fechaInicioControl')
+    //           .valueChanges.subscribe(() => {
+    //             this.compareDates();
+    //           });
+    //         this.fechaFinSubscription = this.mainFilterForm
+    //           .get('fechaFinControl')
+    //           .valueChanges.subscribe(() => {
+    //             this.compareDates();
+    //           });
+
+    //         this.render = true;
+    //       }
+    //     },
+    //     error => {
+    //       this.errorHandling(error);
+    //     }
+    //   );
   }
 
   errorHandling(error) {

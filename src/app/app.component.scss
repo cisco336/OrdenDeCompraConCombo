@@ -1,0 +1,10 @@
+@import '../assets/css/vars';
+
+.app {
+    &-wrapper {
+        background: $HC-background;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: min-content 1fr;
+    }
+}

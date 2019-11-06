@@ -158,6 +158,7 @@ export const strings = {
   createdBy: 'Creado por',
   flow: 'Flujo',
   trackingType: 'Tipo tracking',
+  tracking: 'tracking',
   date: 'Fecha',
   user: 'Usuario',
   idOC: 'ID estado OC',
@@ -170,6 +171,7 @@ export const strings = {
   minDeliverDate: 'Fecha minima de entrega',
   maxDeliverDate: 'Fecha máxima de entrega',
   orderStateInvoice: 'Estado orden facturación',
+  start: 'Inicio'
 };
 
 export const detailsTable = {
@@ -219,6 +221,13 @@ export const longMessages = {
   generateOrderGuideAlertFinal:
     '¿Está seguro de querer generar la guía para la orden de compra seleccionada?',
   generateGuideSuccess: 'La guía se generó de forma exitosa.'
+};
+
+export const links = {
+  home: 'ordenes',
+  details: 'detalles',
+  tracking: 'tracking',
+  guide: 'guia'
 };
 
 export class Constants {

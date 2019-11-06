@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment, type } from '../../environments/environment';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.reducer';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,7 @@ export class DataService {
 
   postBultosCall = '/Guia/ConfiguracionBultos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, store: Store<AppState>) {}
 
   protected generateBasicHeadersJWT(): HttpHeaders {
     return new HttpHeaders({

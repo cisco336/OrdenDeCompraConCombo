@@ -1,0 +1,9 @@
+.icon-button {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    grid-gap: 1rem;
+    align-items: center;
+}
+.no-radius {
+    border-radius: 0;
+}

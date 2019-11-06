@@ -1,0 +1,17 @@
+<button
+  mat-button
+  [ngClass]="{
+    'mat-raised-button': data.raised,
+    'no-radius': data.raised,
+    'mat-stroked-button': !data - raised
+  }"
+  color="{{ data.color || 'primary' }}"
+  [disabled]="data.disabled"
+>
+  <span matRipple [ngClass]="{ 'icon-button': data.icon }">
+    <mat-icon *ngIf="data.icon">
+      {{ data.icon }}
+    </mat-icon>
+    {{ data.text || 'Button' }}
+  </span>
+</button>

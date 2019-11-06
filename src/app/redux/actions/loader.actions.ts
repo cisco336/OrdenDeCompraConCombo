@@ -13,4 +13,4 @@ export class StopLoader implements Action {
   readonly type = LOADER_OFF;
 }
 
-export type Actions = StartLoader | StopLoader;
+export type LoaderActions = StartLoader | StopLoader;

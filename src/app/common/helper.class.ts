@@ -1,9 +1,8 @@
-import * as CryptoJS from "crypto-js";
+import * as CryptoJS from 'crypto-js';
 import { Constants } from '../constants/constants';
 
-
 export class Helper {
-  
+
   static encrypt(text: string): any {
     const encrypt = CryptoJS.AES.encrypt(text, Constants.Secret_Key);
     return btoa(encrypt.toString());

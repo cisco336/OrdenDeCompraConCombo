@@ -43,7 +43,7 @@ import { TablaDetallesComponent } from './components/tabla-detalles/tabla-detall
 import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { BottomSheetComponent } from './components/bottom-sheet/bottom-sheet.component';
-import { TrackingComponent } from './components/tracking/tracking.component';
+import { TrackingComponent } from './pages/tracking/tracking.component';
 import { getSpanishPaginatorIntl } from './spanishPaginator';
 import { PackagesConfigComponent } from './components/packages-config/packages-config.component';
 import { OriginDeliverAddressComponent } from './components/origin-deliver-address/origin-deliver-address.component';
@@ -51,10 +51,17 @@ import { ConfirmGenerateGuideComponent } from './components/confirm-generate-gui
 import { GenerateOrderGuideComponent } from './components/generate-order-guide/generate-order-guide.component';
 import { PackageUpdateConfirmComponent } from './components/package-update-confirm/package-update-confirm.component';
 import { LoaderComponent } from './components/loader/loader.component';
-import { loaderReducer } from './redux/reducers/loader.reducer';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/combo/environment.prod';
+import { MainFormComponent } from './components/main-form/main-form.component';
+import { reducers } from './app.reducer';
+import { ButtonComponent } from './components/button/button.component';
+import { NavComponent } from './components/nav/nav.component';
+import { NavItemComponent } from './components/nav/nav-item/nav-item.component';
+import { AppRoutingModule } from './app-routing.module';
+import { DetallesComponent } from './pages/detalles/detalles.component';
+import { GuiaComponent } from './pages/guia/guia.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +78,13 @@ import { environment } from 'src/environments/combo/environment.prod';
     ConfirmGenerateGuideComponent,
     GenerateOrderGuideComponent,
     PackageUpdateConfirmComponent,
-    LoaderComponent
+    LoaderComponent,
+    MainFormComponent,
+    ButtonComponent,
+    NavComponent,
+    NavItemComponent,
+    DetallesComponent,
+    GuiaComponent
   ],
   entryComponents: [
     DialogDetallesComponent,
@@ -83,6 +96,7 @@ import { environment } from 'src/environments/combo/environment.prod';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
 
     // #region Material
     MatDatepickerModule,
@@ -130,7 +144,7 @@ import { environment } from 'src/environments/combo/environment.prod';
     ToastrModule.forRoot(),
 
     // REDUX
-    StoreModule.forRoot({ loader: loaderReducer }),
+    StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
