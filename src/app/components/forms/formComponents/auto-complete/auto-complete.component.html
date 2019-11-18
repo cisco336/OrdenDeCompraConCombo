@@ -1,0 +1,14 @@
+<mat-form-field class="max-width">
+  <input
+    matInput
+    placeholder="{{ data.placeholder }}"
+    aria-label="State"
+    [matAutocomplete]="auto"
+    [formControl]="dataControl"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="display">
+    <mat-option *ngFor="let item of filteredData | async" [value]="item">
+      {{ item[data.argument] }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

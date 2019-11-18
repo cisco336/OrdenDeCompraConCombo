@@ -1,0 +1,258 @@
+<mat-form-field class="filter">
+  <input
+    matInput
+    [formControl]="filterInput"
+    (keyup)="applyFilter($event.target.value)"
+    placeholder="{{ constants.strings.filter }}"
+    matTooltip="{{ constants.tooltips.tableFilterInfo }}"
+    [matTooltipPosition]="'above'"
+    matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
+  />
+  <mat-icon matSuffix>filter_list</mat-icon>
+</mat-form-field>
+<table
+  *ngIf="dataSource.length"
+  #table
+  mat-table
+  [dataSource]="dataSource"
+  multiTemplateDataRows
+>
+  <mat-icon mat-list-icon>info_outline</mat-icon>
+  <ng-container matColumnDef="Select">
+    <th mat-header-cell *matHeaderCellDef class="check">
+      <mat-checkbox
+        (change)="$event ? masterToggle() : null"
+        [checked]="selection.hasValue() && isAllSelected()"
+        [indeterminate]="selection.hasValue() && !isAllSelected()"
+        [aria-label]="checkboxLabel()"
+        matTooltip="{{ constants.tooltips.checkBoxInfo }}"
+        [matTooltipPosition]="'above'"
+        matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
+      >
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row" class="check">
+      <mat-checkbox
+        (click)="$event.stopPropagation()"
+        (change)="$event ? selection.toggle(row) : null"
+        [checked]="selection.isSelected(row)"
+        [aria-label]="checkboxLabel(row)"
+      >
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="PMG_PO_NUMBER">
+    <th mat-header-cell *matHeaderCellDef class="header-orden">
+      # {{ constants.strings.order }}:
+      <p>{{ constants.longMessages.tableClick }}</p>
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let element"
+      class="position-label"
+      (dblclick)="getOrdenDetalle(element)"
+      (click)="expandedElement = expandedElement === element ? null : element"
+      matRipple
+      [matRippleColor]="primary"
+    >
+      <ul>
+        <li>{{ constants.strings.order }}: {{ element.PMG_PO_NUMBER }}</li>
+        <li *ngIf="element.ESTADO">
+          <span>{{ constants.strings.orderState }}:</span
+          ><span
+            [ngClass]="{
+              info: element.ESTADO === 'EN TRANSPORTE',
+              success: element.ESTADO === 'ESTADO FINAL',
+              warning: element.ESTADO === 'PREPARADO',
+              danger: element.ESTADO === 'PENDIENTE'
+            }"
+            >{{ element.ESTADO | titlecase }}</span
+          >
+        </li>
+        <li *ngIf="element.FECHA_MINIMA_OC">
+          <span>{{ constants.strings.minDeliverDate }}:</span
+          ><span>{{ element.FECHA_MINIMA_OC }}</span>
+        </li>
+        <li *ngIf="element.FECHA_MAXIMA_OC">
+          <span>{{ constants.strings.maxDeliverDate }}:</span
+          ><span>{{ element.FECHA_MAXIMA_OC }}</span>
+        </li>
+      </ul>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="AUX">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td
+      mat-cell
+      *matCellDef="let element"
+      class="position-label click"
+      (click)="expandedElement = expandedElement === element ? null : element"
+      (dblclick)="getOrdenDetalle(element)"
+      matRipple
+      [matRippleColor]="primary"
+    >
+      <ul>
+        <li *ngIf="element.NOTA_PEDIDO">
+          <span>{{ constants.strings.orderNote }}:</span>
+          <span>{{ element.NOTA_PEDIDO }}</span>
+        </li>
+        <li *ngIf="element.STICKER">
+          <span>{{ constants.strings.sticker }}:</span>
+          <span>{{ element.STICKER }}</span>
+        </li>
+        <li *ngIf="element.FLUJO">
+          <span>{{ constants.strings.flow }}:</span>
+          <span>{{ element.FLUJO }}</span>
+        </li>
+        <li *ngIf="element.TIPO_ENTREGA">
+          <span>{{ constants.strings.deliverType }}:</span>
+          <span>{{ element.TIPO_ENTREGA }}</span>
+        </li>
+      </ul>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="ACTIONS">
+    <th mat-header-cell *matHeaderCellDef>{{ constants.strings.actions }}</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        class="click"
+        mat-icon-button
+        color="primary"
+        matTooltip="{{ tooltips.purchaseOrderDetailToolTip }}"
+        matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
+        (click)="getOrdenDetalle(element)"
+      >
+        <mat-icon>assignment</mat-icon>
+      </button>
+      <span
+        [matTooltipDisabled]="element.GENERA_GUIA > 0"
+        matTooltip="{{ errorMessagesText.guideUnabled }}"
+      >
+        <button
+          class="click"
+          mat-icon-button
+          color="warn"
+          [disabled]="!element.GENERA_GUIA"
+          matTooltip="{{ tooltips.purchaseOrderGuideTooltip }}"
+          matTooltipClass="mat-elevation-z8 HC-tooltip-success click"
+          (click)="getOrdenDetalle(element, 1)"
+        >
+          <mat-icon>local_shipping</mat-icon>
+        </button>
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="expandedDetail">
+    <td
+      mat-cell
+      *matCellDef="let element"
+      [attr.colspan]="displayedColumns.length"
+    >
+      <div class="element-detail ">
+        <mat-list>
+          <mat-list-item>
+            <mat-icon mat-list-icon>today</mat-icon>
+            <span mat-line class="break">{{ constants.strings.orderDate }}:</span>
+            <span mat-line class="break">
+              {{ element['PMG_RELEASE_DATE'] | date: 'medium' }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>today</mat-icon>
+            <span mat-line class="break">{{ constants.strings.realDeliverDate }}:</span>
+            <span mat-line class="break">
+              {{ element['FECHA_REAL_ENTREGA'] | date: 'medium' }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>language</mat-icon>
+            <span mat-line class="break">{{ constants.strings.red }}:</span>
+            <span mat-line class="break">
+              {{ element['RED'] }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>attach_money</mat-icon>
+            <span mat-line class="break">{{ constants.strings.value }}:</span>
+            <span mat-line class="break">
+              {{
+                element.PMG_TOT_PO_COST
+                  | currency: 'COP':'symbol-narrow' || errorMessagesText.noData
+              }}
+            </span>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon>assignment</mat-icon>
+            <span mat-line class="break">{{ constants.strings.orderState }}:</span>
+            <span mat-line class="break">
+              {{
+                element.PMG_STAT_NAME || errorMessagesText.noData | titlecase
+              }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>inbox</mat-icon>
+            <span mat-line class="break">{{ constants.strings.deliverType }}:</span>
+            <span mat-line class="break">
+              {{
+                element['TIPO_ENTREGA'] || errorMessagesText.noData | titlecase
+              }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>store</mat-icon>
+            <span mat-line class="break">{{ constants.strings.provider }}:</span>
+            <span mat-line class="break">
+              {{ element.VENDOR_NAME || errorMessagesText.noData | titlecase }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>local_shipping</mat-icon>
+            <span mat-line class="break"
+              >{{ constants.strings.conveyor | titlecase }}:</span
+            >
+            <span mat-line class="break">
+              {{
+                element.TRANSPORTADORA || errorMessagesText.noData | titlecase
+              }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>pan_tool</mat-icon>
+            <span mat-line class="break">{{ constants.strings.promise }}:</span>
+            <span mat-line class="break">
+              {{ element['PROMESA'] }}
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr
+    mat-header-row
+    *matHeaderRowDef="displayedColumns; sticky: !isLoading"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let element; columns: displayedColumns"
+    class="element-row"
+    [class.expanded-row]="expandedElement === element"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: ['expandedDetail']"
+    class="detail-row"
+  ></tr>
+</table>
+
+<mat-paginator
+  *ngIf="dataSource.data.length > 0"
+  [pageSizeOptions]="[5, 10, 20, 50, 100]"
+  showFirstLastButtons
+></mat-paginator>

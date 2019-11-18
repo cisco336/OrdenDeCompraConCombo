@@ -8,7 +8,7 @@ import { GuiaComponent } from './pages/guia/guia.component';
 
 const routes: Routes = [
   {
-    path: constants.links.home + '/?token=kjnojoijoij',
+    path: '',
     component: OrdenesCompraComponent
   },
   {
@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/' + constants.links.home + '/?token=kjnojoijoij',
+    redirectTo: '/',
     pathMatch: 'full'
   }
 ];

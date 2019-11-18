@@ -1,15 +1,17 @@
 import { ActionReducerMap } from '@ngrx/store';
 import * as allReducers from './redux/reducers';
-import { EstadoProveedores } from './models';
+import { EstadoProveedores, EncabezadoOC } from './models';
 
 export interface AppState {
     states: EstadoProveedores[];
     loader: boolean;
     providers: EstadoProveedores[];
+    encabezadosOC: EncabezadoOC[];
 }
 
 export const reducers: ActionReducerMap<AppState> = {
     states: allReducers.statesReducer,
     loader: allReducers.loaderReducer,
     providers: allReducers.providersReducer,
+    encabezadosOC: allReducers.encabezadosOCReducer,
 };

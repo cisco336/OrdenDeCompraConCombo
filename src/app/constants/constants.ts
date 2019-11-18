@@ -174,6 +174,12 @@ export const strings = {
   start: 'Inicio'
 };
 
+export const transacciones = {
+  getEncabezados: 'GE',
+  getDetalles: 'GD',
+  getTracking: 'TR',
+}
+
 export const detailsTable = {
   FECHA_REAL_EVENTO: strings.realEventDate,
   FECHA_CREACION: null, // strings.creationDate,

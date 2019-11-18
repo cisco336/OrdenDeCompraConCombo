@@ -1,0 +1,64 @@
+<form [formGroup]="mainFilterForm">
+  <!-- Autocomplete Proveedor -->
+  <app-auto-complete
+  id="proveedor"
+    *ngIf="proveedores"
+    [data]="{
+      placeholder: strings.strings.provider,
+      data: proveedores,
+      icon: '',
+      argument: 'DESCRIPCION'
+    }"
+    (formReady)="formInitialized('proveedorControl', $event)"
+  ></app-auto-complete>
+
+  <!-- Autocomplete Estados -->
+  <app-auto-complete
+  id="estados"
+    *ngIf="proveedores"
+    [data]="{
+      placeholder: strings.strings.states,
+      data: estados,
+      icon: '',
+      argument: 'DESCRIPCION'
+    }"
+    (formReady)="formInitialized('estadosControl', $event)"
+  ></app-auto-complete>
+
+  <!-- Start Date -->
+  <mat-form-field id="fechaInicio">
+    <input
+      matInput
+      required
+      [matDatepicker]="dp1"
+      placeholder="{{ strings.strings.startDate }}"
+      formControlName="fechaInicioControl"
+    />
+    <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+    <mat-datepicker #dp1></mat-datepicker>
+  </mat-form-field>
+
+  <!-- End date -->
+  <mat-form-field id="fechaFin">
+    <input
+      matInput
+      required
+      [matDatepicker]="dp2"
+      placeholder="{{ strings.strings.endDate }}"
+      formControlName="fechaFinControl"
+    />
+    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+    <mat-datepicker #dp2></mat-datepicker>
+  </mat-form-field>
+
+  <app-button
+  id="boton"
+    [data]="{
+      text: 'Consultar',
+      raised: true,
+      icon: 'search',
+      disabled: mainFilterForm.invalid
+    }"
+    (click)="getDetalles()"
+  ></app-button>
+</form>

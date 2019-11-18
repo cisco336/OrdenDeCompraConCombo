@@ -54,7 +54,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/combo/environment.prod';
-import { MainFormComponent } from './components/main-form/main-form.component';
+import { MainFormComponent } from './components/forms/main-form/main-form.component';
 import { reducers } from './app.reducer';
 import { ButtonComponent } from './components/button/button.component';
 import { NavComponent } from './components/nav/nav.component';
@@ -62,6 +62,9 @@ import { NavItemComponent } from './components/nav/nav-item/nav-item.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DetallesComponent } from './pages/detalles/detalles.component';
 import { GuiaComponent } from './pages/guia/guia.component';
+import { SimpleInputComponent } from './components/forms/formComponents/simple-input/simple-input.component';
+import { AutoCompleteComponent } from './components/forms/formComponents/auto-complete/auto-complete.component';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +87,10 @@ import { GuiaComponent } from './pages/guia/guia.component';
     NavComponent,
     NavItemComponent,
     DetallesComponent,
-    GuiaComponent
+    GuiaComponent,
+    SimpleInputComponent,
+    AutoCompleteComponent,
+    TableComponent
   ],
   entryComponents: [
     DialogDetallesComponent,

@@ -10,3 +10,4 @@ export * from './queryBulto.model';
 export * from './queryDetalles.model';
 export * from './queryMagnitudes.model';
 export * from './tracking.model';
+export * from './encabezadoOrdenDeCompra.model';
