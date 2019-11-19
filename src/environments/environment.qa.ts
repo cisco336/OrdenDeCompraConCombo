@@ -11,7 +11,7 @@ export const environment = {
   production: false,
 
   PATHROTULO: 'http://200.69.100.66/2IMPRESIONGUIASpruebas/ISticker_ZEA.aspx?',
-  APIORDENDECOMPRA: 'http://10.23.14.164:9002/Servicios/ORDEN_COMPRA_1.0.0/api',
+  APIORDENDECOMPRA: 'http://10.23.14.163:9002/Servicios/ORDEN_COMPRA_1.0.0/api',
   USRPASSWD: 'EMPCAR01:EMPCAR1',
   USR: 'EMPCAR01',
   PASSWD: 'EMPCAR1',

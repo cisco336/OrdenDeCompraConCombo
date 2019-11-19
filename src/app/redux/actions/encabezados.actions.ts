@@ -6,7 +6,7 @@ export const GET_ENCABEZADOSOC_SUCCESS = '[ENCABEZADOSOC] Get EncabezadosOC succ
 export const GET_ENCABEZADOSOC_FAIL = '[ENCABEZADOSOC] Get EncabezadosOC fail';
 
 //  Solicitud Obtener encabezados
-export class GetEncabezadosOCRequesAction implements Action {
+export class GetEncabezadosOCRequestAction implements Action {
   readonly type = GET_ENCABEZADOSOC_REQUEST;
 }
 

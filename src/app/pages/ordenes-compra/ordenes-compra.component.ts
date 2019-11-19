@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import {
@@ -28,7 +27,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import * as actions from '../../redux/actions/';
 import { StandarResponseHeader } from 'src/app/interfaces/interfaces';
-import { Action } from 'rxjs/internal/scheduler/Action';
 
 @Component({
   selector: 'app-ordenes-compra',
@@ -37,7 +35,7 @@ import { Action } from 'rxjs/internal/scheduler/Action';
 })
 export class OrdenesCompraComponent implements OnInit, OnDestroy {
   mainFilterForm: FormGroup;
-  
+
   proveedores: Proveedores[] = [];
   estados: Estado[] = [];
   expandedElement: OrdenDeCompra;
@@ -121,6 +119,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this.onResize();
   }
 
+  //#region REDUX
   ngOnInit() {
     // Se coloca el token en el local storage
     this._route.queryParams.subscribe(token => {
@@ -135,53 +134,44 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
   }
-
-  //#region REDUX
   /**
    * Obtener proveedores y asignarlos en el store
    */
   getProveedores() {
     // Se enciende el Loader
+    this.store.dispatch(new actions.GetProvidersRequesAction());
     this._dataService
       .getProveedores()
       .toPromise()
-      .then(
-        proveedores => {
+      .then(proveedores => {
+        if (proveedores['Value'] && !proveedores['Value'][0]['Código']) {
           this.store.dispatch(
             new actions.GetProvidersSuccessAction(proveedores['Value']),
           );
-        },
-        () => {
+        } else {
           this.store.dispatch(new actions.GetProvidersFailAction());
-        },
-      );
+        }
+      });
   }
 
   /**
    * Obtener los estados y asignarlos en el store
    */
   getEstados() {
+    // Se enciende el loader
+    this.store.dispatch(new actions.GetStatesRequestAction());
     this._dataService
       .getEstados()
       .toPromise()
-      .then(
-        estados => {
+      .then(estados => {
+        if (estados['Value'] && !estados['Value'][0]['Código']) {
           this.store.dispatch(
             new actions.GetStatesSuccessAction(estados['Value']),
           );
-        },
-        () => {
+        } else {
           this.store.dispatch(new actions.GetStatesFailAction());
-        },
-      );
-  }
-  //#endregion REDUX
-
-  exportXlsx() {
-    this._excelExport.exportAsExcelFile(
-      this.dataSource.data,
-      'Ordenes_de_compra_' + this.proveedor,
-    );
+        }
+      });
   }
 
   start() {
@@ -200,6 +190,34 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       this.getProveedores();
       this.getEstados();
     }
+  }
+  consultar(queryConsultar) {
+    this.store.dispatch(new actions.GetEncabezadosOCRequestAction());
+    this._componentService.isLoading.next(true);
+    this._dataService
+      .postTablaPrincipalOC(queryConsultar)
+      .toPromise()
+      .then(
+        (data: StandarResponseHeader) => {
+          if (data.Value && data.Value[0]['Código']) {
+            this.tableMessage = data['Value'][0]['Mensaje'];
+            this.store.dispatch(new actions.GetEncabezadosOCFailAction());
+          } else {
+            this.store.dispatch(
+              new actions.GetEncabezadosOCSuccessAction(data.Value),
+            );
+          }
+          this._componentService.isLoading.next(false);
+        }
+      );
+  }
+  //#endregion REDUX
+
+  exportXlsx() {
+    this._excelExport.exportAsExcelFile(
+      this.dataSource.data,
+      'Ordenes_de_compra_' + this.proveedor,
+    );
   }
 
   errorHandling(error) {
@@ -227,34 +245,6 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this._toastr.error(toastrError);
     this.noData = true;
     this._componentService.isLoading.next(false);
-  }
-
-  consultar(queryConsultar) {
-    this._componentService.isLoading.next(true);
-    this._dataService
-      .postTablaPrincipalOC(queryConsultar)
-      .toPromise()
-      .then(
-        (data: StandarResponseHeader) => {
-          this.tableMessage = '';
-          // this.dataSource = new MatTableDataSource();
-          if (data.Value && data.Value[0]['Código']) {
-            this.tableMessage = data['Value'][0]['Mensaje'];
-            this.store.dispatch(new actions.GetEncabezadosOCFailAction());
-          } else {
-            this.tableMessage = '';
-            // this.dataSource.data = data['Value'];
-            this.store.dispatch(
-              new actions.GetEncabezadosOCSuccessAction(data.Value),
-            );
-          }
-          this._componentService.isLoading.next(false);
-        },
-        error => {
-          this.errorHandling(error);
-          this._componentService.isLoading.next(false);
-        },
-      );
   }
 
   getOrdenDetalle(element, guiaOrden?) {

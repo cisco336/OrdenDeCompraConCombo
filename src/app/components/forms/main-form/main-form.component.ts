@@ -43,8 +43,8 @@ export class MainFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.store.subscribe(store => {
-      this.proveedores = store.providers;
-      this.estados = store.states;
+      this.proveedores = store.providers['proveedores'];
+      this.estados = store.states['estados'];
     });
     this.mainFilterForm.valueChanges.subscribe(values => {
       const start = new Date(

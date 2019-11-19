@@ -3,7 +3,7 @@
     <app-main-form (ocDetalles)="consultar($event)"></app-main-form>
   </mat-card>
   <mat-card class="mat-elevation-z4 second">
-    <div *ngIf="tableMessage === ''">
+    <div>
       <h2>
         {{ strings.options }}:
         <mat-icon
@@ -33,9 +33,6 @@
         </button>
       </div> -->
     </div>
-    <app-table></app-table>
-    <div class="table-message" *ngIf="tableMessage !== ''">
-      {{ tableMessage || null }}
-    </div>
+    <app-table class="flex"></app-table>
   </mat-card>
 </div>

@@ -1,10 +1,14 @@
 <div class="spinner" *ngIf="isLoading">
-    <mat-progress-spinner
-      [color]="color"
-      mode="indeterminate"
-      [diameter]="diameter"
-      strokeWidth="2"
-    >
-    </mat-progress-spinner>
-  </div>
-  
+  <mat-progress-spinner
+    [color]="color"
+    mode="indeterminate"
+    [diameter]="diameter"
+    strokeWidth="2"
+  >
+  </mat-progress-spinner>
+  <span *ngIf="loadingMsg">
+    <h4 *ngFor="let msg of loadingMsg">
+      {{ msg }}
+    </h4>
+  </span>
+</div>

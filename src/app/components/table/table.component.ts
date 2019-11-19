@@ -14,18 +14,21 @@ import { FormControl } from '@angular/forms';
 })
 export class TableComponent implements OnInit {
   constants = constants;
-  dataSource: MatTableDataSource<any>;
+  dataSource;
   selection = new SelectionModel<any>(true, []);
   displayedColumns: string[] = ['Select', 'PMG_PO_NUMBER', 'AUX', 'ACTIONS'];
-  filter: FormControl;
+  filterInput: FormControl;
 
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource();
     this.store.subscribe(values => {
-      console.log(values);
-      this.dataSource.data = values.encabezadosOC;
+      this.dataSource = new MatTableDataSource();
+      const tableData = values.encabezadosOC;
+      console.log(tableData);
+      this.dataSource.data = tableData['encabezados']
+        ? tableData['encabezados']
+        : [];
     });
   }
 

@@ -24,34 +24,34 @@ body {
 $sd-primary: (
   1: $HC-primary,
   contrast: (
-    1: $HC-white
-  )
+    1: $HC-white,
+  ),
 );
 $sd-secondary: (
   1: $HC-dark-gray,
   2: $HC-light-gray,
   contrast: (
     1: $HC-white,
-    2: $HC-gray
-  )
+    2: $HC-gray,
+  ),
 );
 $sd-success: (
   1: $HC-success,
   contrast: (
-    1: $HC-white
-  )
+    1: $HC-white,
+  ),
 );
 $sd-warning: (
   1: $HC-warning,
   contrast: (
-    1: $HC-black
-  )
+    1: $HC-black,
+  ),
 );
 $sd-danger: (
   1: $HC-danger,
   contrast: (
-    1: $HC-white
-  )
+    1: $HC-white,
+  ),
 );
 $sodimac-app-primary: mat-palette($sd-primary, 1);
 $sodimac-app-accent: mat-palette($sd-success, 1);
@@ -94,7 +94,7 @@ body {
   & *:not(button span) {
     color: #333 !important;
   }
-  
+
   .dialog-detalles {
     mat-dialog-container {
       overflow-y: hidden;
@@ -118,25 +118,6 @@ body {
 
 .HC-tooltip-success {
   background: $HC-success;
-}
-
-table {
-  & td {
-    font-size: 12px !important;
-  }
-}
-
-::ng-deep table {
-  & thead {
-    background: white;
-    z-index: 1000;
-  }
-}
-
-table {
-  & td {
-    font-size: 12px !important;
-  }
 }
 
 .mat-chip-list-wrapper {
