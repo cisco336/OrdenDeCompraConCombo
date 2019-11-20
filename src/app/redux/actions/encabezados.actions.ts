@@ -22,6 +22,6 @@ export class GetEncabezadosOCFailAction implements Action {
 }
 
 export type EncabezadosOCActions =
-  | GetEncabezadosOCRequesAction
+  | GetEncabezadosOCRequestAction
   | GetEncabezadosOCSuccessAction
   | GetEncabezadosOCFailAction;

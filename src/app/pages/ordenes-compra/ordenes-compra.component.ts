@@ -87,7 +87,8 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   errorMessage = '';
   helper = Helper;
 
-  filterInput = new FormControl('', []);
+  skus;
+  encabezados;
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
@@ -181,6 +182,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       if (!y.split(';')[1] || !y.split(';')[2] || !y.split(';')[3]) {
         this.errorMessage = 'Datos de inicio de sesión incorrectos.';
         this.usr = '';
+        return;
       }
       this.usr = y.split(';')[1];
       this.key = y.split(';')[2];
@@ -189,6 +191,12 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       // Se obtienen proveedores y estados
       this.getProveedores();
       this.getEstados();
+
+      this.store.subscribe(store => {
+        this.render = store.encabezadosOC.encabezados.length > 0;
+        this.skus = store.cambioEstado.skus;
+        this.encabezados = store.encabezadosOC.encabezados;
+      });
     }
   }
   consultar(queryConsultar) {
@@ -197,28 +205,33 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this._dataService
       .postTablaPrincipalOC(queryConsultar)
       .toPromise()
-      .then(
-        (data: StandarResponseHeader) => {
-          if (data.Value && data.Value[0]['Código']) {
-            this.tableMessage = data['Value'][0]['Mensaje'];
-            this.store.dispatch(new actions.GetEncabezadosOCFailAction());
-          } else {
-            this.store.dispatch(
-              new actions.GetEncabezadosOCSuccessAction(data.Value),
-            );
-          }
-          this._componentService.isLoading.next(false);
+      .then((data: StandarResponseHeader) => {
+        if (data.Value && data.Value[0]['Código']) {
+          this.tableMessage = data['Value'][0]['Mensaje'];
+          this.store.dispatch(new actions.GetEncabezadosOCFailAction());
+        } else {
+          this.store.dispatch(
+            new actions.GetEncabezadosOCSuccessAction(data.Value),
+          );
         }
+        this._componentService.isLoading.next(false);
+      });
+  }
+
+  setSkus() {
+    if (this.skus.length > 0) {
+      console.log('Dialogo de cambio de estado.');
+    }
+  }
+  exportXlsx() {
+    if (this.encabezados.length > 0) {
+      this._excelExport.exportAsExcelFile(
+        this.encabezados,
+        'Ordenes_de_compra_' + this.proveedor,
       );
+    }
   }
   //#endregion REDUX
-
-  exportXlsx() {
-    this._excelExport.exportAsExcelFile(
-      this.dataSource.data,
-      'Ordenes_de_compra_' + this.proveedor,
-    );
-  }
 
   errorHandling(error) {
     let toastrError;
@@ -409,7 +422,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.filterInput.reset();
+    // this.filterInput.reset();
     this.consultar('');
   }
 }

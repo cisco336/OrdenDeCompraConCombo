@@ -6,11 +6,13 @@ export interface AppState {
     providers;
     encabezadosOC;
     ordenCompra;
+    cambioEstado;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
     states: allReducers.statesReducer,
     providers: allReducers.providersReducer,
     encabezadosOC: allReducers.encabezadosOCReducer,
-    ordenCompra: allReducers.ordenCompraReducer
+    ordenCompra: allReducers.ordenCompraReducer,
+    cambioEstado: allReducers.cambioEstadoReducer,
 };

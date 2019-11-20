@@ -1,34 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrdenDeCompra } from 'src/app/models';
 import * as constants from '../../constants/constants';
 import { FormControl } from '@angular/forms';
+import * as actions from '../../redux/actions/';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+      ),
+    ]),
+  ],
 })
 export class TableComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   constants = constants;
   dataSource;
   selection = new SelectionModel<any>(true, []);
   displayedColumns: string[] = ['Select', 'PMG_PO_NUMBER', 'AUX', 'ACTIONS'];
-  filterInput: FormControl;
+  filterInput: FormControl = new FormControl('', []);
 
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource();
     this.store.subscribe(values => {
-      this.dataSource = new MatTableDataSource();
       const tableData = values.encabezadosOC;
-      console.log(tableData);
       this.dataSource.data = tableData['encabezados']
         ? tableData['encabezados']
         : [];
+      setTimeout(() => {
+        this.dataSource.paginator = this.paginator;
+      }, 0);
     });
   }
 
@@ -51,6 +72,10 @@ export class TableComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row[
       'Orden'
     ] + 1}`;
+  }
+
+  setSkus() {
+    this.store.dispatch(new actions.GetCambioEstadoSuccessAction(this.selection.selected));
   }
 
   applyFilter(filterValue: string) {

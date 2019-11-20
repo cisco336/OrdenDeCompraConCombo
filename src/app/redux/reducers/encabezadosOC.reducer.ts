@@ -5,7 +5,7 @@ const initState = {
   error: null,
   loading: false,
   loadingMsg: null,
-  encabezados: []
+  encabezados: [],
 };
 
 export function encabezadosOCReducer(
@@ -18,7 +18,7 @@ export function encabezadosOCReducer(
         ...state,
         loadingMsg: 'Cargando encabezados de ordenens de compra',
         loading: true,
-      }
+      };
     case fromEncabezadosOC.GET_ENCABEZADOSOC_SUCCESS:
       return {
         ...state,
@@ -30,9 +30,10 @@ export function encabezadosOCReducer(
     case fromEncabezadosOC.GET_ENCABEZADOSOC_FAIL:
       return {
         ...state,
+        encabezados: [],
         loading: false,
         loadingMsg: null,
-        error: 'Error al obtener los encabezados'
+        error: 'Error al obtener los encabezados',
       };
     default:
       return state;

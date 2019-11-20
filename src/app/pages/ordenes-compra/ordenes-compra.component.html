@@ -2,7 +2,7 @@
   <mat-card class="mat-elevation-z4 first">
     <app-main-form (ocDetalles)="consultar($event)"></app-main-form>
   </mat-card>
-  <mat-card class="mat-elevation-z4 second">
+  <mat-card class="mat-elevation-z4 second" *ngIf="render">
     <div>
       <h2>
         {{ strings.options }}:
@@ -13,25 +13,23 @@
           >info_outline</mat-icon
         >
       </h2>
-      <!-- <div>
+      <div>
         <button
           mat-raised-button
           color="accent"
-          (click)="cambioEstadoDialog()"
-          [disabled]="!selection.selected.length"
+          (click)="setSkus()"
         >
           <mat-icon mat-list-icon>category</mat-icon>{{ strings.changeState }}
         </button>
         <button
           mat-raised-button
           color="primary"
-          #exportButton
           (click)="exportXlsx()"
         >
           <mat-icon mat-list-icon>description</mat-icon
           >{{ strings.generateReport }}
         </button>
-      </div> -->
+      </div>
     </div>
     <app-table class="flex"></app-table>
   </mat-card>
