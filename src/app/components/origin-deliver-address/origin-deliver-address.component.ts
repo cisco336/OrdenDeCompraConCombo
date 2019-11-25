@@ -80,8 +80,9 @@ export class OriginDeliverAddressComponent implements OnInit, OnDestroy {
           this.error = strings.errorMessagesText.citiesError;
           setTimeout(() => (this.error = ''), 3000);
         } else {
-          this.ciudades = ciudades;
-          this.destinos = ciudades;
+          
+          this.ciudades = ciudades["Value"];
+          this.destinos = ciudades["Value"];
           this.filteredOrigen = this.addresses
             .get('originCity')
             .valueChanges.pipe(

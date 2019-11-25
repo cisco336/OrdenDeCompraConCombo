@@ -159,7 +159,7 @@
       <app-stepper-detalles [details]="true"></app-stepper-detalles>
     </mat-tab>
     <mat-tab label="Tracking" [disabled]="!isTracking">
-      <app-tracking></app-tracking>
+      <app-tracking *ngIf="isTracking"></app-tracking>
     </mat-tab>
   </mat-tab-group>
 </div>
