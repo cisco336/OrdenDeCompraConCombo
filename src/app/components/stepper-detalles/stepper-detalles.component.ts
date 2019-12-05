@@ -71,7 +71,7 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   queryBulto: Interfaces.QueryBulto = {
     Transaccion: "",
     Sticker: "",
-    ID_BULTO: 0,
+    IdBulto: 0,
     Ordencompra: this.oc,
     Cantidad: -1,
     Sku: "-1",
@@ -260,13 +260,14 @@ export class StepperDetallesComponent implements OnInit, OnDestroy {
   }
 
   sendPackages(stepper: MatStepper) {
+    console.log("...");
     if (
       this._componentService.getIsValid().value &&
       this._componentService.getIdBulto().value !== ""
     ) {
       const query: QueryBulto = {
         Transaccion: "UD",
-        ID_BULTO: this._componentService.getIdBulto().value,
+        IdBulto: this._componentService.getIdBulto().value,
         Sticker: "",
         Ordencompra: 0,
         Cantidad: 0,
