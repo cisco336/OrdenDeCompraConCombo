@@ -80,8 +80,11 @@ export class TablaDetallesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<DetalleOrdenDeCompra>();
-    this._componentService.getTablaDetalles().subscribe(data => this.dataSource.data = data);
-    this.selection.clear();
+    this._componentService.getTablaDetalles().subscribe(data => {
+      this.selection.clear();
+      this.dataSource.data = data;
+    });
+    
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
     }, 0);

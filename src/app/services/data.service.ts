@@ -113,7 +113,7 @@ export class DataService {
   }
 
   SetDatosGuia(data) {
-    return this.http.put(environment.APIGUIA + this.putSetDatosGuiaCall, data, {
+    return this.http.post(environment.APIGUIA + this.putSetDatosGuiaCall, data, {
       headers: this.generateBasicHeadersJWT()
     });
   }

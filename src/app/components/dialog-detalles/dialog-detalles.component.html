@@ -81,7 +81,7 @@
           </li> -->
         </ul>
       </div>
-      <div class="card-title">
+      <div class="card-title"  *ngIf="infoBaseOC.DIRECCION_FACTURACION && infoBaseOC.DIRECCION_FACTURACION !== ''">
         <mat-icon>attach_money</mat-icon>
         {{ strings.strings.billingData }}:
       </div>
@@ -145,7 +145,7 @@
       </div>
       <div class="card-body">
         <ul>
-          <li *ngIf="infoBaseOC.OBSERVACIONES !== ''">
+          <li class="lstObservations" *ngIf="infoBaseOC.OBSERVACIONES !== ''">
             <span *ngIf="observaciones">{{ strings.strings.observations }}:</span
             ><span>{{ infoBaseOC.OBSERVACIONES }}</span>
           </li>

@@ -45,7 +45,11 @@
     padding: 0;
     color: $HC-gray;
     border: 1px solid $HC-primary; 
-    grid-template-columns: 1fr;   
+    grid-template-columns: 1fr;  
+    & .card-body .lstObservations { 
+      display: grid; 
+      grid-template-columns: min-content 1fr !important; 
+    } 
   }
   &-wrapper {
     justify-content: center;

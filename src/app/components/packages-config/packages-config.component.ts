@@ -14,23 +14,27 @@ import {
 import { DataService } from 'src/app/services/data.service';
 import { Subscription } from 'rxjs';
 import { DialogService } from 'src/app/services/dialog.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-packages-config',
-  templateUrl: './packages-config.component.html',
-  styleUrls: ['./packages-config.component.scss'],
+  selector: "app-packages-config",
+  templateUrl: "./packages-config.component.html",
+  styleUrls: ["./packages-config.component.scss"],
   animations: [
-    trigger('table', [
-      state('true', style({ opacity: 1 })),
-      state('false', style({ opacity: 0 })),
-      transition('0 <=> 1', animate('.2s ease-out'))
+    trigger("table", [
+      state("true", style({ opacity: 1 })),
+      state("false", style({ opacity: 0 })),
+      transition("0 <=> 1", animate(".2s ease-out"))
     ])
   ]
 })
 export class PackagesConfigComponent implements OnInit, OnDestroy {
   strings = strings;
   packagesForm = new FormGroup({
-    unities: new FormControl('', [Validators.required])
+    unities: new FormControl("", [
+      Validators.required,
+      Validators.pattern("[0-9]*")
+    ])
   });
   displayedColumns: any[] = [];
   displayedNames: any[] = [];
@@ -51,6 +55,7 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
   constructor(
     private _componentService: ComponentsService,
     private _dataService: DataService,
+    private _toastr: ToastrService,
     private _dialogService: DialogService
   ) {}
 
@@ -61,7 +66,7 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
         this._componentService.getDataSourceBackup().value
       );
     }
-    this.packagesForm.get('unities').valueChanges.subscribe(change => {
+    this.packagesForm.get("unities").valueChanges.subscribe(change => {
       this._componentService.setSteps({
         two: this.packagesForm.valid,
         three: this._componentService.getSteps().value.three,
@@ -70,14 +75,14 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
     });
     this.displayedColumns = [
       // 'ID_BULTO',
-      'BULTOS',
+      "BULTO",
       // 'CANTIDAD',
-      'LARGO',
-      'ANCHO',
-      'ALTO',
-      'PESO',
-      'VOLUMEN',
-      'DECLARADO'
+      "LARGO",
+      "ANCHO",
+      "ALTO",
+      "PESO",
+      "VOLUMEN",
+      "DECLARADO"
     ];
     this.displayedNames = [
       this.strings.strings.package,
@@ -97,7 +102,7 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
       ? this._componentService.getSelectedSku().subscribe(skuData => {
           if (skuData.length) {
             this.selectedSkus = skuData.filter(
-              s => s.GUIA === 'NA' || s.GUIA === '--'
+              s => s.GUIA === "NA" || s.GUIA === "--"
             );
           }
         })
@@ -130,8 +135,8 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
   generate(unidades) {
     this.isLoading = true;
     const query: QueryBulto = {
-      Transaccion: 'IB',
-      Sticker: '-1',
+      Transaccion: "IB",
+      Sticker: "-1",
       Ordencompra: this.oc,
       Cantidad: parseInt(unidades, 10),
       Sku: this.hasDetails
@@ -143,22 +148,22 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
     };
     this.postBultosSubscription = this._dataService.PostBultos(query).subscribe(
       response => {
-        if (response['State']) {
-          this.newResponse = response['Value'].map(
+        if (response["State"]) {
+          this.newResponse = response["Value"].map(
             s =>
               (s = {
                 ALTO: s.ALTO < 1 ? 1 : s.ALTO,
                 ANCHO: s.ANCHO < 1 ? 1 : s.ANCHO,
                 CANTIDAD: s.BULTO,
-                BULTOS: s.BULTOS,
-                DECLARADO: s.DECLARADO < 1 ? 1 : s.DECLARADO,
+                BULTO: s.BULTO,
+                DECLARADO: s.DECLARADO,
                 ID_BULTO: s.ID_BULTO,
                 ID_BULTO_DETALLE: s.ID_BULTO_DETALLE,
                 LARGO: s.LARGO < 1 ? 1 : s.LARGO,
                 PESO: s.PESO < 1 ? 1 : s.PESO,
                 PMG_PO_NUMBER: s.PMG_PO_NUMBER,
                 STICKER: s.STICKER,
-                VOLUMEN: s.VOLUMEN
+                VOLUMEN: s.ALTO * s.ANCHO * s.LARGO
               })
           );
           this.dataSource.data = this.newResponse;
@@ -171,7 +176,7 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
           } else {
             this._componentService.setIdBultoPost(this.IDBulto);
           }
-          this.IDBulto = response['Value'][0]['ID_BULTO'];
+          this.IDBulto = response["Value"][0]["ID_BULTO"];
 
           this._componentService.setIdBulto(this.IDBulto);
         }
@@ -187,10 +192,10 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
   }
   cleanString(skus) {
     let skuForQuery = JSON.stringify(skus.map(sku => sku.PRD_LVL_CHILD));
-    skuForQuery = skuForQuery.replace(/,/g, '-');
-    skuForQuery = skuForQuery.replace(/"/g, '');
-    skuForQuery = skuForQuery.replace(/\[/g, '');
-    skuForQuery = skuForQuery.replace(/\]/g, '');
+    skuForQuery = skuForQuery.replace(/,/g, "-");
+    skuForQuery = skuForQuery.replace(/"/g, "");
+    skuForQuery = skuForQuery.replace(/\[/g, "");
+    skuForQuery = skuForQuery.replace(/\]/g, "");
 
     this._componentService.setClearSkus(skuForQuery);
 
@@ -202,6 +207,39 @@ export class PackagesConfigComponent implements OnInit, OnDestroy {
   }
 
   addMagnitud() {
-    this._componentService.setMagnitudes(this.newResponse);
+    this.calc();
+
+    if (this.validate()) {
+      this._componentService.setIsValid(true);
+      this._componentService.setMagnitudes(this.newResponse);
+    } else {
+      this._componentService.setIsValid(false);
+      this._toastr.error("No se permiten valores iguales o inferiores a cero");
+    }
+  }
+
+  calc() {
+    this.newResponse.forEach(element => {
+      element.VOLUMEN = element.ALTO * element.ANCHO * element.LARGO;
+    });
+  }
+
+  validate(): boolean {
+    let resp: boolean = true;
+    this.newResponse.forEach(element => {
+      if (element.LARGO <= 0) {
+        resp = false;
+      }
+      if (element.ANCHO <= 0) {
+        resp = false;
+      }
+      if (element.ALTO <= 0) {
+        resp = false;
+      }
+      if (element.PESO <= 0) {
+        resp = false;
+      }
+    });
+    return resp;
   }
 }
